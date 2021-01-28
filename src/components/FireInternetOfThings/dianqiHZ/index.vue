@@ -1,0 +1,200 @@
+<template>
+  <div id="dianqiHZ">
+    <div class="leftWapper">
+      <div class="left_one">
+        <p>今日报警项目</p>
+        <div class="title">
+          <ul v-for="(item, index) in baojingNum" :key="index">
+            <li>{{ item }}</li>
+          </ul>
+        </div>
+
+        <ul
+          class="ulList"
+          v-for="(item, index) in DeviceAlarmList"
+          :key="index"
+        >
+          <li @click="callPolice(item.pid)">
+            <span>{{ item.typeName }}</span
+            ><span>共{{ item.value }}条未处理></span>
+          </li>
+        </ul>
+      </div>
+      <div class="left_two">
+        <p>接入电气火灾探测器</p>
+
+        <Translate />
+      </div>
+    </div>
+    <SearchTranslate
+      :SElec_DetailElecDevice_List="SElec_DetailElecDevice_List"
+    />
+  </div>
+</template>
+
+<script>
+import { DeviceAlarm, SElec_DetailElecDevice } from "@/api/index.js";
+import Translate from "../translate/baojingTranslate.vue";
+import SearchTranslate from "../translate/searchTranslate.vue";
+export default {
+  data() {
+    return {
+      SElec_DetailElecDevice_List: "",
+      baojingNum: "",
+      DeviceAlarmList: "",
+      // DeviceNumList: "",
+    };
+  },
+  mounted() {
+    this.DeviceAlarm();
+  },
+  methods: {
+    callPolice(pid) {
+      SElec_DetailElecDevice(pid).then((res) => {
+        this.SElec_DetailElecDevice_List = res.data;
+      });
+    },
+
+    DeviceAlarm() {
+      DeviceAlarm(this.utils.userName, 3, 1).then((res) => {
+        this.DeviceAlarmList = res.data;
+        let num = 0;
+        console.log(res.data, 99);
+        res.data.forEach((element) => {
+          num += element.value;
+        });
+
+        // this.baojingNum = str + num;
+        let str = "000000" + num;
+        this.baojingNum = str.substring(str.length - 6);
+      });
+    },
+  },
+  components: {
+    Translate,
+    SearchTranslate,
+  },
+};
+</script>
+<style lang='less' scoped>
+#dianqiHZ {
+  /deep/.el-input__inner {
+    background: #021019;
+    color: #fff;
+    border: 1px solid #3094d5;
+  }
+  ul {
+    list-style-type: none;
+  }
+  // position: relative;
+  // z-index: 999;
+  // color: #bfa;
+  .leftWapper {
+    left: 20px;
+    position: absolute;
+    z-index: 999;
+    width: 373px;
+    .left_one {
+      background-image: url("../../images/zhengchangbili.png");
+      height: 450px;
+      background-size: 100% 100%;
+      p {
+        text-align: center;
+        line-height: 70px;
+        font-size: 18px;
+      }
+      .title {
+        margin-top: 10px;
+        margin-left: 30px;
+        // width: 200px;
+        // padding-bottom: 10px;
+        height: 32px;
+
+        li {
+          width: 32px;
+          margin-right: 10px;
+          height: 32px;
+          float: left;
+          background: linear-gradient(
+            0deg,
+            rgba(71, 102, 179, 0.62),
+            rgba(23, 47, 107, 0.62)
+          );
+
+          font-weight: bold;
+          color: #f830af;
+          line-height: 32px;
+          text-align: center;
+        }
+      }
+      .ulList {
+        // padding-bottom: 20px;
+        margin-left: 30px;
+        li {
+          cursor: pointer;
+          width: 301px;
+          height: 35px;
+          background: linear-gradient(-87deg, #3053af, #14295a);
+          border: 1px solid #3486da;
+          margin: 10px 0;
+          padding: 0 10px;
+          line-height: 35px;
+          font-size: 16px;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 15px;
+        }
+      }
+    }
+    .left_two {
+      background-image: url("../../images/椭圆 6 拷贝 8@2x.png");
+      height: 300px;
+      background-size: 100% 100%;
+      p {
+        text-align: center;
+        line-height: 65px;
+        font-size: 18px;
+      }
+      .title {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 30px;
+        // width: 200px;
+        height: 32px;
+
+        li {
+          width: 32px;
+          margin-right: 10px;
+          height: 32px;
+          float: left;
+          background: linear-gradient(
+            0deg,
+            rgba(71, 102, 179, 0.62),
+            rgba(23, 47, 107, 0.62)
+          );
+
+          font-weight: bold;
+          color: #6dff64;
+          line-height: 32px;
+          text-align: center;
+        }
+      }
+      .ulList {
+        margin-left: 30px;
+        li {
+          width: 301px;
+          height: 35px;
+          background: linear-gradient(-87deg, #3053af, #14295a);
+          border: 1px solid #3486da;
+          margin: 10px 0;
+          padding: 0 10px;
+          line-height: 35px;
+          font-size: 16px;
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}
+</style>
