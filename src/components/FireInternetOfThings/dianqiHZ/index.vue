@@ -59,7 +59,10 @@ export default {
       DeviceAlarm(this.utils.userName, 3, 1).then((res) => {
         this.DeviceAlarmList = res.data;
         let num = 0;
-        console.log(res.data, 99);
+        // console.log(res.data, 99);
+        if (res.data.length <= 0) {
+          return this.$message.error("今日报警数据丢失");
+        }
         res.data.forEach((element) => {
           num += element.value;
         });

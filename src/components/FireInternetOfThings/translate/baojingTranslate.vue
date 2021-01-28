@@ -837,14 +837,14 @@
                         </li>
                         <li>
                           报警值:
-                          <span v-if="item.type.indexOf('A相') != -1"
-                            >{{ item.currentAlarmAvalue }}A</span
+                          <span v-if="item.type.indexOf('A电压') != -1"
+                            >{{ item.noVoltageAlarmAValue }}V</span
                           >
-                          <span v-if="item.type.indexOf('B相') != -1"
-                            >{{ item.currentAlarmBvalue }}A</span
+                          <span v-if="item.type.indexOf('B电压') != -1"
+                            >{{ item.noVoltageAlarmBValue }}V</span
                           >
-                          <span v-if="item.type.indexOf('C相') != -1"
-                            >{{ item.currentAlarmCSvalue }}A</span
+                          <span v-if="item.type.indexOf('C电压') != -1"
+                            >{{ item.noVoltageAlarmCValue }}V</span
                           >
                         </li>
                         <li>
@@ -1053,16 +1053,17 @@
                         </li>
                         <li>
                           报警值:
-                          <span v-if="item.type.indexOf('A电压') != -1"
-                            >{{ item.noVoltageAlarmAValue }}V</span
+                          <span v-if="item.type.indexOf('A相电压') != -1"
+                            >{{ item.noVoltageAlarmAValue }}A</span
                           >
-                          <span v-if="item.type.indexOf('B电压') != -1"
-                            >{{ item.noVoltageAlarmBValue }}V</span
+                          <span v-if="item.type.indexOf('B相电压') != -1"
+                            >{{ item.noVoltageAlarmBValue }}A</span
                           >
-                          <span v-if="item.type.indexOf('C电压') != -1"
-                            >{{ item.noVoltageAlarmCValue }}V</span
+                          <span v-if="item.type.indexOf('C相电压') != -1"
+                            >{{ item.noVoltageAlarmCValue }}A</span
                           >
                         </li>
+
                         <li>
                           报警时间: <span>{{ item.regdate }}</span>
                         </li>
@@ -1788,6 +1789,7 @@ export default {
           this.btnInfo = "设备定位全景图";
           break;
       }
+
       DeviceNum(this.utils.userName, type, 1).then((res) => {
         this.DeviceNumList = res.data;
         console.log(this.DeviceNumList);
