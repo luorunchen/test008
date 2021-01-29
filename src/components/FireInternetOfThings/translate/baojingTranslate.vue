@@ -427,44 +427,52 @@
                   ><div class="grid-content bg-purple">
                     <div class="imgWapper">
                       <el-row>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                            <p>12V</p>
-                            <p>12V</p>
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
+                        <template>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.oneAlarm }}A</p>
+                              <p>{{ shengyu_loudian.oneDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.twoAlarm }}A</p>
+                              <p>{{ shengyu_loudian.twoDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.threeAlarm }}A</p>
+                              <p>{{ shengyu_loudian.threeDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                        </template>
                       </el-row>
                       <ul>
                         <li>
@@ -492,6 +500,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneVolatage }}V</p>
+                            <p>{{ shengyu_loudian.oneDianYa }}V</p>
                           </div>
                         </el-col>
                         <el-col :span="8">
@@ -501,6 +511,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                         <el-col :span="8">
@@ -510,6 +522,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -532,6 +546,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneTempera }}℃</p>
+                            <p>{{ shengyu_loudian.oneWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -541,6 +557,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoTempera }}℃</p>
+                            <p>{{ shengyu_loudian.twoWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -550,6 +568,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.threeTempera }}℃</p>
+                            <p>{{ shengyu_loudian.threeWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -559,6 +579,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.fourTempera }}℃</p>
+                            <p>{{ shengyu_loudian.fourWenDu }}℃</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -600,42 +622,97 @@
                   ><div class="grid-content bg-purple">
                     <div class="imgWapper">
                       <el-row>
-                        <el-col :span="6">
+                        <template>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.oneAlarm }}A</p>
+                              <p>{{ shengyu_loudian.oneDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.twoAlarm }}A</p>
+                              <p>{{ shengyu_loudian.twoDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.threeAlarm }}A</p>
+                              <p>{{ shengyu_loudian.threeDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                        </template>
+                      </el-row>
+                      <ul>
+                        <li>报警状态:无</li>
+                        <li>报警值:无</li>
+                        <li>报警时间:无</li>
+                      </ul>
+                    </div>
+                  </div></el-col
+                >
+
+                <el-col :span="8"
+                  ><div class="grid-content bg-purple">
+                    <div class="imgWapper">
+                      <el-row>
+                        <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../images/电压.png"
                               width="35px"
                               height="35px"
                             />
-                            <p>12V</p>
-                            <p>12V</p>
+                            <p>{{ shengyu_loudian.oneVolatage }}V</p>
+                            <p>{{ shengyu_loudian.oneDianYa }}V</p>
                           </div>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../images/电压.png"
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../images/电压.png"
                               width="35px"
                               height="35px"
                             />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -651,46 +728,6 @@
                   ><div class="grid-content bg-purple">
                     <div class="imgWapper">
                       <el-row>
-                        <el-col :span="8">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电压.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="8">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电压.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="8">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电压.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                      </el-row>
-                      <ul>
-                        <li>报警状态:无</li>
-                        <li>报警值:无</li>
-                        <li>报警时间:无</li>
-                      </ul>
-                    </div>
-                  </div></el-col
-                >
-                <el-col :span="8"
-                  ><div class="grid-content bg-purple">
-                    <div class="imgWapper">
-                      <el-row>
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
@@ -698,6 +735,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneTempera }}℃</p>
+                            <p>{{ shengyu_loudian.oneWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -707,6 +746,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoTempera }}℃</p>
+                            <p>{{ shengyu_loudian.twoWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -716,6 +757,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.threeTempera }}℃</p>
+                            <p>{{ shengyu_loudian.threeWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -725,6 +768,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.fourTempera }}℃</p>
+                            <p>{{ shengyu_loudian.fourWenDu }}℃</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -792,44 +837,52 @@
                   ><div class="grid-content bg-purple">
                     <div class="imgWapper">
                       <el-row>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                            <p>12V</p>
-                            <p>12V</p>
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
+                        <template>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.oneAlarm }}A</p>
+                              <p>{{ shengyu_loudian.oneDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.twoAlarm }}A</p>
+                              <p>{{ shengyu_loudian.twoDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.threeAlarm }}A</p>
+                              <p>{{ shengyu_loudian.threeDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                        </template>
                       </el-row>
                       <ul>
                         <li>
@@ -837,14 +890,14 @@
                         </li>
                         <li>
                           报警值:
-                          <span v-if="item.type.indexOf('A电压') != -1"
-                            >{{ item.noVoltageAlarmAValue }}V</span
+                          <span v-if="item.type.indexOf('A相电流') != -1"
+                            >{{ item.currentAlarmAvalue }}A</span
                           >
-                          <span v-if="item.type.indexOf('B电压') != -1"
-                            >{{ item.noVoltageAlarmBValue }}V</span
+                          <span v-if="item.type.indexOf('B相电流') != -1"
+                            >{{ item.currentAlarmBvalue }}A</span
                           >
-                          <span v-if="item.type.indexOf('C电压') != -1"
-                            >{{ item.noVoltageAlarmCValue }}V</span
+                          <span v-if="item.type.indexOf('C相电流') != -1"
+                            >{{ item.currentAlarmCvalue }}A</span
                           >
                         </li>
                         <li>
@@ -865,6 +918,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneVolatage }}V</p>
+                            <p>{{ shengyu_loudian.oneDianYa }}V</p>
                           </div>
                         </el-col>
                         <el-col :span="8">
@@ -874,6 +929,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                         <el-col :span="8">
@@ -883,6 +940,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -905,6 +964,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneTempera }}℃</p>
+                            <p>{{ shengyu_loudian.oneWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -914,6 +975,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoTempera }}℃</p>
+                            <p>{{ shengyu_loudian.twoWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -923,6 +986,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.threeTempera }}℃</p>
+                            <p>{{ shengyu_loudian.threeWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -932,6 +997,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.fourTempera }}℃</p>
+                            <p>{{ shengyu_loudian.fourWenDu }}℃</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -968,44 +1035,52 @@
                   ><div class="grid-content bg-purple">
                     <div class="imgWapper">
                       <el-row>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                            <p>12V</p>
-                            <p>12V</p>
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div style="height: 90px">
-                            <img
-                              src="../../images/电流.png"
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                        </el-col>
+                        <template>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.oneAlarm }}A</p>
+                              <p>{{ shengyu_loudian.oneDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.twoAlarm }}A</p>
+                              <p>{{ shengyu_loudian.twoDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.threeAlarm }}A</p>
+                              <p>{{ shengyu_loudian.threeDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="height: 90px">
+                              <img
+                                src="../../images/电流.png"
+                                width="35px"
+                                height="35px"
+                              />
+                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                            </div>
+                          </el-col>
+                        </template>
                       </el-row>
                       <ul>
                         <li>报警状态:无</li>
@@ -1026,6 +1101,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneVolatage }}V</p>
+                            <p>{{ shengyu_loudian.oneDianYa }}V</p>
                           </div>
                         </el-col>
                         <el-col :span="8">
@@ -1035,6 +1112,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                         <el-col :span="8">
@@ -1044,6 +1123,8 @@
                               width="35px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1053,13 +1134,13 @@
                         </li>
                         <li>
                           报警值:
-                          <span v-if="item.type.indexOf('A相电压') != -1"
+                          <span v-if="item.type.indexOf('A电压') != -1"
                             >{{ item.noVoltageAlarmAValue }}A</span
                           >
-                          <span v-if="item.type.indexOf('B相电压') != -1"
+                          <span v-if="item.type.indexOf('B电压') != -1"
                             >{{ item.noVoltageAlarmBValue }}A</span
                           >
-                          <span v-if="item.type.indexOf('C相电压') != -1"
+                          <span v-if="item.type.indexOf('C电压') != -1"
                             >{{ item.noVoltageAlarmCValue }}A</span
                           >
                         </li>
@@ -1082,6 +1163,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.oneTempera }}℃</p>
+                            <p>{{ shengyu_loudian.oneWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -1091,6 +1174,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.twoTempera }}℃</p>
+                            <p>{{ shengyu_loudian.twoWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -1100,6 +1185,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.threeTempera }}℃</p>
+                            <p>{{ shengyu_loudian.threeWenDu }}℃</p>
                           </div>
                         </el-col>
                         <el-col :span="6">
@@ -1109,6 +1196,8 @@
                               width="16px"
                               height="35px"
                             />
+                            <p>{{ shengyu_loudian.fourTempera }}℃</p>
+                            <p>{{ shengyu_loudian.fourWenDu }}℃</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1239,19 +1328,35 @@
 
           <div class="one_echarts">
             <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_one"></div>
+            <div v-if="this.ElectricDeviceDateType == false">
+              <p class="zanwushuju">暂无数据</p>
+            </div>
+            <div class="echarts_wapper_one" v-else></div>
           </div>
           <div class="two_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_two"></div>
+            <p class="titleP">电压统计图</p>
+            <div v-if="ElectricDeviceDateType == false">
+              <p class="zanwushuju">暂无数据</p>
+            </div>
+            <div class="echarts_wapper_two" v-else></div>
           </div>
           <div class="three_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_three"></div>
+            <p class="titleP">温度统计图</p>
+            <div v-if="ElectricDeviceDateType == false">
+              <p class="zanwushuju">暂无数据</p>
+            </div>
+            <div class="echarts_wapper_three" v-else></div>
           </div>
           <div class="four_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_four"></div>
+            <p class="titleP">图片</p>
+            <div v-if="ElecDataList_images.length == 0">
+              <p class="zanwushuju">暂无数据</p>
+            </div>
+            <div class="echarts_wapper_four" v-else>
+              <div v-for="(item, index) in ElecDataList_images" :key="index">
+                <img :src="item" alt="" width="150px" height="150px" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1598,6 +1703,9 @@ import {
 export default {
   data() {
     return {
+      ElectricDeviceDateType: false,
+      ElecDataList_images: [],
+      shengyu_loudian: "",
       ElecDataList_typeName: "",
       getDeviceByDevIdList: "",
       ElecDataList: "",
@@ -1813,25 +1921,71 @@ export default {
       const now = year + "-" + month + "-" + day;
 
       getDeviceByDevId(devId).then((res) => {
-        console.log(res, "sssqqq");
+        // console.log(res, "sssqqq");
         this.getDeviceByDevIdList = res.data.list[0];
       });
 
       // 设备详情接口
       ElecData(devId, now).then((res) => {
+        //重置照片
+        this.ElecDataList_images = [];
         this.ElecDataList = res.data;
-        console.log(res, "wqqqeqweasd");
+
+        if (res.data.DevData[0].image != "") {
+          const list = res.data.DevData[0].image.split(",");
+          list.forEach((Element) => {
+            // Element =
+            let a = "http://edog-online.com/ctx/devPic/" + Element;
+            this.ElecDataList_images.push(a);
+          });
+        }
+
         this.ElecDataList_typeName = res.data.DevData[0].typeName;
         ReadParameterApi(res.data.DevData[0].productNumber).then((res) => {
           // console.log(res, "ldjakjdla");
+          // this.getDeviceByDevIdList.row = res.data.row;
+          // console.log(this.getDeviceByDevIdList, 7899987978);
+          this.shengyu_loudian = {
+            oneAlarm: this.getDeviceByDevIdList.mess2[0]
+              .noLeakageAlarmACurrentValue,
+            twoAlarm: this.getDeviceByDevIdList.mess2[0]
+              .noLeakageAlarmBCurrentValue,
+            threeAlarm: this.getDeviceByDevIdList.mess2[0]
+              .noLeakageAlarmCCurrentValue,
+            fourAlarm: this.getDeviceByDevIdList.mess2[0]
+              .leakageAlarmCurrentValue,
+            oneDianLiu: res.data.row.ADianLiu,
+            twoDianLiu: res.data.row.BDianLiu,
+            threeDianLiu: res.data.row.CDianLiu,
+            fourDianLiu: res.data.row.SYdianliu,
+            oneVolatage: this.getDeviceByDevIdList.mess2[0]
+              .noVoltageAlarmAValue,
+            twoVolatage: this.getDeviceByDevIdList.mess2[0]
+              .noVoltageAlarmBValue,
+            threeVolatage: this.getDeviceByDevIdList.mess2[0]
+              .noVoltageAlarmCValue,
+            oneDianYa: res.data.row.ADianYa,
+            twoDianYa: res.data.row.BDianYa,
+            threeDianYa: res.data.row.CDianYa,
+            oneTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmATemperatureValue,
+            twoTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmBTemperatureValue,
+            threeTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmCTemperatureValue,
+            fourTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmNTemperatureValue,
+            oneWenDu: res.data.row.AWenDu,
+            twoWenDu: res.data.row.BWenDu,
+            threeWenDu: res.data.row.CWenDu,
+            fourWenDu: res.data.row.NWenDu,
+          };
+          console.log(this.shengyu_loudian);
         });
       });
       // 图表接口
       ElectricDeviceDate(devId, now).then((res) => {
-        console.log(res.data, 2321232123212);
-        if (res.data.Data.length <= 0) {
-          return this.$message.error("未接受到图表数据");
-        }
+        // console.log(res.data, 2321232123212);
         const data = res.data;
         let dianLiuUa = [];
         let dianLiuUb = [];
@@ -1845,6 +1999,11 @@ export default {
         let wenduC = [];
         let wenduN = [];
         let name = [];
+        if (res.data.Data.length > 0) {
+          this.ElectricDeviceDateType = true;
+        } else {
+          return (this.ElectricDeviceDateType = false);
+        }
 
         res.data.Data.forEach((element) => {
           dianLiuUa.push(element.ia);
@@ -2296,6 +2455,40 @@ export default {
         border-bottom: 1px solid #f3f6fa;
         // text-align: center;
       }
+      .zanwushuju {
+        // background-color: black;
+        text-align: center;
+        line-height: 300px;
+        font-family: "Raleway", sans-serif;
+        font-size: 28px;
+        color: #fff;
+        text-shadow: 4px 4px 0 red, 4px -4px 0 red, -4px -4px 0 red,
+          -4px 4px 0 red, 4px 3px 0 red, 4px -3px 0 red, -4px -3px 0 red,
+          -4px 3px 0 red, 4px 2px 0 red, 4px -2px 0 red, -4px -2px 0 red,
+          -4px 2px 0 red, 4px 1px 0 red, 4px -1px 0 red, -4px -1px 0 red,
+          -4px 1px 0 red, 4px 0px 0 red, 4px 0px 0 red, -4px 0px 0 red,
+          -4px 0px 0 red, 3px 4px 0 red, 3px -4px 0 red, -3px -4px 0 red,
+          -3px 4px 0 red, 3px 3px 0 red, 3px -3px 0 red, -3px -3px 0 red,
+          -3px 3px 0 red, 3px 2px 0 red, 3px -2px 0 red, -3px -2px 0 red,
+          -3px 2px 0 red, 3px 1px 0 red, 3px -1px 0 red, -3px -1px 0 red,
+          -3px 1px 0 red, 3px 0px 0 red, 3px 0px 0 red, -3px 0px 0 red,
+          -3px 0px 0 red, 2px 4px 0 red, 2px -4px 0 red, -2px -4px 0 red,
+          -2px 4px 0 red, 2px 3px 0 red, 2px -3px 0 red, -2px -3px 0 red,
+          -2px 3px 0 red, 2px 2px 0 red, 2px -2px 0 red, -2px -2px 0 red,
+          -2px 2px 0 red, 2px 1px 0 red, 2px -1px 0 red, -2px -1px 0 red,
+          -2px 1px 0 red, 2px 0px 0 red, 2px 0px 0 red, -2px 0px 0 red,
+          -2px 0px 0 red, 1px 4px 0 red, 1px -4px 0 red, -1px -4px 0 red,
+          -1px 4px 0 red, 1px 3px 0 red, 1px -3px 0 red, -1px -3px 0 red,
+          -1px 3px 0 red, 1px 2px 0 red, 1px -2px 0 red, -1px -2px 0 red,
+          -1px 2px 0 red, 1px 1px 0 red, 1px -1px 0 red, -1px -1px 0 red,
+          -1px 1px 0 red, 1px 0px 0 red, 1px 0px 0 red, -1px 0px 0 red,
+          -1px 0px 0 red, 0px 4px 0 red, 0px -4px 0 red, 0px -4px 0 red,
+          0px 4px 0 red, 0px 3px 0 red, 0px -3px 0 red, 0px -3px 0 red,
+          0px 3px 0 red, 0px 2px 0 red, 0px -2px 0 red, 0px -2px 0 red,
+          0px 2px 0 red, 0px 1px 0 red, 0px -1px 0 red, 0px -1px 0 red,
+          0px 1px 0 red, 0px 0px 0 red, 0px 0px 0 red, 0px 0px 0 red,
+          0px 0px 0 red, 0 0 0 red;
+      }
       .echarts_wapper_two {
         width: 100%;
         height: 300px;
@@ -2311,6 +2504,40 @@ export default {
         line-height: 40px;
         border-bottom: 1px solid #f3f6fa;
         // text-align: center;
+      }
+      .zanwushuju {
+        // background-color: black;
+        text-align: center;
+        line-height: 300px;
+        font-family: "Raleway", sans-serif;
+        font-size: 28px;
+        color: #fff;
+        text-shadow: 4px 4px 0 red, 4px -4px 0 red, -4px -4px 0 red,
+          -4px 4px 0 red, 4px 3px 0 red, 4px -3px 0 red, -4px -3px 0 red,
+          -4px 3px 0 red, 4px 2px 0 red, 4px -2px 0 red, -4px -2px 0 red,
+          -4px 2px 0 red, 4px 1px 0 red, 4px -1px 0 red, -4px -1px 0 red,
+          -4px 1px 0 red, 4px 0px 0 red, 4px 0px 0 red, -4px 0px 0 red,
+          -4px 0px 0 red, 3px 4px 0 red, 3px -4px 0 red, -3px -4px 0 red,
+          -3px 4px 0 red, 3px 3px 0 red, 3px -3px 0 red, -3px -3px 0 red,
+          -3px 3px 0 red, 3px 2px 0 red, 3px -2px 0 red, -3px -2px 0 red,
+          -3px 2px 0 red, 3px 1px 0 red, 3px -1px 0 red, -3px -1px 0 red,
+          -3px 1px 0 red, 3px 0px 0 red, 3px 0px 0 red, -3px 0px 0 red,
+          -3px 0px 0 red, 2px 4px 0 red, 2px -4px 0 red, -2px -4px 0 red,
+          -2px 4px 0 red, 2px 3px 0 red, 2px -3px 0 red, -2px -3px 0 red,
+          -2px 3px 0 red, 2px 2px 0 red, 2px -2px 0 red, -2px -2px 0 red,
+          -2px 2px 0 red, 2px 1px 0 red, 2px -1px 0 red, -2px -1px 0 red,
+          -2px 1px 0 red, 2px 0px 0 red, 2px 0px 0 red, -2px 0px 0 red,
+          -2px 0px 0 red, 1px 4px 0 red, 1px -4px 0 red, -1px -4px 0 red,
+          -1px 4px 0 red, 1px 3px 0 red, 1px -3px 0 red, -1px -3px 0 red,
+          -1px 3px 0 red, 1px 2px 0 red, 1px -2px 0 red, -1px -2px 0 red,
+          -1px 2px 0 red, 1px 1px 0 red, 1px -1px 0 red, -1px -1px 0 red,
+          -1px 1px 0 red, 1px 0px 0 red, 1px 0px 0 red, -1px 0px 0 red,
+          -1px 0px 0 red, 0px 4px 0 red, 0px -4px 0 red, 0px -4px 0 red,
+          0px 4px 0 red, 0px 3px 0 red, 0px -3px 0 red, 0px -3px 0 red,
+          0px 3px 0 red, 0px 2px 0 red, 0px -2px 0 red, 0px -2px 0 red,
+          0px 2px 0 red, 0px 1px 0 red, 0px -1px 0 red, 0px -1px 0 red,
+          0px 1px 0 red, 0px 0px 0 red, 0px 0px 0 red, 0px 0px 0 red,
+          0px 0px 0 red, 0 0 0 red;
       }
       .echarts_wapper_three {
         width: 100%;
@@ -2328,7 +2555,46 @@ export default {
         border-bottom: 1px solid #f3f6fa;
         // text-align: center;
       }
+      .zanwushuju {
+        // background-color: black;
+        text-align: center;
+        line-height: 160px;
+        font-family: "Raleway", sans-serif;
+        font-size: 28px;
+        color: #fff;
+        text-shadow: 4px 4px 0 red, 4px -4px 0 red, -4px -4px 0 red,
+          -4px 4px 0 red, 4px 3px 0 red, 4px -3px 0 red, -4px -3px 0 red,
+          -4px 3px 0 red, 4px 2px 0 red, 4px -2px 0 red, -4px -2px 0 red,
+          -4px 2px 0 red, 4px 1px 0 red, 4px -1px 0 red, -4px -1px 0 red,
+          -4px 1px 0 red, 4px 0px 0 red, 4px 0px 0 red, -4px 0px 0 red,
+          -4px 0px 0 red, 3px 4px 0 red, 3px -4px 0 red, -3px -4px 0 red,
+          -3px 4px 0 red, 3px 3px 0 red, 3px -3px 0 red, -3px -3px 0 red,
+          -3px 3px 0 red, 3px 2px 0 red, 3px -2px 0 red, -3px -2px 0 red,
+          -3px 2px 0 red, 3px 1px 0 red, 3px -1px 0 red, -3px -1px 0 red,
+          -3px 1px 0 red, 3px 0px 0 red, 3px 0px 0 red, -3px 0px 0 red,
+          -3px 0px 0 red, 2px 4px 0 red, 2px -4px 0 red, -2px -4px 0 red,
+          -2px 4px 0 red, 2px 3px 0 red, 2px -3px 0 red, -2px -3px 0 red,
+          -2px 3px 0 red, 2px 2px 0 red, 2px -2px 0 red, -2px -2px 0 red,
+          -2px 2px 0 red, 2px 1px 0 red, 2px -1px 0 red, -2px -1px 0 red,
+          -2px 1px 0 red, 2px 0px 0 red, 2px 0px 0 red, -2px 0px 0 red,
+          -2px 0px 0 red, 1px 4px 0 red, 1px -4px 0 red, -1px -4px 0 red,
+          -1px 4px 0 red, 1px 3px 0 red, 1px -3px 0 red, -1px -3px 0 red,
+          -1px 3px 0 red, 1px 2px 0 red, 1px -2px 0 red, -1px -2px 0 red,
+          -1px 2px 0 red, 1px 1px 0 red, 1px -1px 0 red, -1px -1px 0 red,
+          -1px 1px 0 red, 1px 0px 0 red, 1px 0px 0 red, -1px 0px 0 red,
+          -1px 0px 0 red, 0px 4px 0 red, 0px -4px 0 red, 0px -4px 0 red,
+          0px 4px 0 red, 0px 3px 0 red, 0px -3px 0 red, 0px -3px 0 red,
+          0px 3px 0 red, 0px 2px 0 red, 0px -2px 0 red, 0px -2px 0 red,
+          0px 2px 0 red, 0px 1px 0 red, 0px -1px 0 red, 0px -1px 0 red,
+          0px 1px 0 red, 0px 0px 0 red, 0px 0px 0 red, 0px 0px 0 red,
+          0px 0px 0 red, 0 0 0 red;
+      }
       .echarts_wapper_four {
+        display: flex;
+
+        img {
+          margin-left: 20px;
+        }
         width: 100%;
         height: 160px;
       }
@@ -2343,6 +2609,40 @@ export default {
         line-height: 40px;
         border-bottom: 1px solid #f3f6fa;
         // text-align: center;
+      }
+      .zanwushuju {
+        // background-color: black;
+        text-align: center;
+        line-height: 300px;
+        font-family: "Raleway", sans-serif;
+        font-size: 28px;
+        color: #fff;
+        text-shadow: 4px 4px 0 red, 4px -4px 0 red, -4px -4px 0 red,
+          -4px 4px 0 red, 4px 3px 0 red, 4px -3px 0 red, -4px -3px 0 red,
+          -4px 3px 0 red, 4px 2px 0 red, 4px -2px 0 red, -4px -2px 0 red,
+          -4px 2px 0 red, 4px 1px 0 red, 4px -1px 0 red, -4px -1px 0 red,
+          -4px 1px 0 red, 4px 0px 0 red, 4px 0px 0 red, -4px 0px 0 red,
+          -4px 0px 0 red, 3px 4px 0 red, 3px -4px 0 red, -3px -4px 0 red,
+          -3px 4px 0 red, 3px 3px 0 red, 3px -3px 0 red, -3px -3px 0 red,
+          -3px 3px 0 red, 3px 2px 0 red, 3px -2px 0 red, -3px -2px 0 red,
+          -3px 2px 0 red, 3px 1px 0 red, 3px -1px 0 red, -3px -1px 0 red,
+          -3px 1px 0 red, 3px 0px 0 red, 3px 0px 0 red, -3px 0px 0 red,
+          -3px 0px 0 red, 2px 4px 0 red, 2px -4px 0 red, -2px -4px 0 red,
+          -2px 4px 0 red, 2px 3px 0 red, 2px -3px 0 red, -2px -3px 0 red,
+          -2px 3px 0 red, 2px 2px 0 red, 2px -2px 0 red, -2px -2px 0 red,
+          -2px 2px 0 red, 2px 1px 0 red, 2px -1px 0 red, -2px -1px 0 red,
+          -2px 1px 0 red, 2px 0px 0 red, 2px 0px 0 red, -2px 0px 0 red,
+          -2px 0px 0 red, 1px 4px 0 red, 1px -4px 0 red, -1px -4px 0 red,
+          -1px 4px 0 red, 1px 3px 0 red, 1px -3px 0 red, -1px -3px 0 red,
+          -1px 3px 0 red, 1px 2px 0 red, 1px -2px 0 red, -1px -2px 0 red,
+          -1px 2px 0 red, 1px 1px 0 red, 1px -1px 0 red, -1px -1px 0 red,
+          -1px 1px 0 red, 1px 0px 0 red, 1px 0px 0 red, -1px 0px 0 red,
+          -1px 0px 0 red, 0px 4px 0 red, 0px -4px 0 red, 0px -4px 0 red,
+          0px 4px 0 red, 0px 3px 0 red, 0px -3px 0 red, 0px -3px 0 red,
+          0px 3px 0 red, 0px 2px 0 red, 0px -2px 0 red, 0px -2px 0 red,
+          0px 2px 0 red, 0px 1px 0 red, 0px -1px 0 red, 0px -1px 0 red,
+          0px 1px 0 red, 0px 0px 0 red, 0px 0px 0 red, 0px 0px 0 red,
+          0px 0px 0 red, 0 0 0 red;
       }
       .echarts_wapper_one {
         width: 100%;

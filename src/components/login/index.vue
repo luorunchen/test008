@@ -105,8 +105,11 @@ export default {
           this.$router.push({ path: "/" });
           var role = res.data.role[0]; //权限
 
-          sessionStorage.setItem("role", role);
           sessionStorage.setItem("userName", username);
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("new_role", new_role);
+          sessionStorage.setItem("region", region);
+          sessionStorage.setItem("power", power);
           return this.$message({
             showClose: true,
             message: "登录成功",
@@ -115,7 +118,7 @@ export default {
         } else {
           return this.$message({
             showClose: true,
-            message: "登录失败账号或密码不正确",
+            message: "账号或密码不正确",
             type: "error",
           });
         }

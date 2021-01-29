@@ -3,8 +3,7 @@ module.exports = {
   //   port: 57103 // 端口号配置
   // },
   devServer: {
-    host: 'localhost',
-    port: 8080,
+
     proxy: {
       '/api': {
         target: 'http://edog-online.com/earlyWarn',// 要跨域的域名

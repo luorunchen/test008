@@ -196,11 +196,12 @@ export default {
     },
   },
   mounted() {
-    this.init();
-    this.echart();
     // console.log(this.$route.path, 999999);
-
+    this.init();
     switch (this.$route.path) {
+      case "/FireInternetOfThings":
+        this.echart();
+        break;
       case "/FireInternetOfThings/electricalFire":
         this.btnInfo = "电气火灾隐患";
         break;

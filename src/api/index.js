@@ -251,7 +251,7 @@ export function WebeditFileimageServlet(username, cause) {
     }
   })
 }
-//接入设备->报警=>解除报警接口
+//接入设备->报警=>数据详情接口
 export function getDeviceByDevId(devid) {
   return service({
     url: `/admin/device/getDeviceByDevId.action`,
@@ -262,10 +262,32 @@ export function getDeviceByDevId(devid) {
     }
   })
 }
-//接入设备->报警=>解除报警接口
+//接入设备->报警=>数据详情接口
 export function ReadParameterApi(id) {
   return service({
     url: `/ReadParameterApi.action`,
+    method: 'GET',
+    params: {
+      id,
+
+    }
+  })
+}
+//接入设备->报警=>设备设置(保险单号)接口
+export function putMessToDevice(imei, content) {
+  return service({
+    url: `/admin/project/putMessToDevice.action`,
+    method: 'GET',
+    params: {
+      imei,
+      "content=InsuranceNo": content
+    }
+  })
+}
+//接入设备->报警=>设备设置(远程断电)接口
+export function resetclose(id) {
+  return service({
+    url: `/resetclose.action`,
     method: 'GET',
     params: {
       id,
