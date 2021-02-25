@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
+
   //登录进入的首页
   {
     path: '/',
@@ -99,6 +100,7 @@ const routes = [
         name: 'Panorama',
         component: () => import('@/components/FireInternetOfThings/shebeidingwei'),
       },
+
     ],
 
 
@@ -111,5 +113,21 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 })
+router.beforeEach((to, from, next) => {
+  let token = sessionStorage.getItem("userName");
+  // console.log(token, 987654321)
+  // console.log(to.name, 990, from, 6545, next)
+  if (token) {
+    next()
+  } else {
+    //如果没有登录你访问的不是login就让你强制跳转到login页面
+    if (to.path !== "/login") {
+      // this.$message.error('您还未登录账号')
+      next({ path: "/login" });
+    } else {
+      next();
+    }
+  }
 
+});
 export default router

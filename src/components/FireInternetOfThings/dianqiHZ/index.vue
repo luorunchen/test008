@@ -1,7 +1,7 @@
 <template>
   <div id="dianqiHZ">
     <div class="leftWapper">
-      <div class="left_one">
+      <div class="left_one" ref="leftOne">
         <p>今日报警项目</p>
         <div class="title">
           <ul v-for="(item, index) in baojingNum" :key="index">
@@ -28,6 +28,7 @@
     </div>
     <SearchTranslate
       :SElec_DetailElecDevice_List="SElec_DetailElecDevice_List"
+      :pagetype="pagetype"
     />
   </div>
 </template>
@@ -42,6 +43,7 @@ export default {
       SElec_DetailElecDevice_List: "",
       baojingNum: "",
       DeviceAlarmList: "",
+      pagetype: 2,
       // DeviceNumList: "",
     };
   },
@@ -61,15 +63,19 @@ export default {
         let num = 0;
         // console.log(res.data, 99);
         if (res.data.length <= 0) {
-          return this.$message.error("今日报警数据丢失");
-        }
-        res.data.forEach((element) => {
-          num += element.value;
-        });
+          // return this.$message.error("今日报警数据丢失");
+          this.baojingNum = "000000";
 
-        // this.baojingNum = str + num;
-        let str = "000000" + num;
-        this.baojingNum = str.substring(str.length - 6);
+          this.$refs.leftOne.style.height = "140" + "px";
+        } else {
+          res.data.forEach((element) => {
+            num += element.value;
+          });
+
+          // this.baojingNum = str + num;
+          let str = "000000" + num;
+          this.baojingNum = str.substring(str.length - 6);
+        }
       });
     },
   },
@@ -81,11 +87,11 @@ export default {
 </script>
 <style lang='less' scoped>
 #dianqiHZ {
-  /deep/.el-input__inner {
-    background: #021019;
-    color: #fff;
-    border: 1px solid #3094d5;
-  }
+  // /deep/.el-input__inner {
+  //   background: #021019;
+  //   color: #fff;
+  //   border: 1px solid #3094d5;
+  // }
   ul {
     list-style-type: none;
   }

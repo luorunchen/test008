@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="rightWapper">
-      <div class="right_one">
+      <div class="right_one" ref="right_one">
         <div class="chaxun">
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item>
@@ -24,7 +24,7 @@
                 class="olList"
                 v-for="(item, index) in SElec_DetailElecDevice_List"
                 :key="index"
-                @click="(dialogVisible = true), echart_wapper(item.BH)"
+                @click="echart_wapper(item.BH)"
               >
                 <li>{{ index + 1 }}.{{ item.text }}</li>
                 <li>地址:{{ item.MC }}</li>
@@ -35,969 +35,51 @@
         </template>
       </div>
     </div>
-
+    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
     <!-- 搜索内容弹窗 -->
-    <div class="titleWapper">
-      <el-dialog :visible.sync="dialogVisible" width="60%">
-        <div
-          style="width: 100%"
-          v-loading="loading"
-          element-loading-text="拼命加载中"
-          element-loading-spinner="el-icon-loading"
-          element-loading-background="rgb(4, 19, 54,1)"
-        >
-          <p class="title_name">
-            {{ GetMapDataListName.name }}
-          </p>
-
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <!-- 电气火灾展示数据 -->
-              <template
-                v-if="
-                  this.$route.name == 'electricalFire' ||
-                  this.$route.name == 'EmergencyManagement' ||
-                  this.$route.name == 'PowerDetection' ||
-                  this.$route.name == 'Panorama'
-                "
-              >
-                <div class="scroll_wapper">
-                  <div
-                    class="left_one"
-                    @click="(innerVisible = true), see()"
-                    v-for="(item, index) in getDeviceByPidList['mess']"
-                    :key="index"
-                  >
-                    <ul>
-                      <li>在线监测:{{ item.productNumber }}</li>
-                      <li>更新时间:{{ item.alarmFaultDate }}</li>
-                      <li>
-                        报警类型:
-                        <span
-                          style="color: #f830af"
-                          v-if="item.typeName != '正常'"
-                        >
-                          {{ item.typeName }}</span
-                        ><span style="color: #6dff64" v-else>
-                          {{ item.typeName }}</span
-                        >
-                      </li>
-
-                      <li>位置:{{ item.installLocation }}</li>
-                    </ul>
-                  </div>
-                </div>
-              </template>
-              <!-- 消防水展示数据 -->
-              <template v-if="this.$route.name == 'FireWaterSystem'">
-                <div class="scroll_wapper">
-                  <!-- 水压表 -->
-                  <div
-                    class="left_one"
-                    @click="(FireWaterSystemDialog = true), shuiyaSee('shuiya')"
-                  >
-                    <ul>
-                      <li>消防水位</li>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>报警类型</li>
-                      <li>位置</li>
-                    </ul>
-                  </div>
-                  <!-- 液压表 -->
-                  <div
-                    class="left_one"
-                    @click="(FireWaterSystemDialog = true), shuiyaSee('yeya')"
-                  >
-                    <ul>
-                      <li>消防液压表</li>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>报警类型</li>
-                      <li>位置</li>
-                    </ul>
-                  </div>
-                </div>
-              </template>
-              <!-- 火灾报警与燃气探测展示数据 -->
-              <template
-                v-if="
-                  this.$route.name == 'FireAlarmSystem' ||
-                  this.$route.name == 'GasDetector'
-                "
-              >
-                <div class="scroll_wapper">
-                  <div class="left_one" @click="FireAlarmSystemDialog = true">
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>报警类型</li>
-                      <li>位置</li>
-                    </ul>
-                  </div>
-                  <div class="left_one" @click="FireAlarmSystemDialog = true">
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>报警类型</li>
-                      <li>位置</li>
-                    </ul>
-                  </div>
-                  <div class="left_one" @click="FireAlarmSystemDialog = true">
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>报警类型</li>
-                      <li>位置</li>
-                    </ul>
-                  </div>
-                </div>
-              </template>
-              <!-- 重点部位展示数据 -->
-              <template v-if="this.$route.name == 'KeyParts'">
-                <div class="scroll_wapper">
-                  <div class="left_one">
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>
-                        <el-button
-                          type="primary"
-                          size="mini"
-                          @click="KeyPartsDialog = true"
-                          >查看视频</el-button
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="left_one">
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>
-                        <el-button
-                          type="primary"
-                          size="mini"
-                          @click="KeyPartsDialog = true"
-                          >查看视频</el-button
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="left_one">
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>
-                        <el-button
-                          type="primary"
-                          size="mini"
-                          @click="KeyPartsDialog = true"
-                          >查看视频</el-button
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </template>
-              <!-- 智慧型独立烟感展示数据 -->
-              <template
-                v-if="
-                  this.$route.name == 'SmartIndependentSmoke' ||
-                  this.$route.name == 'IntelligentFireAlarm' ||
-                  this.$route.name == 'FireExtinguisher'
-                "
-              >
-                <div class="scroll_wapper">
-                  <div
-                    class="left_one"
-                    @click="
-                      (SmartIndependentSmokeDialog = true),
-                        SmartIndependentSmokeSee()
-                    "
-                  >
-                    <ul>
-                      <li>设备号</li>
-                      <li>电池</li>
-                      <li>报警类型</li>
-                      <li>位置</li>
-                    </ul>
-                  </div>
-                </div>
-              </template>
-            </el-col>
-            <el-col :span="16">
-              <div class="right_wapper">
-                <el-row
-                  style="margin-bottom: 20px"
-                  v-show="this.$route.name != 'KeyParts'"
-                  :gutter="20"
-                >
-                  <el-col :span="8"
-                    ><div
-                      :class="
-                        equipmentColor == 'police'
-                          ? 'one equipmentColor'
-                          : 'one'
-                      "
-                      @click="equipment('police')"
-                    >
-                      <div class="one_item"></div>
-
-                      <p>{{ GetMapDataListName.callPolice }}</p>
-                      <p>报警设备</p>
-                    </div></el-col
-                  >
-                  <el-col :span="8"
-                    ><div
-                      :class="
-                        equipmentColor == 'onLine'
-                          ? 'two equipmentColor'
-                          : 'two'
-                      "
-                      @click="equipment('onLine')"
-                    >
-                      <div class="two_item"></div>
-                      <p>{{ GetMapDataListName.onLine }}</p>
-                      <p>在线设备</p>
-                    </div></el-col
-                  >
-                  <el-col :span="8"
-                    ><div
-                      :class="
-                        equipmentColor == 'offLine'
-                          ? 'three equipmentColor'
-                          : 'three'
-                      "
-                      @click="equipment('offLine')"
-                    >
-                      <div class="three_item"></div>
-                      <p>{{ GetMapDataListName.offLine }}</p>
-                      <p>离线设备</p>
-                    </div></el-col
-                  >
-                </el-row>
-
-                <el-row :gutter="20">
-                  <el-col :span="12"
-                    ><div
-                      class="four"
-                      v-for="(item, index) in GetMapDataList.Company"
-                      :key="index"
-                    >
-                      <p>单位简介</p>
-                      <p>
-                        <span style="color: #28d9ff">{{ item.MC }}</span
-                        >位于
-                        <span style="color: #28d9ff">{{ item.areaMC }}</span
-                        >详细位置
-                        <span style="color: #28d9ff">{{ item.address }}</span
-                        >单位类型为
-                        <span style="color: #28d9ff">其他</span>
-                      </p>
-                      <p>
-                        单位消防安全负责人是<span style="color: #28d9ff">{{
-                          item.firename
-                        }}</span>
-                        联系电话是
-                        <span style="color: #28d9ff">{{ item.firephone }}</span>
-                        消防安全管理人是
-                        <span style="color: #28d9ff">{{ item.resname }}</span>
-                        联系电话是
-                        <span style="color: #28d9ff">{{ item.resphone }}</span>
-                      </p>
-                      <p>
-                        该单位使用属于
-                        <span style="color: #28d9ff">{{ item.typeMC }}</span>
-                      </p>
-                    </div></el-col
-                  >
-                  <el-col :span="12"
-                    ><div class="five">
-                      <p>一周内报警数</p>
-                      <div class="echart_wapper"></div></div
-                  ></el-col>
-                </el-row>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-dialog>
-    </div>
-
-    <!-- 内部弹窗 ->查看 -->
-    <el-dialog
-      width="60%"
-      title="查看"
-      :visible.sync="innerVisible"
-      append-to-body
-    >
-      <el-row
-        ><el-button type="primary " @click="innerVisible_shebei = true"
-          >设备设置</el-button
-        >
-        <el-button type="primary" @click="innerVisible_lishi = true"
-          >历史报警</el-button
-        >
-      </el-row>
-      <div class="shebeiWapper">
-        <div class="shebeiInfo">
-          <div class="one">
-            <p class="titleP">设备信息</p>
-            <ul>
-              <li>设备编号:1</li>
-              <li>设备状态:1</li>
-              <li>报警手机:1</li>
-              <li>报警信息:1</li>
-              <li>报警时间:1</li>
-              <li>最新数据:1</li>
-              <li>保险单号:1</li>
-              <li>安装位置:1</li>
-              <li>安装日期:1</li>
-              <li>开启流量:1</li>
-            </ul>
-          </div>
-          <div class="two">
-            <p class="titleP">填写处置情况</p>
-            <el-input
-              v-model="input"
-              type="textarea"
-              :autosize="{ minRows: 7, maxRows: 8 }"
-              placeholder="请输入内容"
-            ></el-input>
-            <el-button type="primary" size="mini" style="margintop: 20px"
-              >提交</el-button
-            >
-          </div>
-        </div>
-
-        <div class="shebeiEcharts">
-          <el-row :gutter="20">
-            <el-col :span="8"
-              ><div class="grid-content bg-purple">
-                <div class="imgWapper">
-                  <el-row>
-                    <el-col :span="6">
-                      <p style="height: 90px">12</p>
-                    </el-col>
-                    <el-col :span="6">
-                      <p style="height: 90px">12</p>
-                    </el-col>
-                    <el-col :span="6">
-                      <p style="height: 90px">12</p>
-                    </el-col>
-                    <el-col :span="6">
-                      <p style="height: 90px">12</p>
-                    </el-col>
-                  </el-row>
-                  <ul>
-                    <li>报警状态:1</li>
-                    <li>报警值:1</li>
-                    <li>报警时间:1</li>
-                  </ul>
-                </div>
-              </div></el-col
-            >
-            <el-col :span="8"
-              ><div class="grid-content bg-purple">
-                <div class="imgWapper">
-                  <el-row>
-                    <el-col :span="6">
-                      <div style="height: 90px; padding: 10px 0 0 14px">
-                        <img
-                          src="../../images/电流.png"
-                          width="35px"
-                          height="35px"
-                        />
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <ul>
-                    <li>报警状态:1</li>
-                    <li>报警值:1</li>
-                    <li>报警时间:1</li>
-                  </ul>
-                </div>
-              </div></el-col
-            >
-            <el-col :span="8"
-              ><div class="grid-content bg-purple">
-                <div class="imgWapper"></div>
-                <ul>
-                  <li>报警状态:1</li>
-                  <li>报警值:1</li>
-                  <li>报警时间:1</li>
-                </ul>
-              </div></el-col
-            >
-          </el-row>
-          <div class="one_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_one_search"></div>
-          </div>
-          <div class="two_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_two_search"></div>
-          </div>
-          <div class="three_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_three_search"></div>
-          </div>
-          <div class="four_echarts">
-            <p class="titleP">电流统计图</p>
-            <div class="echarts_wapper_four_search"></div>
-          </div>
-        </div>
-      </div>
-    </el-dialog>
-
-    <!-- 内部弹窗->设置设备 -->
-    <el-dialog
-      width="50%"
-      title="内层 Dialog"
-      :visible.sync="innerVisible_shebei"
-      append-to-body
-    >
-      <el-row>
-        <el-col :span="6"
-          ><div class="shezhi_left">
-            <p class="titleP">设备信息</p>
-            <ul>
-              <li>设备编号</li>
-              <li>保险单号</li>
-              <li>开启流量</li>
-              <li>是否授权</li>
-            </ul>
-          </div></el-col
-        >
-        <el-col :span="18"
-          ><div class="shizhi_right">
-            <div class="right_one">
-              <p class="titleP">设备开关</p>
-              <el-row
-                :gutter="20"
-                type="flex"
-                class="row-bg"
-                justify="space-around"
-              >
-                <el-col :span="8"> <el-button>远程断电</el-button></el-col>
-                <el-col :span="8"> <el-button>远程开机</el-button></el-col>
-                <el-col :span="8"> <el-button>远程关机</el-button></el-col>
-              </el-row>
-              <el-row :gutter="20" class="row-bg">
-                <el-col :span="8"> <el-button>开启蜂鸣器</el-button></el-col>
-                <el-col :span="8"> <el-button>关闭蜂鸣器</el-button></el-col>
-                <el-col :span="8"> <el-button>远程消音</el-button></el-col>
-              </el-row>
-              <el-row :gutter="20" class="row-bg">
-                <el-col :span="8"> <el-button>开启流量</el-button></el-col>
-                <el-col :span="8"> <el-button>远程复位</el-button></el-col>
-                <el-col :span="8"> <el-button>授权</el-button></el-col>
-              </el-row>
-              <el-row :gutter="20" class="row-bg">
-                <el-col :span="8"> <el-button>开启屏蔽器</el-button></el-col>
-                <el-col :span="8"> <el-button>下发保险单</el-button></el-col>
-                <!-- <el-col :span="8"> <el-button>远程关机</el-button></el-col> -->
-              </el-row>
-            </div>
-            <div class="right_two">
-              <p class="titleP">设置</p>
-              <div class="tabs">
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <el-tab-pane label="阀值设置" class="tabs_one" name="first">
-                    <el-row :gutter="20">
-                      <el-col :span="12">
-                        <p>剩余电流/mA</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input>
-                      </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="12">
-                        <p>剩余电流/mA</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input>
-                      </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="12">
-                        <p>剩余电流/mA</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input>
-                      </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="12">
-                        <p>剩余电流/mA</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input>
-                      </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="12">
-                        <p>剩余电流/mA</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input>
-                      </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="12">
-                        <p>剩余电流/mA</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input>
-                      </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
-                    </el-row>
-                    <el-row type="flex" justify="center">
-                      <el-col :span="4"
-                        ><el-button size="mini">取消</el-button></el-col
-                      >
-                      <el-col :span="4"
-                        ><el-button type="primary" size="mini"
-                          >确定</el-button
-                        ></el-col
-                      >
-                    </el-row>
-                  </el-tab-pane>
-                  <el-tab-pane
-                    label="报警推送方式"
-                    name="second"
-                    style="text-align: center"
-                  >
-                    <p>设备状态</p>
-                    <el-checkbox-group v-model="checkList">
-                      <el-checkbox label="App"></el-checkbox>
-                      <el-checkbox label="短信"></el-checkbox>
-                      <el-checkbox label="手机"></el-checkbox>
-                    </el-checkbox-group>
-                    <el-row type="flex" justify="center">
-                      <el-col :span="4"
-                        ><el-button size="mini">取消</el-button></el-col
-                      >
-                      <el-col :span="4"
-                        ><el-button type="primary" size="mini"
-                          >确定</el-button
-                        ></el-col
-                      >
-                    </el-row></el-tab-pane
-                  >
-                  <el-tab-pane label="设备历史故障" name="third">
-                    <el-form
-                      size="mini"
-                      :inline="true"
-                      :model="formInline"
-                      class="demo-form-inline"
-                    >
-                      <el-form-item label="日期:">
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="开始时间"
-                            v-model="sizeForm.date1"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="结束时间"
-                            v-model="sizeForm.date2"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
-                      </el-form-item>
-
-                      <el-form-item>
-                        <el-button type="primary" @click="onSubmit"
-                          >查询</el-button
-                        >
-                      </el-form-item>
-                    </el-form>
-                    <template>
-                      <el-table :data="tableData" style="width: 100%">
-                        <el-table-column prop="date" label="日期" width="180">
-                        </el-table-column>
-                        <el-table-column prop="name" label="姓名" width="180">
-                        </el-table-column>
-                        <el-table-column prop="address" label="地址">
-                        </el-table-column>
-                      </el-table>
-                    </template>
-                  </el-tab-pane>
-                  <el-tab-pane label="设置操作记录" name="fourth">
-                    <el-form
-                      size="mini"
-                      :inline="true"
-                      :model="formInline"
-                      class="demo-form-inline"
-                    >
-                      <el-form-item label="日期:">
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="开始时间"
-                            v-model="sizeForm.date1"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="结束时间"
-                            v-model="sizeForm.date2"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
-                      </el-form-item>
-
-                      <el-form-item>
-                        <el-button type="primary" @click="onSubmit"
-                          >查询</el-button
-                        >
-                      </el-form-item>
-                    </el-form>
-                    <template>
-                      <el-table :data="tableData" style="width: 100%">
-                        <el-table-column prop="date" label="日期" width="180">
-                        </el-table-column>
-                        <el-table-column prop="name" label="姓名" width="180">
-                        </el-table-column>
-                        <el-table-column prop="address" label="地址">
-                        </el-table-column>
-                      </el-table>
-                    </template>
-                  </el-tab-pane>
-                </el-tabs>
-              </div>
-            </div></div
-        ></el-col>
-      </el-row>
-    </el-dialog>
-
-    <!-- 内部弹窗->历史报警 -->
-    <el-dialog
-      title="历史报警"
-      append-to-body
-      :visible.sync="innerVisible_lishi"
-      width="50%"
-    >
-      <el-form
-        size="mini"
-        :inline="true"
-        :model="formInline"
-        class="demo-form-inline"
-      >
-        <el-form-item label="日期:">
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="开始时间"
-              v-model="sizeForm.date1"
-              style="width: 100%"
-            ></el-date-picker>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="结束时间"
-              v-model="sizeForm.date2"
-              style="width: 100%"
-            ></el-date-picker>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-        </el-form-item>
-      </el-form>
-      <template>
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
-          </el-table-column>
-          <el-table-column prop="address" label="地址"> </el-table-column>
-        </el-table>
-      </template>
-    </el-dialog>
-
-    <!-- 消防水液体弹窗 -->
-    <el-dialog
-      title="实时数据"
-      :visible.sync="FireWaterSystemDialog"
-      width="50%"
-    >
-      <div class="FireWaterSystemDialogWapper">
-        <p class="title">{{ msg }}</p>
-        <!-- 图表容器 -->
-        <div class="shuiya_echarts"></div>
-
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-button type="primary" size="small">自诊断查询</el-button>
-          </el-col>
-          <el-col :span="6"
-            ><el-button type="warning" size="small"
-              >远程参数更新</el-button
-            ></el-col
-          >
-          <el-col :span="6"
-            ><el-button type="danger" size="small"
-              >自主布撤防</el-button
-            ></el-col
-          >
-          <el-col :span="6"
-            ><el-button type="success" size="small">固件升级</el-button></el-col
-          >
-        </el-row>
-        <el-row type="flex" class="row-bg" justify="space-between">
-          <el-col :span="6">
-            <img src="../../images/four.png" height="137px" alt="" />
-          </el-col>
-
-          <el-col :span="6">
-            <img src="../../images/battery4.png" height="137px" alt="" />
-          </el-col>
-        </el-row>
-      </div>
-      <div class="shuju_echarts">
-        <p>设备最近数据分析</p>
-        <div class="shuju_echarts_wapper"></div>
-      </div>
-    </el-dialog>
-
-    <!-- 火灾报警与燃气弹窗共用弹窗 -->
-    <el-dialog
-      title="设备信息"
-      :visible.sync="FireAlarmSystemDialog"
-      width="50%"
-    >
-      <div class="FireAlarmSystemDialog">
-        <div class="one">
-          <p>设备详情</p>
-          <ul>
-            <li>设备厂商</li>
-            <li>设备类型</li>
-            <li>安装位置</li>
-            <li>注册时间</li>
-            <li>产品编号</li>
-          </ul>
-        </div>
-        <div class="two">
-          <p>历史报警</p>
-          <el-form
-            size="mini"
-            :inline="true"
-            :model="formInline"
-            class="demo-form-inline formList"
-          >
-            <el-form-item label="日期:">
-              <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  placeholder="开始时间"
-                  v-model="sizeForm.date1"
-                  style="width: 100%"
-                ></el-date-picker>
-              </el-col>
-              <el-col class="line" :span="2">-</el-col>
-              <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  placeholder="结束时间"
-                  v-model="sizeForm.date2"
-                  style="width: 100%"
-                ></el-date-picker>
-              </el-col>
-            </el-form-item>
-
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
-            </el-form-item>
-            <template>
-              <el-table :data="tableData" style="width: 100%">
-                <el-table-column prop="date" label="日期" width="180">
-                </el-table-column>
-                <el-table-column prop="name" label="姓名" width="180">
-                </el-table-column>
-                <el-table-column prop="address" label="地址"> </el-table-column>
-              </el-table>
-            </template>
-          </el-form>
-        </div>
-        <div class="three">
-          <p>设备事件</p>
-        </div>
-      </div>
-    </el-dialog>
-
-    <!-- 重点部位弹窗 -->
-    <el-dialog title="查看视频" :visible.sync="KeyPartsDialog" width="50%">
-    </el-dialog>
-    <!-- 独立烟感弹窗 -->
-    <el-dialog
-      title="设备信息"
-      :visible.sync="SmartIndependentSmokeDialog"
-      width="60%"
-    >
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <div class="SmartIndependentSmoke">
-            <div class="two">
-              <p class="titleP">填写处置情况</p>
-              <el-input
-                v-model="input"
-                type="textarea"
-                :autosize="{ minRows: 7, maxRows: 8 }"
-                placeholder="请输入内容"
-              ></el-input>
-              <el-button type="primary" size="mini" style="margintop: 20px"
-                >提交</el-button
-              >
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="18" class="SmartIndependentSmoke_right_wapper">
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <div class="rihgt_one">
-                <p class="titleP">设备信息</p>
-                <ul>
-                  <li>设备编号</li>
-                  <li>时间</li>
-                  <li>所在地址</li>
-                  <li>所在位置</li>
-                </ul>
-              </div>
-            </el-col>
-            <el-col :span="16">
-              <div class="right_two">
-                <el-row>
-                  <el-col :span="12">
-                    <img src="../../images/four.png" alt=""
-                  /></el-col>
-                  <el-col :span="12"
-                    ><img src="../../images/battery4.png" alt=""
-                  /></el-col>
-                </el-row>
-              </div>
-            </el-col>
-          </el-row>
-          <div class="SmartIndependentSmoke_echars_one">
-            <p class="titleP">设备心跳/温度统计图</p>
-            <div class="SmartIndependentSmoke_echars_one_wapper"></div>
-          </div>
-          <div class="lishibaojing">
-            <p class="titleP">历史报警</p>
-            <el-form
-              size="mini"
-              :inline="true"
-              :model="formInline"
-              class="demo-form-inline formList"
-            >
-              <el-form-item label="日期:">
-                <el-col :span="11">
-                  <el-date-picker
-                    type="date"
-                    placeholder="开始时间"
-                    v-model="sizeForm.date1"
-                    style="width: 100%"
-                  ></el-date-picker>
-                </el-col>
-                <el-col class="line" :span="2">-</el-col>
-                <el-col :span="11">
-                  <el-date-picker
-                    type="date"
-                    placeholder="结束时间"
-                    v-model="sizeForm.date2"
-                    style="width: 100%"
-                  ></el-date-picker>
-                </el-col>
-              </el-form-item>
-
-              <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-              </el-form-item>
-              <template>
-                <el-table :data="tableData" style="width: 100%">
-                  <el-table-column prop="date" label="日期" width="180">
-                  </el-table-column>
-                  <el-table-column prop="name" label="姓名" width="180">
-                  </el-table-column>
-                  <el-table-column prop="address" label="地址">
-                  </el-table-column>
-                </el-table>
-              </template>
-            </el-form>
-          </div>
-        </el-col>
-      </el-row>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { GetMapData, getDeviceByPid } from "@/api/index.js";
+import PublicPopUps from "../translate/publicPopUps.vue";
+import {
+  GetMapData,
+  getDeviceByPid,
+  ElecData,
+  WebeditFileimageServlet,
+  ReadParameterApi,
+  getDeviceByDevId,
+  ElectricDeviceDate,
+  resetclose,
+  putMessToDevice,
+  putMessToDeviceOn,
+  resetclosefuwei,
+  insertClouddog,
+  updateShutdown,
+  UpdateDevicePush,
+} from "@/api/index.js";
 export default {
-  props: ["SElec_DetailElecDevice_List"],
+  props: ["SElec_DetailElecDevice_List", "pagetype"],
   data() {
     return {
+      DeviceHistory: "",
+
+      fazhishezhi: {
+        SYDL: "",
+        AXDL: "",
+        BXDL: "",
+        CXDL: "",
+        AXWD: "",
+        BXWD: "",
+        CXWD: "",
+        NXWD: "",
+        AXDY: "",
+        BXDY: "",
+        CXDY: "",
+      },
+      baoxiandanhao: "",
+      ElecDataList_images: [],
+      ElecDataList: "",
       getDeviceByPidList: "",
       loading: true,
       GetMapDataList: "",
@@ -1007,6 +89,7 @@ export default {
         onLine: "",
         offLine: "",
       },
+      managementInput: "",
       //独立烟感
       SmartIndependentSmokeDialog: false,
       //重点部位
@@ -1015,7 +98,7 @@ export default {
       FireAlarmSystemDialog: false,
       msg: "",
       FireWaterSystemDialog: false,
-      equipmentColor: "police",
+      equipmentColor: "onLine",
       sizeForm: {
         date2: "",
         date1: "",
@@ -1033,37 +116,107 @@ export default {
         user: "",
         region: "",
       },
+      getDeviceByDevIdList: "",
+      shengyu_loudian: "",
+      ElecDataList_typeName: "",
       currentPage4: 4,
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      tableData: [],
+      getHistoryFault: "",
     };
   },
   mounted() {
-    console.log(this.SElec_DetailElecDevice_List, 4564565);
-    undefined;
+    // console.log(this.SElec_DetailElecDevice_List, 4564565);
+    // undefined;
   },
-
+  components: {
+    PublicPopUps,
+  },
   methods: {
+    //设备历史
+    deviceHistory() {
+      console.log(this.DeviceHistory);
+      getHistoryFault(
+        this.ElecDataList.DevData[0].productNumber,
+        this.DeviceHistory[0],
+        this.DeviceHistory[1]
+      ).then((res) => {});
+    },
+    //报警推送
+    baojingtuisong() {
+      console.log(this.checkList);
+      let app = 0;
+      let sms = 0;
+      let phone = 0;
+      // if(this.checklist.length==3){
+      //   app = 1
+      // }
+      // if(this.checklist.length==2){
+      //   sms = 1
+      // }
+      this.checkList.forEach((index, element) => {
+        console.log(index, element);
+        if (index === "短信") {
+          sms = 1;
+        }
+        if (index === "电话") {
+          phone = 1;
+        }
+        if (index === "App") {
+          app = 1;
+        }
+      });
+      UpdateDevicePush(
+        "undefined",
+        app,
+        this.utils.userName,
+        sms,
+        this.ElecDataList.DevData[0].productNumber,
+        phone
+      ).then((res) => {
+        this.$message.success("修改成功");
+      });
+    },
+    SetParameterApiFun() {
+      SetParameterApi(
+        this.ElecDataList.DevData[0].productNumber,
+        this.fazhishezhi.SYDL,
+        this.fazhishezhi.AXWD,
+        this.fazhishezhi.BXWD,
+        this.fazhishezhi.CXWD,
+        this.fazhishezhi.NXWD,
+        this.fazhishezhi.AXDL,
+        this.fazhishezhi.BXDL,
+        this.fazhishezhi.CXDL,
+        this.fazhishezhi.AXDY,
+        this.fazhishezhi.BXDY,
+        this.fazhishezhi.CXDY
+      ).then((res) => {
+        if (result.status == 1) {
+          alert("参数设置成功");
+          setTimeout(function () {
+            parent.location.reload();
+          }, 1000);
+        } else {
+          alert("参数设置失败");
+        }
+      });
+    },
+    //提交处置情况
+    management() {
+      if (this.ElecDataList.DevData == "正常") {
+        return this.$message.warning("设备正常,无需解除");
+      }
+      if (this.managementInput == "") {
+        return this.$message.error("请填写处置信息");
+      }
+      WebeditFileimageServlet(this.utils.userName, this.managementInput).then(
+        (res) => {
+          if (res.data.list[0].status == true) {
+            return this.$message.success("报警解除成功");
+          }
+        }
+      );
+    },
     //独立烟感
     SmartIndependentSmokeSee() {
       this.$nextTick(() => {
@@ -1228,44 +381,245 @@ export default {
         });
       });
     },
-    equipment(data) {
+    equipment(data, num) {
       this.equipmentColor = data;
+      getDeviceByPid(this.devicepidData, num, 2, this.utils.userName).then(
+        (res) => {
+          // console.lotg(res.data, 3121);
+          this.getDeviceByPidList = res.data;
+        }
+      );
     },
     // 外部弹窗echart
     echart_wapper(data) {
-      this.loading = true;
+      // this.loading = true;
       // console.log(data)
-      // const type = 2;
-      GetMapData(data, 2, this.utils.userName).then((res) => {
-        // console.log(res);
-        this.GetMapDataList = res.data;
-        this.GetMapDataListName.name = this.GetMapDataList.Company[0].MC;
-        this.GetMapDataListName.callPolice = this.GetMapDataList.devMess[0];
-        this.GetMapDataListName.onLine = this.GetMapDataList.devMess[1];
-        this.GetMapDataListName.offLine = this.GetMapDataList.devMess[2];
-        this.loading = false;
-        // console.log(res.data, "wwww");
-        let name = [];
-        let data = [];
-        // console.log(res.data.Diagram, 333);
-        res.data.Diagram.forEach((element) => {
-          name.push(element.date);
-          data.push(element.num);
+      this.$refs.publicPopUps.initOff();
+      this.$refs.publicPopUps.echart_wapper(data);
+      // // const type = 2;
+      // this.devicepidData = data;
+      // GetMapData(data, 2, this.utils.userName).then((res) => {
+      //   // console.log(res);
+      //   this.GetMapDataList = res.data;
+      //   this.GetMapDataListName.name = this.GetMapDataList.Company[0].MC;
+      //   this.GetMapDataListName.callPolice = this.GetMapDataList.devMess[0];
+      //   this.GetMapDataListName.onLine = this.GetMapDataList.devMess[1];
+      //   this.GetMapDataListName.offLine = this.GetMapDataList.devMess[2];
+      //   // this.loading = false;
+      //   // console.log(res.data, "wwww");
+      //   let name = [];
+      //   let data = [];
+      //   // console.log(res.data.Diagram, 333);
+      //   res.data.Diagram.forEach((element) => {
+      //     name.push(element.date);
+      //     data.push(element.num);
+      //   });
+      //   this.$nextTick(() => {
+      //     let one_echart_left = this.$echarts.init(
+      //       document.querySelector(".echart_wapper")
+      //     );
+      //     one_echart_left.setOption({
+      //       xAxis: {
+      //         type: "category",
+      //         data: name,
+      //         axisLabel: {
+      //           show: true,
+      //           textStyle: {
+      //             color: "#fff",
+      //           },
+      //         },
+      //       },
+      //       grid: {
+      //         left: "3%",
+      //         right: "4%",
+      //         bottom: "3%",
+      //         containLabel: true,
+      //       },
+      //       tooltip: {
+      //         trigger: "axis",
+      //         axisPointer: {
+      //           type: "cross",
+      //           label: {
+      //             backgroundColor: "#6a7985",
+      //           },
+      //         },
+      //       },
+      //       yAxis: {
+      //         type: "value",
+      //         axisLabel: {
+      //           show: true,
+      //           textStyle: {
+      //             color: "#fff",
+      //           },
+      //         },
+      //       },
+      //       series: [
+      //         {
+      //           data: data,
+      //           type: "line",
+      //           smooth: true,
+      //           itemStyle: {
+      //             normal: {
+      //               lineStyle: {
+      //                 color: "red",
+      //               },
+      //             },
+      //           },
+      //         },
+      //       ],
+      //     });
+      //   });
+      // });
+      // getDeviceByPid(data, 1, 2, this.utils.userName).then((res) => {
+      //   console.log(res.data, 3121);
+      //   this.getDeviceByPidList = res.data;
+      // });
+    },
+    // 查看echart图片函数
+    see(devId) {
+      getDeviceByDevId(devId).then((res) => {
+        // console.log(res, "sssqqq");
+        this.getDeviceByDevIdList = res.data.list[0];
+      });
+      // 设备详情接口
+      ElecData(devId, now).then((res) => {
+        //重置照片
+        this.ElecDataList_images = [];
+        this.ElecDataList = res.data;
+
+        if (res.data.DevData[0].image != "") {
+          const list = res.data.DevData[0].image.split(",");
+          list.forEach((Element) => {
+            // Element =
+            let a = "http://edog-online.com/ctx/devPic/" + Element;
+            this.ElecDataList_images.push(a);
+          });
+        }
+
+        this.ElecDataList_typeName = res.data.DevData[0].typeName;
+        console.log(this.ElecDataList_typeName);
+        ReadParameterApi(res.data.DevData[0].productNumber).then((res) => {
+          // console.log(res, "ldjakjdla");
+          // this.getDeviceByDevIdList.row = res.data.row;
+          // console.log(this.getDeviceByDevIdList, 7899987978);
+          this.shengyu_loudian = {
+            oneAlarm: this.getDeviceByDevIdList.mess2[0]
+              .noLeakageAlarmACurrentValue,
+            twoAlarm: this.getDeviceByDevIdList.mess2[0]
+              .noLeakageAlarmBCurrentValue,
+            threeAlarm: this.getDeviceByDevIdList.mess2[0]
+              .noLeakageAlarmCCurrentValue,
+            fourAlarm: this.getDeviceByDevIdList.mess2[0]
+              .leakageAlarmCurrentValue,
+            oneDianLiu: res.data.row.ADianLiu,
+            twoDianLiu: res.data.row.BDianLiu,
+            threeDianLiu: res.data.row.CDianLiu,
+            fourDianLiu: res.data.row.SYdianliu,
+            oneVolatage: this.getDeviceByDevIdList.mess2[0]
+              .noVoltageAlarmAValue,
+            twoVolatage: this.getDeviceByDevIdList.mess2[0]
+              .noVoltageAlarmBValue,
+            threeVolatage: this.getDeviceByDevIdList.mess2[0]
+              .noVoltageAlarmCValue,
+            oneDianYa: res.data.row.ADianYa,
+            twoDianYa: res.data.row.BDianYa,
+            threeDianYa: res.data.row.CDianYa,
+            oneTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmATemperatureValue,
+            twoTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmBTemperatureValue,
+            threeTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmCTemperatureValue,
+            fourTempera: this.getDeviceByDevIdList.mess2[0]
+              .noAlarmNTemperatureValue,
+            oneWenDu: res.data.row.AWenDu,
+            twoWenDu: res.data.row.BWenDu,
+            threeWenDu: res.data.row.CWenDu,
+            fourWenDu: res.data.row.NWenDu,
+          };
+          console.log(this.shengyu_loudian);
         });
+      });
+      const time = new Date();
+      const year = time.getFullYear();
+      const month = time.getMonth() + 1;
+      const day = time.getDate();
+      const now = year + "-" + month + "-" + day;
+
+      ElectricDeviceDate(devId, now).then((res) => {
+        let dianLiuUa = [];
+        let dianLiuUb = [];
+        let dianLiuUc = [];
+        let dianLiuUd = [];
+        let dianYaA = [];
+        let dianYaB = [];
+        let dianYaC = [];
+        let wenduA = [];
+        let wenduB = [];
+        let wenduC = [];
+        let wenduN = [];
+        let name = [];
+
+        //图标数据赋值
+        res.data.Data.forEach((element) => {
+          dianLiuUa.push(element.ia);
+          dianLiuUb.push(element.ib);
+          dianLiuUc.push(element.ic);
+          dianLiuUd.push(element.ld);
+          wenduA.push(element.ta);
+          wenduB.push(element.tb);
+          wenduC.push(element.tc);
+          wenduN.push(element.tn);
+          dianYaA.push(element.ua);
+          dianYaB.push(element.ub);
+          dianYaC.push(element.uc);
+          name.push(element.happenedTime);
+        });
+        var one_echart_left;
+        var two_echart_left;
+        var three_echart_left;
+        //重置图表
+        console.log(
+          one_echart_left != null &&
+            one_echart_left != undefined &&
+            one_echart_left != ""
+        );
+        // this.$nextTick(() => {
+        //   if (
+        //     one_echart_left != null ||
+        //     one_echart_left != undefined ||
+        //     one_echart_left != ""
+        //   ) {
+        //     one_echart_left.dispose();
+        //   }
+        //   if (
+        //     two_echart_left != null ||
+        //     two_echart_left != undefined ||
+        //     two_echart_left != ""
+        //   ) {
+        //     two_echart_left.dispose();
+        //   }
+        //   if (
+        //     three_echart_left != null ||
+        //     three_echart_left != undefined ||
+        //     two_echart_left != ""
+        //   ) {
+        //     three_echart_left.dispose();
+        //   }
+        // });
+
         this.$nextTick(() => {
-          let one_echart_left = this.$echarts.init(
-            document.querySelector(".echart_wapper")
+          one_echart_left = this.$echarts.init(
+            document.querySelector(".echarts_wapper_one_search")
           );
+
+          // 电流统计图
           one_echart_left.setOption({
-            xAxis: {
-              type: "category",
-              data: name,
-              axisLabel: {
-                show: true,
-                textStyle: {
-                  color: "#fff",
-                },
-              },
+            tooltip: {
+              trigger: "axis",
+            },
+            legend: {
+              data: ["A电流(mA)", "B电流(mA)", "C电流(mA)", "剩余电流(mA)"],
             },
             grid: {
               left: "3%",
@@ -1273,241 +627,361 @@ export default {
               bottom: "3%",
               containLabel: true,
             },
-            tooltip: {
-              trigger: "axis",
-              axisPointer: {
-                type: "cross",
-                label: {
-                  backgroundColor: "#6a7985",
-                },
+            toolbox: {
+              feature: {
+                saveAsImage: {},
               },
+            },
+            xAxis: {
+              type: "category",
+              boundaryGap: false,
+              data: name.reverse(),
             },
             yAxis: {
               type: "value",
-              axisLabel: {
-                show: true,
-                textStyle: {
-                  color: "#fff",
-                },
-              },
             },
             series: [
               {
-                data: data,
+                name: "A电流(mA)",
                 type: "line",
-                smooth: true,
-                itemStyle: {
-                  normal: {
-                    lineStyle: {
-                      color: "red",
-                    },
-                  },
-                },
+
+                data: dianLiuUa.reverse(),
+              },
+              {
+                name: "B电流(mA)",
+                type: "line",
+
+                data: dianLiuUb.reverse(),
+              },
+              {
+                name: "C电流(mA)",
+                type: "line",
+
+                data: dianLiuUc.reverse(),
+              },
+              {
+                name: "剩余电流(mA)",
+                type: "line",
+
+                data: dianLiuUd.reverse(),
+              },
+            ],
+          });
+
+          // 第二个图表
+          two_echart_left = this.$echarts.init(
+            document.querySelector(".echarts_wapper_two_search")
+          );
+          //第三个图表
+          two_echart_left.setOption({
+            tooltip: {
+              trigger: "axis",
+            },
+            legend: {
+              data: ["A温度(℃)", "B温度(℃)", "C温度(℃)", "N温度(℃)"],
+            },
+            grid: {
+              left: "3%",
+              right: "4%",
+              bottom: "3%",
+              containLabel: true,
+            },
+            toolbox: {
+              feature: {
+                saveAsImage: {},
+              },
+            },
+            xAxis: {
+              type: "category",
+              boundaryGap: false,
+              data: name.reverse(),
+            },
+            yAxis: {
+              type: "value",
+            },
+            series: [
+              {
+                name: "A温度(℃)",
+                type: "line",
+
+                data: wenduA.reverse(),
+              },
+              {
+                name: "B温度(℃)",
+                type: "line",
+
+                data: wenduB.reverse(),
+              },
+              {
+                name: "C温度(℃)",
+                type: "line",
+
+                data: wenduC.reverse(),
+              },
+              {
+                name: "N温度(℃)",
+                type: "line",
+
+                data: wenduN.reverse(),
+              },
+            ],
+          });
+
+          three_echart_left = this.$echarts.init(
+            document.querySelector(".echarts_wapper_three_search")
+          );
+          three_echart_left.setOption({
+            tooltip: {
+              trigger: "axis",
+            },
+            legend: {
+              data: ["A电压(A)", "B电压(A)", "C电压(A)"],
+            },
+            grid: {
+              left: "3%",
+              right: "4%",
+              bottom: "3%",
+              containLabel: true,
+            },
+            toolbox: {
+              feature: {
+                saveAsImage: {},
+              },
+            },
+            xAxis: {
+              type: "category",
+              boundaryGap: false,
+              data: name.reverse(),
+            },
+            yAxis: {
+              type: "value",
+            },
+            series: [
+              {
+                name: "A电压(A)",
+                type: "line",
+                // stack: "总量",
+                data: dianYaA.reverse(),
+              },
+              {
+                name: "B电压(A)",
+                type: "line",
+                // stack: "总量",
+                data: dianYaB.reverse(),
+              },
+              {
+                name: "C电压(A)",
+                type: "line",
+                // stack: "总量",
+                data: dianYaC.reverse(),
               },
             ],
           });
         });
       });
-      getDeviceByPid(data, 1, 2, this.utils.userName).then((res) => {
-        // console.log(res.data, 3121);
-        this.getDeviceByPidList = res.data;
-      });
     },
-    // 查看echart图片函数
-    see() {
-      this.$nextTick(() => {
-        let one_echart_left = this.$echarts.init(
-          document.querySelector(".echarts_wapper_one_search")
-        );
 
-        // 绘制图表
-        one_echart_left.setOption({
-          tooltip: {
-            trigger: "axis",
-          },
-          legend: {
-            data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"],
-          },
-          grid: {
-            left: "3%",
-            right: "4%",
-            bottom: "3%",
-            containLabel: true,
-          },
-          toolbox: {
-            feature: {
-              saveAsImage: {},
-            },
-          },
-          xAxis: {
-            type: "category",
-            boundaryGap: false,
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-          },
-          yAxis: {
-            type: "value",
-          },
-          series: [
-            {
-              name: "邮件营销",
-              type: "line",
-              stack: "总量",
-              data: [120, 132, 101, 134, 90, 230, 210],
-            },
-            {
-              name: "联盟广告",
-              type: "line",
-              stack: "总量",
-              data: [220, 182, 191, 234, 290, 330, 310],
-            },
-            {
-              name: "视频广告",
-              type: "line",
-              stack: "总量",
-              data: [150, 232, 201, 154, 190, 330, 410],
-            },
-            {
-              name: "直接访问",
-              type: "line",
-              stack: "总量",
-              data: [320, 332, 301, 334, 390, 330, 320],
-            },
-            {
-              name: "搜索引擎",
-              type: "line",
-              stack: "总量",
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
-            },
-          ],
-        });
-        // 第二个图表
-        let two_echart_left = this.$echarts.init(
-          document.querySelector(".echarts_wapper_two_search")
-        );
-        two_echart_left.setOption({
-          tooltip: {
-            trigger: "axis",
-          },
-          legend: {
-            data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"],
-          },
-          grid: {
-            left: "3%",
-            right: "4%",
-            bottom: "3%",
-            containLabel: true,
-          },
-          toolbox: {
-            feature: {
-              saveAsImage: {},
-            },
-          },
-          xAxis: {
-            type: "category",
-            boundaryGap: false,
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-          },
-          yAxis: {
-            type: "value",
-          },
-          series: [
-            {
-              name: "邮件营销",
-              type: "line",
-              stack: "总量",
-              data: [120, 132, 101, 134, 90, 230, 210],
-            },
-            {
-              name: "联盟广告",
-              type: "line",
-              stack: "总量",
-              data: [220, 182, 191, 234, 290, 330, 310],
-            },
-            {
-              name: "视频广告",
-              type: "line",
-              stack: "总量",
-              data: [150, 232, 201, 154, 190, 330, 410],
-            },
-            {
-              name: "直接访问",
-              type: "line",
-              stack: "总量",
-              data: [320, 332, 301, 334, 390, 330, 320],
-            },
-            {
-              name: "搜索引擎",
-              type: "line",
-              stack: "总量",
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
-            },
-          ],
-        });
+    //设备设置按钮
+    shebeiBtn(num) {
+      const role = sessionStorage.getItem("role");
+      const power = sessionStorage.getItem("power");
+      switch (num) {
+        //远程断电
+        case "1":
+          if (role == "1000" || power.indexOf("10003003") != -1) {
+            resetclose(this.ElecDataList.DevData[0].productNumber, 0).then(
+              (res) => {
+                if (res.message == "请求成功") {
+                  this.$message.success(res.message);
+                } else {
+                  this.$message.error(res.message);
+                }
+              }
+            );
+          } else {
+            this.$message.error("暂无权限");
+          }
 
-        //第三个图表
-        let three_echart_left = this.$echarts.init(
-          document.querySelector(".echarts_wapper_three_search")
-        );
-        three_echart_left.setOption({
-          tooltip: {
-            trigger: "axis",
-          },
-          legend: {
-            data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"],
-          },
-          grid: {
-            left: "3%",
-            right: "4%",
-            bottom: "3%",
-            containLabel: true,
-          },
-          toolbox: {
-            feature: {
-              saveAsImage: {},
-            },
-          },
-          xAxis: {
-            type: "category",
-            boundaryGap: false,
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-          },
-          yAxis: {
-            type: "value",
-          },
-          series: [
-            {
-              name: "邮件营销",
-              type: "line",
-              stack: "总量",
-              data: [120, 132, 101, 134, 90, 230, 210],
-            },
-            {
-              name: "联盟广告",
-              type: "line",
-              stack: "总量",
-              data: [220, 182, 191, 234, 290, 330, 310],
-            },
-            {
-              name: "视频广告",
-              type: "line",
-              stack: "总量",
-              data: [150, 232, 201, 154, 190, 330, 410],
-            },
-            {
-              name: "直接访问",
-              type: "line",
-              stack: "总量",
-              data: [320, 332, 301, 334, 390, 330, 320],
-            },
-            {
-              name: "搜索引擎",
-              type: "line",
-              stack: "总量",
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
-            },
-          ],
-        });
-      });
+          break;
+
+        //远程开机
+        case "2":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "shutdown"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("远程开机成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+        //远程关机
+        case "3":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "startup"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("远程开机成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.message.error("暂无权限");
+          }
+          break;
+        //开启蜂鸣器
+        case "4":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "voiceon"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("开启蜂鸣器成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //关闭蜂鸣器
+        case "5":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "voiceoff"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("开启蜂鸣器成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.message.error("暂无权限");
+          }
+          break;
+        //远程消音
+        case "6":
+          if (role == "1000" || power.indexOf("10003001") != -1) {
+            resetclose(this.ElecDataList.DevData[0].productNumber, 2).then(
+              (res) => {
+                if (res.message == "请求成功") {
+                  alert("远程消音成功");
+                } else {
+                  alert("远程消音失败");
+                }
+              }
+            );
+          } else {
+            this.$message.error("暂无权限");
+          }
+
+          break;
+        //开启流量
+        case "7":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "openflow"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("开启流量成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //远程复位
+        case "8":
+          if (role == "1000" || power.indexOf("10003003") != -1) {
+            resetclosefuwei(this.ElecDataList.DevData[0].productNumber, 2).then(
+              (res) => {
+                if (res.status == "1") {
+                  this.$message.success(res.message);
+                } else {
+                  this.$message.error(res.message);
+                }
+              }
+            );
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //授权
+        case "9":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            insertClouddog(this.ElecDataList.DevData[0].productNumber).then(
+              (res) => {
+                if (res.list[0].status == "true") {
+                  this.$message.success(
+                    "授权成功.工作日一天后将授权生效,非工作日将延期"
+                  );
+                } else {
+                  this.$message.error("授权失败");
+                }
+              }
+            );
+          }
+          break;
+        //开启屏蔽器
+        case "10":
+          if (role == "1000" || power.indexOf("10003013") != -1) {
+            updateShutdown(
+              this.ElecDataList.DevData[0].productNumber,
+              this.utils,
+              userName
+            ).then((res) => {
+              if (res.status == "true") {
+                layer.open({
+                  content: res.mess,
+                });
+                this.$message.success(res.mess);
+              } else {
+                this.$message.error(res.mess);
+              }
+            });
+          }
+          break;
+        //下发保险单
+        case "11":
+          // console.log(6554654);
+          // console.log(this.ElecDataList.DevData[0].productNumber, 789789);
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDevice(
+              this.ElecDataList.DevData[0].productNumber,
+              this.baoxiandanhao
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("下发保险单号成功");
+              } else {
+                this.$message.error("请稍后重试");
+              }
+            });
+          }
+          // var res = JSON.parse(result);
+          // console.log(res);
+
+          break;
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -1522,6 +996,12 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
+  },
+  updated() {
+    console.log(123);
+    if (this.SElec_DetailElecDevice_List.length > 0) {
+      this.$refs.right_one.style.height = "450" + "px";
+    }
   },
 };
 </script>
@@ -1995,7 +1475,22 @@ export default {
     // background: #bfa;
     .imgWapper {
       height: 90px;
+      text-align: center;
       background: #1071e2;
+      div {
+        // line-height: 90px;
+        padding-top: 3px;
+        p {
+          color: #fff;
+        }
+      }
+      ul {
+        margin-top: -10px;
+        text-align: left;
+        span {
+          color: red;
+        }
+      }
     }
     .el-row {
       margin-bottom: 20px;
@@ -2098,12 +1593,12 @@ export default {
 .rightWapper {
   margin-top: 50px;
   position: absolute;
-  z-index: 999;
+  z-index: 99;
   right: 20px;
   width: 330px;
   .right_one {
     // background-image: ("../../images/zhengchangbili.png");
-    height: 450px;
+    height: 90px;
     background-size: 100% 100%;
     background-image: url("../../images/矩形 10 拷贝 9@2x.png");
     .chaxun {

@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <div class="title">
-      <img class="titleIMG" src="../images/矩形 1 拷贝 4@2x.png" alt="" />
+      <img
+        class="titleIMG"
+        src="@/components/images/矩形 1 拷贝 4@2x.png"
+        alt=""
+      />
     </div>
     <div class="titleFZ">智慧安全系统平台</div>
     <div class="loginIMGLeft">
       <img
-        src="../images/5bd85ea016f25@2x.png"
+        src="@/components/images/5bd85ea016f25@2x.png"
         width="100%"
         height="100%"
         alt=""
@@ -14,7 +18,7 @@
     </div>
     <div class="loginImg">
       <img
-        src="../images/矩形 10 拷贝 9@2x.png"
+        src="@/components/images/矩形 10 拷贝 9@2x.png"
         width="100%"
         height="100%"
         alt=""
@@ -102,14 +106,14 @@ export default {
       login(username, password).then((res) => {
         console.log(res);
         if (res.data.status === true) {
-          this.$router.push({ path: "/" });
           var role = res.data.role[0]; //权限
 
           sessionStorage.setItem("userName", username);
-          sessionStorage.setItem("role", role);
-          sessionStorage.setItem("new_role", new_role);
-          sessionStorage.setItem("region", region);
-          sessionStorage.setItem("power", power);
+          sessionStorage.setItem("role", res.data.role[0]);
+          sessionStorage.setItem("new_role", res.data.new_role);
+          sessionStorage.setItem("region", res.data.region);
+          sessionStorage.setItem("power", res.data.power);
+          this.$router.push({ path: "/" });
           return this.$message({
             showClose: true,
             message: "登录成功",
@@ -120,6 +124,7 @@ export default {
             showClose: true,
             message: "账号或密码不正确",
             type: "error",
+            ssss,
           });
         }
       });
@@ -128,6 +133,9 @@ export default {
       this.$refs[formName].resetFields();
     },
   },
+  // mounted() {
+  //   this.$message.warning("您还未登录");
+  // },
 };
 </script>
 

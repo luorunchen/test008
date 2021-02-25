@@ -1,55 +1,83 @@
 <template>
   <div id="huozaibaojing">
     <div class="leftWapper">
-      <div class="left_one">
+      <div class="left_one" ref="leftOne">
         <p>今日报警项目</p>
         <div class="title">
-          <ul>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
+          <ul v-for="(item, index) in baojingNum" :key="index">
+            <li>{{ item }}</li>
           </ul>
         </div>
-
-        <ul class="ulList">
-          <li><span>报警XXXX</span><span>共X条未处理></span></li>
-          <li>2</li>
-          <li>2</li>
-        </ul>
+        <div class="scroll_wapper">
+          <ul
+            class="ulList"
+            v-for="(item, index) in DeviceAlarmList"
+            :key="index"
+          >
+            <li @click="callPolice(item.pid)">
+              <span>{{ item.typeName }}</span
+              ><span>共{{ item.value }}条未处理></span>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="left_two">
         <p>接入电气火灾探测器</p>
-        <div class="title">
-          <ul>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-          </ul>
-        </div>
 
         <Translate />
       </div>
     </div>
-    <SearchTranslate />
+    <SearchTranslate
+      :SElec_DetailElecDevice_List="SElec_DetailElecDevice_List"
+      :pagetype="pagetype"
+    />
   </div>
 </template>
 
 <script>
+import { DeviceAlarm, SElec_DetailElecDevice } from "@/api/index.js";
 import Translate from "../translate/baojingTranslate.vue";
 import SearchTranslate from "../translate/searchTranslate.vue";
 export default {
   data() {
     return {
-      formInline: {
-        user: "",
-      },
+      SElec_DetailElecDevice_List: "",
+      baojingNum: "",
+      DeviceAlarmList: "",
+      pagetype: "4",
+      // DeviceNumList: "",
     };
+  },
+  mounted() {
+    this.DeviceAlarm();
+  },
+  methods: {
+    callPolice(pid) {
+      SElec_DetailElecDevice(pid).then((res) => {
+        this.SElec_DetailElecDevice_List = res.data;
+      });
+    },
+    DeviceAlarm() {
+      DeviceAlarm(this.utils.userName, "0,5,20", 1).then((res) => {
+        this.DeviceAlarmList = res.data;
+        let num = 0;
+        // console.log(res.data, 99);
+        if (res.data.length <= 0) {
+          // return this.$message.error("今日报警数据丢失");
+          this.baojingNum = "000000";
+
+          this.$refs.leftOne.style.height = "140" + "px";
+        } else {
+          res.data.forEach((element) => {
+            num += element.value;
+          });
+
+          // this.baojingNum = str + num;
+          let str = "000000" + num;
+          this.baojingNum = str.substring(str.length - 6);
+        }
+      });
+    },
   },
   components: {
     Translate,
@@ -78,7 +106,7 @@ export default {
     .left_one {
       background-image: url("../../images/zhengchangbili.png");
       height: 450px;
-      background-size: 100% 100%;
+      background-size: 100% 450px;
       p {
         text-align: center;
         line-height: 70px;
@@ -172,6 +200,16 @@ export default {
         }
       }
     }
+  }
+  .scroll_wapper {
+    margin-top: 15px;
+    // position: relative;
+    overflow-y: auto;
+    height: 300px; //高度根据需求自行设定
+    overflow-x: hidden;
+  }
+  .scroll_wapper ::-webkit-scrollbar {
+    display: none; /*隐藏滚动条*/
   }
   .rightWapper {
     margin-top: 50px;

@@ -1,4 +1,4 @@
-import service from '../utils/request.js'
+import { service, service_ycy } from '../utils/request.js'
 
 //登录接口
 export function login(username, password) {
@@ -185,9 +185,9 @@ export function SElec_DetailElecDevice(pid) {
   return service({
     url: `/admin/project/SElec_DetailElecDevice.action`,
     method: 'POST',
-    params: {
-      pid
-    }
+    data: `pid=${pid}`
+
+
   })
 }
 //今日报警详情查看接口
@@ -239,6 +239,18 @@ export function ElecData(devId, lstDate) {
     }
   })
 }
+//消防水位详情接口
+export function ElecData_type(devId, type) {
+  return service({
+    url: `/admin/device/ElecData.action`,
+    method: 'GET',
+    params: {
+      devId,
+      type,
+
+    }
+  })
+}
 //接入设备->报警=>解除报警接口
 export function WebeditFileimageServlet(username, cause) {
   return service({
@@ -284,14 +296,138 @@ export function putMessToDevice(imei, content) {
     }
   })
 }
-//接入设备->报警=>设备设置(远程断电)接口
-export function resetclose(id) {
+//接入设备->报警=>设备设置(远程断电/消音)接口
+export function resetclose(imei, states) {
+  return service({
+    url: `/resetclose.action`,
+    method: 'GET',
+    params: {
+      imei,
+      states
+    }
+  })
+}
+//接入设备->报警=>设备设置(远程复位)接口
+export function resetclosefuwei(imei, states) {
   return service({
     url: `/resetclose.action`,
     method: 'GET',
     params: {
       id,
+      states
+    }
+  })
+}
+//接入设备->报警=>设备设置(远程开/关机)接口
+export function putMessToDeviceOn(imei, content) {
+  return service({
+    url: `/admin/project/putMessToDevice.action`,
+    method: 'GET',
+    params: {
+      imei,
+      content
+    }
+  })
+}
+//接入设备->报警=>设备设置(授权)接口
+export function insertClouddog(devices) {
+  return service({
+    url: `/WebProject/insertClouddog.action`,
+    method: 'GET',
+    params: {
+      devices,
 
+    }
+  })
+}
+//接入设备->报警=>设备设置(开启屏蔽器)接口
+export function updateShutdown(devices, my_username) {
+  return service({
+    url: `/WebProject/updateShutdown`,
+    method: 'GET',
+    params: {
+      devices,
+      my_username
+    }
+  })
+}
+//接入设备->报警=>设备设置(阀值设置)接口
+export function SetParameterApi(devSignature, parNine, parTen, parEleven,
+  parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen) {
+  return service({
+    url: `/SetParameterApi.action`,
+    method: 'GET',
+    params: {
+      devSignature, parNine, parTen, parEleven,
+      parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen
+    }
+  })
+}
+//接入设备->报警=>设备设置(报警推送)接口
+export function UpdateDevicePush(devicename, app, username, sms, deviceId, phone) {
+  return service({
+    url: `/WebProject/UpdateDevicePush.action`,
+    method: 'GET',
+    params: {
+      devicename,
+      app,
+      username,
+      sms,
+      deviceId,
+      phone
+    }
+  })
+}
+//接入设备->报警=>设备设置(报警推送)接口
+export function getHistoryFault(deviceId, lodDate, newDate) {
+  return service({
+    url: `/WebProject/getHistoryFault`,
+    method: 'GET',
+    params: {
+
+      deviceId,
+      lodDate,
+      newDate
+    }
+  })
+}
+//地图点
+export function DeviceProjectNew(username, type, region) {
+  return service({
+    url: `/WebProject/DeviceProjectNew.action`,
+    method: 'GET',
+    params: {
+      username,
+      type,
+      region
+    }
+  })
+}
+//萤石云视频
+export function getvideo() {
+  return service({
+    url: `/getvideo.action`,
+    method: 'GET',
+
+  })
+}
+//烟感获取详情
+export function getHisDeviceData(imei) {
+  return service({
+    url: `/admin/device/getHisDeviceData.action`,
+    method: 'GET',
+    params: {
+      imei
+    }
+  })
+}
+//电力检测获取详情
+export function fracture(did, my_username, st_date, en_date) {
+  return service({
+    url: `/fracture.action`,
+    method: 'GET',
+    params: {
+      did, my_username, st_date, en_date
     }
   })
 }

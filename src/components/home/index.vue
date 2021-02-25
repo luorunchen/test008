@@ -244,6 +244,7 @@ import {
   push_AlarmAndFault,
   push_ProjectRegion,
   AlarmInforMore,
+  DeviceProjectNew,
 } from "@/api/index.js";
 // import AMap from "AMap";
 export default {
@@ -335,6 +336,50 @@ export default {
         resizeEnable: true,
         zoom: 10,
         mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
+      });
+
+      DeviceProjectNew(
+        this.utils.userName,
+        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+        1
+      ).then((res) => {
+        console.log(res);
+        const style = [
+          {
+            url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
+            anchor: new AMap.Pixel(4, 4),
+            size: new AMap.Size(11, 11),
+          },
+          {
+            url: "https://a.amap.com/jsapi_demos/static/images/mass0.png",
+            anchor: new AMap.Pixel(6, 6),
+            size: new AMap.Size(11, 11),
+          },
+        ];
+        let a = [];
+        let b = [];
+        for (let i = 0; i < res.data.Company.length; i++) {
+          if (res.data.Company[i].style == 1) {
+            b.push(res.data.Company[i]);
+          } else {
+            a.push(res.data.Company[i]);
+          }
+        }
+        let c = [...a, ...b];
+        const mass = new AMap.MassMarks(c, {
+          opacity: 0.8,
+          zIndex: 111,
+          cursor: "pointer",
+          style: style,
+        });
+        const marker = new AMap.Marker({ content: " ", map: map });
+        mass.setMap(map);
+
+        //绑定事件模块
+        // mass.on("mouseover", function (e) {
+        //   marker.setPosition(e.data.lnglat);
+        //   marker.setLabel({ content: e.data.name });
+        // });
       });
     },
     submitForm(formName) {
@@ -815,6 +860,7 @@ export default {
     },
 
     out() {
+      sessionStorage.removeItem("userName");
       this.$router.push("/login");
     },
   },

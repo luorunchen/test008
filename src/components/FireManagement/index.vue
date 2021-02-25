@@ -405,7 +405,7 @@
       title="新增"
       :visible.sync="dialogVisible"
       width="50%"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <template v-if="this.btnInfo == '项目管理'">
         <el-form
@@ -608,7 +608,7 @@
       width="30%"
       title="新增"
       :visible.sync="outerVisible"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="姓名">

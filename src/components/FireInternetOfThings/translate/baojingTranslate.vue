@@ -5,7 +5,56 @@
         <li>{{ item }}</li>
       </ul>
     </div>
-    <ul class="ulList">
+    <ul
+      class="ulList"
+      v-if="
+        this.$route.path === '/FireInternetOfThings/FireWaterSystem' ||
+        this.$route.path === '/FireInternetOfThings/FireAlarmSystem' ||
+        this.$route.path === '/FireInternetOfThings/KeyParts' ||
+        this.$route.path === '/FireInternetOfThings/SmartIndependentSmoke' ||
+        this.$route.path === '/FireInternetOfThings/GasDetector' ||
+        this.$route.path === '/FireInternetOfThings/IntelligentFireAlarm' ||
+        this.$route.path === '/FireInternetOfThings/FireExtinguisher' ||
+        this.$route.path === '/FireInternetOfThings/PowerDetection'
+      "
+    >
+      <li
+        @click="fatherMethod('1')"
+        :class="this.DeviceNumList.alarm == 0 ? 'pointer_events' : ''"
+      >
+        <span>报警</span
+        ><span style="color: #f9387f">{{ DeviceNumList.alarm }}></span>
+      </li>
+      <li
+        @click="fatherMethod('2')"
+        :class="this.DeviceNumList.online == 0 ? 'pointer_events' : ''"
+      >
+        <span>在线</span><span>{{ DeviceNumList.online }}></span>
+      </li>
+      <li
+        @click="fatherMethod('3')"
+        :class="this.DeviceNumList.offline == 0 ? 'pointer_events' : ''"
+      >
+        <span>离线</span
+        ><span style="color: #ffff00">{{ DeviceNumList.offline }}></span>
+      </li>
+    </ul>
+
+    <ul
+      class="ulList"
+      v-else-if="
+        this.$route.path === '/FireInternetOfThings/EmergencyManagement'
+      "
+    >
+      <li @click="windowsClick('3')">
+        <span>电气火灾设备</span><span>></span>
+      </li>
+      <li @click="windowsClick('4,8')">
+        <span>消防水设备</span><span>></span>
+      </li>
+    </ul>
+
+    <ul class="ulList" v-else>
       <li @click="(dialogVisible = true), callPolice('')">
         <span>报警</span
         ><span style="color: #f9387f">{{ DeviceNumList.alarm }}></span>
@@ -23,7 +72,7 @@
       title="报警设备"
       :visible.sync="dialogVisible"
       width="70%"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <el-form
         :inline="true"
@@ -178,7 +227,7 @@
       title="在线设备"
       :visible.sync="onlineVisible"
       width="70%"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <el-form
         :inline="true"
@@ -253,12 +302,12 @@
         >
       </span> -->
     </el-dialog>
-    <!-- 在线设备弹窗 -->
+    <!-- 离线设备弹窗 -->
     <el-dialog
-      title="在线设备"
+      title="离线设备"
       :visible.sync="offlineVisible"
       width="70%"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <el-form
         :inline="true"
@@ -339,10 +388,12 @@
       width="60%"
       title="查看"
       :visible.sync="innerVisible"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <el-row
-        ><el-button type="primary " @click="innerVisible_shebei = true"
+        ><el-button
+          type="primary "
+          @click="(innerVisible_shebei = true), devicesSetting()"
           >设备设置</el-button
         >
         <el-button type="primary" @click="innerVisible_lishi = true"
@@ -371,7 +422,10 @@
               </li>
 
               <li>
-                保险单号: <span> {{ item.policy }}</span>
+                保险单号:
+                <span>
+                  {{ item.policy == "0" ? "暂无保险单号" : item.policy }}</span
+                >
               </li>
               <li>
                 安装位置: <span>{{ item.installLocation }}</span>
@@ -1326,33 +1380,33 @@
             </el-row>
           </template>
 
-          <div class="one_echarts">
+          <div
+            class="one_echarts"
+            v-loading="callPoliceList_loading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255,255,255)"
+          >
             <p class="titleP">电流统计图</p>
-            <div v-if="this.ElectricDeviceDateType == false">
-              <p class="zanwushuju">暂无数据</p>
-            </div>
-            <div class="echarts_wapper_one" v-else></div>
+
+            <div class="echarts_wapper_one"></div>
           </div>
           <div class="two_echarts">
             <p class="titleP">电压统计图</p>
-            <div v-if="ElectricDeviceDateType == false">
-              <p class="zanwushuju">暂无数据</p>
-            </div>
-            <div class="echarts_wapper_two" v-else></div>
+
+            <div class="echarts_wapper_two"></div>
           </div>
           <div class="three_echarts">
             <p class="titleP">温度统计图</p>
-            <div v-if="ElectricDeviceDateType == false">
-              <p class="zanwushuju">暂无数据</p>
-            </div>
-            <div class="echarts_wapper_three" v-else></div>
+
+            <div class="echarts_wapper_three"></div>
           </div>
           <div class="four_echarts">
             <p class="titleP">图片</p>
             <div v-if="ElecDataList_images.length == 0">
               <p class="zanwushuju">暂无数据</p>
             </div>
-            <div class="echarts_wapper_four" v-else>
+            <div class="echarts_wapper_four">
               <div v-for="(item, index) in ElecDataList_images" :key="index">
                 <img :src="item" alt="" width="150px" height="150px" />
               </div>
@@ -1364,19 +1418,29 @@
     <!-- 内部弹窗->设置设备 -->
     <el-dialog
       width="50%"
-      title="内层 Dialog"
+      title="设备设置"
       :visible.sync="innerVisible_shebei"
-      append-to-body
+      :modal-append-to-body="false"
     >
       <el-row>
         <el-col :span="6"
           ><div class="shezhi_left">
             <p class="titleP">设备信息</p>
-            <ul>
-              <li>设备编号</li>
-              <li>保险单号</li>
-              <li>开启流量</li>
-              <li>是否授权</li>
+            <ul v-for="(item, index) in ElecDataList.DevData" :key="index">
+              <li>
+                设备编号: <span> {{ item.productNumber }}</span>
+              </li>
+              <li>
+                保险单号:
+                <span>{{
+                  item.policy == "0" ? "暂无保险单号" : item.policy
+                }}</span>
+              </li>
+              <li>
+                开启流量:
+                <span>{{ item.flow == "0" ? "否" : "item.flow" }}</span>
+              </li>
+              <li>是否授权: <span>否</span></li>
             </ul>
           </div></el-col
         >
@@ -1390,23 +1454,70 @@
                 class="row-bg"
                 justify="space-around"
               >
-                <el-col :span="8"> <el-button>远程断电</el-button></el-col>
-                <el-col :span="8"> <el-button>远程开机</el-button></el-col>
-                <el-col :span="8"> <el-button>远程关机</el-button></el-col>
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('1')"
+                    >远程断电</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('2')"
+                    >远程开机</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('3')"
+                    >远程关机</el-button
+                  ></el-col
+                >
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="8"> <el-button>开启蜂鸣器</el-button></el-col>
-                <el-col :span="8"> <el-button>关闭蜂鸣器</el-button></el-col>
-                <el-col :span="8"> <el-button>远程消音</el-button></el-col>
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('4')"
+                    >开启蜂鸣器</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('5')"
+                    >关闭蜂鸣器</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('6')"
+                    >远程消音</el-button
+                  ></el-col
+                >
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="8"> <el-button>开启流量</el-button></el-col>
-                <el-col :span="8"> <el-button>远程复位</el-button></el-col>
-                <el-col :span="8"> <el-button>授权</el-button></el-col>
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('7')"
+                    >开启流量</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('8')"
+                    >远程复位</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('9')">授权</el-button></el-col
+                >
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="8"> <el-button>开启屏蔽器</el-button></el-col>
-                <el-col :span="8"> <el-button>下发保险单</el-button></el-col>
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('10')"
+                    >开启屏蔽器</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('11')">下发保险单</el-button>
+                </el-col>
+                <el-col :span="8">
+                  <el-input
+                    placeholder="请输入保险单号"
+                    v-model="baoxiandanhao"
+                  ></el-input>
+                </el-col>
+
                 <!-- <el-col :span="8"> <el-button>远程关机</el-button></el-col> -->
               </el-row>
             </div>
@@ -1419,6 +1530,7 @@
                       <el-col :span="12">
                         <p>剩余电流/mA</p>
                         <el-input
+                          v-model="fazhishezhi.SYDL"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input>
@@ -1426,6 +1538,7 @@
                       <el-col :span="12"
                         ><p>A相温度/℃</p>
                         <el-input
+                          v-model="fazhishezhi.AXWD"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input
@@ -1433,15 +1546,17 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :span="12">
-                        <p>剩余电流/mA</p>
+                        <p>B相温度/℃</p>
                         <el-input
+                          v-model="fazhishezhi.BXWD"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input>
                       </el-col>
                       <el-col :span="12"
-                        ><p>A相温度/℃</p>
+                        ><p>C相温度/℃</p>
                         <el-input
+                          v-model="fazhishezhi.CXWD"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input
@@ -1449,15 +1564,17 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :span="12">
-                        <p>剩余电流/mA</p>
+                        <p>N相温度/℃</p>
                         <el-input
+                          v-model="fazhishezhi.NXWD"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input>
                       </el-col>
                       <el-col :span="12"
-                        ><p>A相温度/℃</p>
+                        ><p>A相电流/A</p>
                         <el-input
+                          v-model="fazhishezhi.AXDL"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input
@@ -1465,15 +1582,17 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :span="12">
-                        <p>剩余电流/mA</p>
+                        <p>B相电流/A</p>
                         <el-input
+                          v-model="fazhishezhi.BXDL"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input>
                       </el-col>
                       <el-col :span="12"
-                        ><p>A相温度/℃</p>
+                        ><p>C相电流/A</p>
                         <el-input
+                          v-model="fazhishezhi.CXDL"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input
@@ -1481,15 +1600,17 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :span="12">
-                        <p>剩余电流/mA</p>
+                        <p>A相电压/V</p>
                         <el-input
+                          v-model="fazhishezhi.AXDY"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input>
                       </el-col>
                       <el-col :span="12"
-                        ><p>A相温度/℃</p>
+                        ><p>B相电压/V</p>
                         <el-input
+                          v-model="fazhishezhi.BXDY"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input
@@ -1497,27 +1618,24 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :span="12">
-                        <p>剩余电流/mA</p>
+                        <p>C相电压/V</p>
                         <el-input
+                          v-model="fazhishezhi.CXDY"
                           size="mini"
                           placeholder="请输入内容"
                         ></el-input>
                       </el-col>
-                      <el-col :span="12"
-                        ><p>A相温度/℃</p>
-                        <el-input
-                          size="mini"
-                          placeholder="请输入内容"
-                        ></el-input
-                      ></el-col>
                     </el-row>
                     <el-row type="flex" justify="center">
                       <el-col :span="4"
                         ><el-button size="mini">取消</el-button></el-col
                       >
                       <el-col :span="4"
-                        ><el-button type="primary" size="mini"
-                          >确定</el-button
+                        ><el-button
+                          type="primary"
+                          size="mini"
+                          @click="SetParameterApiFun"
+                          >保存</el-button
                         ></el-col
                       >
                     </el-row>
@@ -1529,16 +1647,19 @@
                   >
                     <p>设备状态</p>
                     <el-checkbox-group v-model="checkList">
-                      <el-checkbox label="App"></el-checkbox>
-                      <el-checkbox label="短信"></el-checkbox>
-                      <el-checkbox label="手机"></el-checkbox>
+                      <el-checkbox label="App">App</el-checkbox>
+                      <el-checkbox label="短信">短信</el-checkbox>
+                      <el-checkbox label="电话">电话</el-checkbox>
                     </el-checkbox-group>
                     <el-row type="flex" justify="center">
                       <el-col :span="4"
                         ><el-button size="mini">取消</el-button></el-col
                       >
                       <el-col :span="4"
-                        ><el-button type="primary" size="mini"
+                        ><el-button
+                          type="primary"
+                          size="mini"
+                          @click="baojingtuisong"
                           >确定</el-button
                         ></el-col
                       >
@@ -1552,27 +1673,20 @@
                       class="demo-form-inline"
                     >
                       <el-form-item label="日期:">
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="开始时间"
-                            v-model="sizeForm.date1"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="结束时间"
-                            v-model="sizeForm.date2"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
+                        <el-date-picker
+                          v-model="DeviceHistory"
+                          type="datetimerange"
+                          range-separator="至"
+                          start-placeholder="开始日期"
+                          end-placeholder="结束日期"
+                          value-format="yyyy-MM-dd HH:mm:ss"
+                          format="yyyy-MM-dd HH:mm:ss"
+                        >
+                        </el-date-picker>
                       </el-form-item>
 
                       <el-form-item>
-                        <el-button type="primary" @click="onSubmit"
+                        <el-button type="primary" @click="deviceHistory"
                           >查询</el-button
                         >
                       </el-form-item>
@@ -1596,27 +1710,22 @@
                       class="demo-form-inline"
                     >
                       <el-form-item label="日期:">
-                        <el-col :span="11">
+                        <div class="block">
                           <el-date-picker
-                            type="date"
-                            placeholder="开始时间"
-                            v-model="sizeForm.date1"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                          <el-date-picker
-                            type="date"
-                            placeholder="结束时间"
-                            v-model="sizeForm.date2"
-                            style="width: 100%"
-                          ></el-date-picker>
-                        </el-col>
+                            v-model="DeviceHistory"
+                            type="datetimerange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                          >
+                          </el-date-picker>
+                        </div>
                       </el-form-item>
 
                       <el-form-item>
-                        <el-button type="primary" @click="onSubmit"
+                        <el-button type="primary" @click="deviceHistory"
                           >查询</el-button
                         >
                       </el-form-item>
@@ -1642,7 +1751,7 @@
     <!-- 内部弹窗->历史报警 -->
     <el-dialog
       title="历史报警"
-      append-to-body
+      :modal-append-to-body="false"
       :visible.sync="innerVisible_lishi"
       width="50%"
     >
@@ -1674,6 +1783,7 @@
 
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button type="primary" @click="onSubmit">导出</el-button>
         </el-form-item>
       </el-form>
       <template>
@@ -1699,10 +1809,34 @@ import {
   WebeditFileimageServlet,
   ReadParameterApi,
   getDeviceByDevId,
+  resetclose,
+  putMessToDevice,
+  putMessToDeviceOn,
+  resetclosefuwei,
+  insertClouddog,
+  updateShutdown,
+  SetParameterApi,
+  UpdateDevicePush,
+  getHistoryFault,
 } from "@/api/index.js";
 export default {
   data() {
     return {
+      DeviceHistory: "",
+      fazhishezhi: {
+        SYDL: "",
+        AXDL: "",
+        BXDL: "",
+        CXDL: "",
+        AXWD: "",
+        BXWD: "",
+        CXWD: "",
+        NXWD: "",
+        AXDY: "",
+        BXDY: "",
+        CXDY: "",
+      },
+      baoxiandanhao: "",
       ElectricDeviceDateType: false,
       ElecDataList_images: [],
       shengyu_loudian: "",
@@ -1742,34 +1876,282 @@ export default {
         region: "",
       },
       currentPage4: 1,
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      tableData: [],
     };
   },
   mounted() {
     this.DeviceNum();
   },
   methods: {
+    windowsClick(data) {
+      // let status = this.$store.state.initStatus; //
+      this.$store.commit("changeStatus", data);
+    },
+    fatherMethod(num) {
+      let data;
+      switch (num) {
+        case "1":
+          data = this.DeviceNumList.alarmPid;
+          break;
+        case "2":
+          data = this.DeviceNumList.onlinePid;
+          break;
+        case "3":
+          data = this.DeviceNumList.offlinePid;
+          break;
+      }
+
+      // console.log(data.join(","));
+      this.$parent.callPolice(data.join(","));
+    },
+    //设备历史
+    deviceHistory() {
+      console.log(this.DeviceHistory);
+      getHistoryFault(
+        this.ElecDataList.DevData[0].productNumber,
+        this.DeviceHistory[0],
+        this.DeviceHistory[1]
+      ).then((res) => {});
+    },
+    //报警推送
+    baojingtuisong() {
+      console.log(this.checkList);
+      let app = 0;
+      let sms = 0;
+      let phone = 0;
+      // if(this.checklist.length==3){
+      //   app = 1
+      // }
+      // if(this.checklist.length==2){
+      //   sms = 1
+      // }
+      this.checkList.forEach((index, element) => {
+        console.log(index, element);
+        if (index === "短信") {
+          sms = 1;
+        }
+        if (index === "电话") {
+          phone = 1;
+        }
+        if (index === "App") {
+          app = 1;
+        }
+      });
+      UpdateDevicePush(
+        "undefined",
+        app,
+        this.utils.userName,
+        sms,
+        this.ElecDataList.DevData[0].productNumber,
+        phone
+      ).then((res) => {
+        this.$message.success("修改成功");
+      });
+    },
+    //设备设置按钮
+    shebeiBtn(num) {
+      const role = sessionStorage.getItem("role");
+      const power = sessionStorage.getItem("power");
+      switch (num) {
+        //远程断电
+        case "1":
+          if (role == "1000" || power.indexOf("10003003") != -1) {
+            resetclose(this.ElecDataList.DevData[0].productNumber, 0).then(
+              (res) => {
+                if (res.message == "请求成功") {
+                  this.$message.success(res.message);
+                } else {
+                  this.$message.error(res.message);
+                }
+              }
+            );
+          } else {
+            this.$message.error("暂无权限");
+          }
+
+          break;
+
+        //远程开机
+        case "2":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "shutdown"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("远程开机成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+        //远程关机
+        case "3":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "startup"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("远程开机成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.message.error("暂无权限");
+          }
+          break;
+        //开启蜂鸣器
+        case "4":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "voiceon"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("开启蜂鸣器成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //关闭蜂鸣器
+        case "5":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "voiceoff"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("开启蜂鸣器成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.message.error("暂无权限");
+          }
+          break;
+        //远程消音
+        case "6":
+          if (role == "1000" || power.indexOf("10003001") != -1) {
+            resetclose(this.ElecDataList.DevData[0].productNumber, 2).then(
+              (res) => {
+                if (res.message == "请求成功") {
+                  alert("远程消音成功");
+                } else {
+                  alert("远程消音失败");
+                }
+              }
+            );
+          } else {
+            this.$message.error("暂无权限");
+          }
+
+          break;
+        //开启流量
+        case "7":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.ElecDataList.DevData[0].productNumber,
+              "openflow"
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("开启流量成功");
+              } else {
+                alert("请稍后重试");
+              }
+            });
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //远程复位
+        case "8":
+          if (role == "1000" || power.indexOf("10003003") != -1) {
+            resetclosefuwei(this.ElecDataList.DevData[0].productNumber, 2).then(
+              (res) => {
+                if (res.status == "1") {
+                  this.$message.success(res.message);
+                } else {
+                  this.$message.error(res.message);
+                }
+              }
+            );
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //授权
+        case "9":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            insertClouddog(this.ElecDataList.DevData[0].productNumber).then(
+              (res) => {
+                if (res.list[0].status == "true") {
+                  this.$message.success(
+                    "授权成功.工作日一天后将授权生效,非工作日将延期"
+                  );
+                } else {
+                  this.$message.error("授权失败");
+                }
+              }
+            );
+          }
+          break;
+        //开启屏蔽器
+        case "10":
+          if (role == "1000" || power.indexOf("10003013") != -1) {
+            updateShutdown(
+              this.ElecDataList.DevData[0].productNumber,
+              this.utils,
+              userName
+            ).then((res) => {
+              if (res.status == "true") {
+                layer.open({
+                  content: res.mess,
+                });
+                this.$message.success(res.mess);
+              } else {
+                this.$message.error(res.mess);
+              }
+            });
+          }
+          break;
+        //下发保险单
+        case "11":
+          // console.log(6554654);
+          // console.log(this.ElecDataList.DevData[0].productNumber, 789789);
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDevice(
+              this.ElecDataList.DevData[0].productNumber,
+              this.baoxiandanhao
+            ).then((res) => {
+              if (res.message == "请求成功") {
+                alert("下发保险单号成功");
+              } else {
+                this.$message.error("请稍后重试");
+              }
+            });
+          }
+          // var res = JSON.parse(result);
+          // console.log(res);
+
+          break;
+      }
+    },
+    // 设备设置
+
     //提交处置情况
     management() {
       if (this.ElecDataList.DevData == "正常") {
@@ -1791,10 +2173,9 @@ export default {
       let object = this.onlineInput.shebeiName || this.onlineInput.xiangmuName;
       this.callPoliceList_loading = true;
       this.alarm = alarm;
-      let type;
+
       switch (this.$route.path) {
         case "/FireInternetOfThings/electricalFire":
-          type = 3;
           break;
         case "/FireInternetOfThings/FireWaterSystem":
           this.btnInfo = "消防水系统";
@@ -1841,6 +2222,7 @@ export default {
         this.callPoliceList_loading = false;
       });
     },
+
     // 报警设备
     callPolice(alarm) {
       this.callPoliceList_loading = true;
@@ -1868,39 +2250,49 @@ export default {
           break;
         case "/FireInternetOfThings/FireWaterSystem":
           this.btnInfo = "消防水系统";
+          type = "4,8";
           break;
         case "/FireInternetOfThings/FireAlarmSystem":
           this.btnInfo = "火灾报警系统";
+          type = "0,5,20";
           break;
         case "/FireInternetOfThings/KeyParts":
           this.btnInfo = "重点部位";
+          type = "9,13,20";
           break;
         case "/FireInternetOfThings/SmartIndependentSmoke":
           this.btnInfo = "智慧型独立烟感";
+          type = "2";
           break;
         case "/FireInternetOfThings/GasDetector":
           this.btnInfo = "燃气探测器";
+          type = "1,6,11";
           break;
         case "/FireInternetOfThings/EmergencyManagement":
           this.btnInfo = "应急处理";
+          type = "3,4,8";
           break;
         case "/FireInternetOfThings/IntelligentFireAlarm":
           this.btnInfo = "智慧型消防报警";
+          type = "10,15,16,19,18";
           break;
         case "/FireInternetOfThings/FireExtinguisher":
           this.btnInfo = "灭火器";
+          type = "21";
           break;
         case "/FireInternetOfThings/PowerDetection":
           this.btnInfo = "电力检测系统";
+          type = "12";
           break;
         case "/FireInternetOfThings/Panorama":
           this.btnInfo = "设备定位全景图";
+          type = "3";
           break;
       }
 
       DeviceNum(this.utils.userName, type, 1).then((res) => {
         this.DeviceNumList = res.data;
-        console.log(this.DeviceNumList);
+        // console.log(this.DeviceNumList);
         let subNum = "000000" + this.DeviceNumList.deviceNum;
         this.deviceNum = subNum.substring(subNum.length - 6);
       });
@@ -1908,10 +2300,30 @@ export default {
 
     // TabS 切换函数
     handleClick(tab, event) {
-      console.log(tab, event);
+      console.log(tab.label);
+      if (tab.label === "阀值设置") {
+        ReadParameterApi(this.ElecDataList.DevData[0].productNumber).then(
+          (res) => {
+            console.log(res.data.row);
+            const row = res.data.row;
+            this.fazhishezhi.AXWD = row.AWenDu;
+            this.fazhishezhi.BXWD = row.BWenDu;
+            this.fazhishezhi.CXWD = row.CWenDu;
+            this.fazhishezhi.NXWD = row.NWenDu;
+            this.fazhishezhi.SYDL = row.SYdianliu;
+            this.fazhishezhi.AXDL = row.ADianLiu;
+            this.fazhishezhi.BXDL = row.BDianLiu;
+            this.fazhishezhi.CXDL = row.CDianLiu;
+            this.fazhishezhi.AXDY = row.ADianYa;
+            this.fazhishezhi.BXDY = row.BDianYa;
+            this.fazhishezhi.CXDY = row.CDianYa;
+          }
+        );
+      }
     },
     // 查看echart图片函数
     see(devId) {
+      this.callPoliceList_loading = true;
       //清空处置情况
       this.managementInput = "";
       const time = new Date();
@@ -1986,7 +2398,8 @@ export default {
       // 图表接口
       ElectricDeviceDate(devId, now).then((res) => {
         // console.log(res.data, 2321232123212);
-        const data = res.data;
+        this.callPoliceList_loading = false;
+
         let dianLiuUa = [];
         let dianLiuUb = [];
         let dianLiuUc = [];
@@ -1999,11 +2412,11 @@ export default {
         let wenduC = [];
         let wenduN = [];
         let name = [];
-        if (res.data.Data.length > 0) {
-          this.ElectricDeviceDateType = true;
-        } else {
-          return (this.ElectricDeviceDateType = false);
-        }
+        // if (res.data.Data.length > 0) {
+        //   this.ElectricDeviceDateType = true;
+        // } else {
+        //   return (this.ElectricDeviceDateType = false);
+        // }
 
         res.data.Data.forEach((element) => {
           dianLiuUa.push(element.ia);
@@ -2191,6 +2604,31 @@ export default {
         });
       });
     },
+    SetParameterApiFun() {
+      SetParameterApi(
+        this.ElecDataList.DevData[0].productNumber,
+        this.fazhishezhi.SYDL,
+        this.fazhishezhi.AXWD,
+        this.fazhishezhi.BXWD,
+        this.fazhishezhi.CXWD,
+        this.fazhishezhi.NXWD,
+        this.fazhishezhi.AXDL,
+        this.fazhishezhi.BXDL,
+        this.fazhishezhi.CXDL,
+        this.fazhishezhi.AXDY,
+        this.fazhishezhi.BXDY,
+        this.fazhishezhi.CXDY
+      ).then((res) => {
+        if (result.status == 1) {
+          alert("参数设置成功");
+          setTimeout(function () {
+            parent.location.reload();
+          }, 1000);
+        } else {
+          alert("参数设置失败");
+        }
+      });
+    },
     // 分页器回调
     handleSizeChange(val) {
       this.pageSize = val;
@@ -2274,6 +2712,9 @@ export default {
     padding-left: 20px;
     li {
       margin-top: 8px;
+      span {
+        color: blue;
+      }
     }
   }
 }
@@ -2671,6 +3112,10 @@ export default {
       font-size: 16px;
       display: flex;
       justify-content: space-between;
+    }
+    .pointer_events {
+      pointer-events: none;
+      cursor: not-allowed;
     }
   }
 }

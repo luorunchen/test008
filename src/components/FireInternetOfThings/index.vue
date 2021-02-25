@@ -1,5 +1,11 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    v-loading="loading_map"
+    element-loading-text="地图资源加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.4)"
+  >
     <div class="title">
       <div class="gotoSy">
         <div style="width: 130px">
@@ -169,19 +175,21 @@
         </div>
       </div>
     </div>
+
+    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { getIndexReport } from "@/api/index.js";
-
-import DianliJC from "@/components/FireInternetOfThings/dianliJC";
+import { getIndexReport, DeviceProjectNew } from "@/api/index.js";
+import PublicPopUps from "../FireInternetOfThings/translate/publicPopUps.vue";
 export default {
   data() {
     return {
+      pagetype: "",
       numTwo: "0",
-
+      loading_map: false,
       numOne: "0",
       btnInfo: "隐患整改进度",
       getIndexReportList: "",
@@ -189,58 +197,148 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log(to.path);
       if (to.path === "/FireInternetOfThings") {
         this.echart();
       }
     },
+    //  应急处理组件触发函数
+    status() {
+      this.mass.setMap(null);
+      this.DeviceProjectNewFun(this.$store.state.initStatus); //   需要调用的方法
+      // console.log(this.$store.state.initStatus);
+    },
   },
   mounted() {
     // console.log(this.$route.path, 999999);
-    this.init();
+
     switch (this.$route.path) {
       case "/FireInternetOfThings":
+        this.DeviceProjectNewFun(
+          "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21"
+        );
         this.echart();
         break;
       case "/FireInternetOfThings/electricalFire":
         this.btnInfo = "电气火灾隐患";
+        this.pagetype = "2";
+        this.DeviceProjectNewFun("3");
         break;
       case "/FireInternetOfThings/FireWaterSystem":
         this.btnInfo = "消防水系统";
+        this.pagetype = "3";
+        this.DeviceProjectNewFun("4,8");
         break;
       case "/FireInternetOfThings/FireAlarmSystem":
         this.btnInfo = "火灾报警系统";
+        this.pagetype = "4";
+        this.DeviceProjectNewFun("0,5,20");
         break;
       case "/FireInternetOfThings/KeyParts":
         this.btnInfo = "重点部位";
+        this.pagetype = "5";
+        this.DeviceProjectNewFun("9,13,20");
         break;
       case "/FireInternetOfThings/SmartIndependentSmoke":
         this.btnInfo = "智慧型独立烟感";
+        this.pagetype = "6";
+        this.DeviceProjectNewFun("2");
         break;
       case "/FireInternetOfThings/GasDetector":
         this.btnInfo = "燃气探测器";
+        this.pagetype = "7";
+        this.DeviceProjectNewFun("1,6,11");
         break;
       case "/FireInternetOfThings/EmergencyManagement":
         this.btnInfo = "应急处理";
+        this.DeviceProjectNewFun("3,4,8");
         break;
       case "/FireInternetOfThings/IntelligentFireAlarm":
         this.btnInfo = "智慧型消防报警";
+
+        this.DeviceProjectNewFun("10,15,16,19,18");
         break;
       case "/FireInternetOfThings/FireExtinguisher":
         this.btnInfo = "灭火器";
+
+        this.DeviceProjectNewFun("21");
         break;
       case "/FireInternetOfThings/PowerDetection":
         this.btnInfo = "电力检测系统";
+
+        this.DeviceProjectNewFun("12");
         break;
       case "/FireInternetOfThings/Panorama":
         this.btnInfo = "设备定位全景图";
+
+        this.DeviceProjectNewFun("3");
         break;
     }
+
+    this.init();
   },
 
   methods: {
     getText() {
       this.btnInfo = event.currentTarget.getAttribute("textInfo");
+      // this.init();
+      console.log(this.btnInfo);
+      switch (this.btnInfo) {
+        case "隐患整改进度":
+          this.mass.setMap(null);
+          this.DeviceProjectNewFun(
+            "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21"
+          );
+
+          break;
+        case "电气火灾隐患":
+          this.DeviceProjectNewFun("3");
+          this.mass.setMap(null);
+          this.pagetype = "2";
+          break;
+        case "消防水系统":
+          this.DeviceProjectNewFun("4,8");
+          this.mass.setMap(null);
+          this.pagetype = "3";
+          break;
+        case "火灾报警系统":
+          this.DeviceProjectNewFun("0,5,20");
+          this.mass.setMap(null);
+          this.pagetype = "4";
+          break;
+        case "重点部位":
+          this.DeviceProjectNewFun("9,13,20");
+          this.mass.setMap(null);
+          this.pagetype = "5";
+          break;
+        case "智慧型独立烟感":
+          this.DeviceProjectNewFun("2");
+          this.mass.setMap(null);
+          this.pagetype = "6";
+          break;
+        case "燃气探测器":
+          this.DeviceProjectNewFun("1,6,11");
+          this.mass.setMap(null);
+          break;
+        case "应急处理":
+          this.DeviceProjectNewFun("3,4,8");
+          break;
+        case "智慧型消防报警":
+          this.DeviceProjectNewFun("10,15,16,19,18");
+          this.mass.setMap(null);
+          break;
+        case "灭火器":
+          this.DeviceProjectNewFun("21");
+          this.mass.setMap(null);
+          break;
+        case "电力检测系统":
+          this.DeviceProjectNewFun("12");
+          this.mass.setMap(null);
+          break;
+        case "设备全景定位图":
+          this.DeviceProjectNewFun("3");
+          this.mass.setMap(null);
+          break;
+      }
     },
     echart() {
       getIndexReport(this.utils.userName).then((res) => {
@@ -462,12 +560,80 @@ export default {
     },
     //地图部分
     init() {
-      let map = new AMap.Map("app", {
+      this.map = new AMap.Map("app", {
         center: [116.397428, 39.90923],
         resizeEnable: true,
         zoom: 10,
         mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
       });
+      this.map.setZoomAndCenter(4, [116.205467, 39.907761]);
+    },
+    DeviceProjectNewFun(data) {
+      // console.log(this.$refs.publicPopUps.initOff());
+      this.loading_map = true;
+      DeviceProjectNew(this.utils.userName, data, 1).then((res) => {
+        // this.DeviceProjectNewData = res.data.Company;
+        let a = [];
+        let b = [];
+        for (let i = 0; i < res.data.Company.length; i++) {
+          if (res.data.Company[i].style == 1) {
+            b.push(res.data.Company[i]);
+          } else {
+            a.push(res.data.Company[i]);
+          }
+        }
+
+        this.DeviceProjectNewData = [...a, ...b];
+        // console.log(c, "我是aa,b");
+        this.$nextTick(() => {
+          const style = [
+            {
+              url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
+              anchor: new AMap.Pixel(4, 4),
+              size: new AMap.Size(8, 8),
+            },
+            {
+              url: "https://a.amap.com/jsapi_demos/static/images/mass0.png",
+              anchor: new AMap.Pixel(6, 6),
+              size: new AMap.Size(11, 11),
+            },
+          ];
+          // console.log(this.DeviceProjectNewData, 987987);
+
+          this.mass = new AMap.MassMarks(this.DeviceProjectNewData, {
+            opacity: 0.8,
+            zIndex: 111,
+            cursor: "pointer",
+            style: style,
+          });
+          // this.DeviceProjectNewData = [];
+          const marker = new AMap.Marker({ content: " ", map: this.map });
+          this.mass.setMap(this.map);
+
+          this.loading_map = false;
+          // 保存this
+          var _that = this;
+          //绑定事件模块
+          this.mass.on("click", function (e) {
+            // console.log(e);
+
+            // this.$refs.publicPopUps.initOff();
+
+            _that.$refs.publicPopUps.initOff();
+            _that.$refs.publicPopUps.echart_wapper(e.data.pid);
+          });
+        });
+      });
+    },
+  },
+  components: {
+    PublicPopUps,
+  },
+  computed: {
+    status() {
+      //  计算属性
+      // console.log(this.$store.state.initStatus);
+      return this.$store.state.initStatus; //  Vuex 中定义的属性
     },
   },
 };
@@ -477,6 +643,8 @@ export default {
   color: #fff;
   width: 100%;
   height: calc(100vh);
+  position: relative;
+  z-index: 9;
   .title {
     display: flex;
     width: 100%;
