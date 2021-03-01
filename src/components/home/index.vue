@@ -373,8 +373,8 @@ export default {
           cursor: "pointer",
           style: style,
         });
-        const marker = new AMap.Marker({ content: " ", map: map });
-        mass.setMap(map);
+        const marker = new AMap.Marker({ content: " ", map: this.map });
+        mass.setMap(this.map);
 
         //绑定事件模块
         // mass.on("mouseover", function (e) {
