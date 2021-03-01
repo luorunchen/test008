@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 
+
+// import home from ''
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -11,27 +14,33 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('@/components/home/index.vue'),
+    // component: resolve => require(['@/components/home/index.vue'], resolve)
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('../components/login')
+    // component: resolve => require(['../components/login'], resolve)
   },
+
   {
     path: '/SystemSettings',
     name: 'SystemSettings',
     component: () => import('../components/SystemSettings')
+    // component: resolve => require(['../components/SystemSettings'], resolve)
   },
   {
     path: '/FireManagement',
     name: 'FireManagement',
     component: () => import('../components/FireManagement')
+    // component: resolve => require(['../components/FireManagement'], resolve)
   },
   {
     //隐患进度整改
     path: '/FireInternetOfThings',
     name: 'FireInternetOfThings',
     component: () => import('@/components/FireInternetOfThings'),
+    // component: resolve => require(['@/components/FireInternetOfThings'], resolve),
 
     children: [
       //电气火灾隐患
@@ -39,6 +48,7 @@ const routes = [
         path: 'electricalFire',
         name: 'electricalFire',
         component: () => import('@/components/FireInternetOfThings/dianqiHZ'),
+        // component: resolve => require(['@/components/FireInternetOfThings/dianqiHZ'], resolve),
       },
 
       //消防水系统
@@ -46,6 +56,7 @@ const routes = [
         path: 'FireWaterSystem',
         name: 'FireWaterSystem',
         component: () => import('@/components/FireInternetOfThings/xiaofangshui'),
+        // component: resolve => require(['@/components/FireInternetOfThings/xiaofangshui'], resolve),
       },
       //火灾报警系统
       {
@@ -111,7 +122,8 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: 'history'
+  mode: 'history',
+  base: '/lingdong1',
 })
 router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem("userName");
@@ -130,4 +142,17 @@ router.beforeEach((to, from, next) => {
   }
 
 });
+// router.onError((error) => {
+//   const pattern = /Loading chunk (\d)+ failed/g;
+//   const isChunkLoadFailed = error.message.match(pattern);
+//   if (isChunkLoadFailed) {
+//     // 用路由的replace方法，并没有相当于F5刷新页面，失败的js文件并没有从新请求，会导致一直尝试replace页面导致死循环，而用 location.reload 方法，相当于触发F5刷新页面，虽然用户体验上来说会有刷新加载察觉，但不会导致页面卡死及死循环，从而曲线救国解决该问题
+//     // location.reload();
+//     // const targetPath = $router.history.pending.fullPath;
+//     // $router.replace(targetPath);
+//     router.replace(targetPath);
+//   }
+
+// });
+
 export default router

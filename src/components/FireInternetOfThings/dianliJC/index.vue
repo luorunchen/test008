@@ -99,7 +99,7 @@ export default {
     z-index: 999;
     width: 373px;
     .left_one {
-      background-image: url("../../images/zhengchangbili.png");
+      background-image: url("../../../assets/../assets/images/zhengchangbili.png");
       height: 450px;
       background-size: 100% 450px;
       p {
@@ -147,7 +147,7 @@ export default {
       }
     }
     .left_two {
-      background-image: url("../../images/椭圆 6 拷贝 8@2x.png");
+      background-image: url("../../../assets/../assets/images/juxing7.png");
       height: 300px;
       background-size: 100% 100%;
       p {
@@ -203,10 +203,10 @@ export default {
     right: 20px;
     width: 330px;
     .right_one {
-      // background-image: ("../../images/zhengchangbili.png");
+      // background-image: ("../../../assets/../assets/images/zhengchangbili.png");
       height: 400px;
       background-size: 100% 100%;
-      background-image: url("../../images/矩形 10 拷贝 9@2x.png");
+      background-image: url("../../../assets/../assets/images/juxing5.png");
       .chaxun {
         padding-top: 20px;
         padding-left: 20px;

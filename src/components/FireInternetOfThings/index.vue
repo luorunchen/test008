@@ -209,13 +209,11 @@ export default {
     },
   },
   mounted() {
-    // console.log(this.$route.path, 999999);
+    console.log(this.$route.path, 999999);
 
     switch (this.$route.path) {
       case "/FireInternetOfThings":
-        this.DeviceProjectNewFun(
-          "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21"
-        );
+        this.DeviceProjectNewFun("3");
         this.echart();
         break;
       case "/FireInternetOfThings/electricalFire":
@@ -285,9 +283,7 @@ export default {
       switch (this.btnInfo) {
         case "隐患整改进度":
           this.mass.setMap(null);
-          this.DeviceProjectNewFun(
-            "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21"
-          );
+          this.DeviceProjectNewFun("3");
 
           break;
         case "电气火灾隐患":
@@ -655,7 +651,7 @@ export default {
     .gotoSy {
       width: 190px;
       height: 76px;
-      background-image: url("../images/Rectangle 2 copy.png");
+      background-image: url("../../assets/images/Rectangle 2 copy.png");
       background-size: 100% 100%;
       p {
         font-size: 22px;
@@ -720,7 +716,7 @@ export default {
     z-index: 999;
     .one {
       height: 300px;
-      background-image: url("../images/矩形 10 拷贝 9@2x.png");
+      background-image: url("../../assets/images/juxing5.png");
       background-size: 100% 100%;
       .infoYMR {
         padding-top: 10px;
@@ -803,7 +799,7 @@ export default {
     .two {
       width: 510px;
       height: 240px;
-      background-image: url("../images/椭圆 6 拷贝 8@2x.png");
+      background-image: url("../../assets/images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -820,7 +816,7 @@ export default {
     .three {
       width: 510px;
       height: 240px;
-      background-image: url("../images/椭圆 6 拷贝 8@2x.png");
+      background-image: url("../../assets/images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -846,7 +842,7 @@ export default {
     .one {
       // width: 510px;
       height: 350px;
-      background-image: url("../images/zhengchangbili.png");
+      background-image: url("../../assets/images/zhengchangbili.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -874,7 +870,7 @@ export default {
       // width: 510px;
       // margin-top: 20px;
       height: 350px;
-      background-image: url("../images/zhengchangbili.png");
+      background-image: url("../../assets/images/zhengchangbili.png");
       background-size: 100% 100%;
       p {
         text-align: center;

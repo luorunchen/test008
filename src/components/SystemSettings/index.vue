@@ -434,7 +434,7 @@ export default {
     .gotoSy {
       width: 190px;
       height: 76px;
-      background-image: url("../images/Rectangle 2 copy.png");
+      background-image: url("../../assets/images/Rectangle 2 copy.png");
       background-size: 100% 100%;
       p {
         font-size: 22px;

@@ -420,7 +420,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -431,7 +431,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -442,7 +442,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -453,7 +453,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -485,7 +485,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -496,7 +496,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -507,7 +507,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -531,7 +531,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -542,7 +542,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -553,7 +553,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -564,7 +564,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -615,7 +615,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -626,7 +626,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -637,7 +637,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -648,7 +648,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -674,7 +674,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -685,7 +685,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -696,7 +696,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -720,7 +720,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -731,7 +731,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -742,7 +742,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -753,7 +753,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -830,7 +830,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -841,7 +841,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -852,7 +852,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -863,7 +863,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -903,7 +903,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -914,7 +914,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -925,7 +925,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -949,7 +949,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -960,7 +960,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -971,7 +971,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -982,7 +982,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -1028,7 +1028,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -1039,7 +1039,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -1050,7 +1050,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -1061,7 +1061,7 @@
                           <el-col :span="6">
                             <div style="height: 90px">
                               <img
-                                src="../../images/电流.png"
+                                src="../../../assets/images/dianliu.png"
                                 width="35px"
                                 height="35px"
                               />
@@ -1086,7 +1086,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -1097,7 +1097,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -1108,7 +1108,7 @@
                         <el-col :span="8">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电压.png"
+                              src="../../../assets/images/dianya.png"
                               width="35px"
                               height="35px"
                             />
@@ -1148,7 +1148,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -1159,7 +1159,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -1170,7 +1170,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -1181,7 +1181,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/温度计.png"
+                              src="../../../assets/images/wenduji.png"
                               width="16px"
                               height="35px"
                             />
@@ -1220,7 +1220,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../../assets/images/dianliu.png"
                               width="35px"
                               height="35px"
                             />
@@ -1231,7 +1231,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../../assets/images/dianliu.png"
                               width="35px"
                               height="35px"
                             />
@@ -1242,7 +1242,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../../assets/images/dianliu.png"
                               width="35px"
                               height="35px"
                             />
@@ -1253,7 +1253,7 @@
                         <el-col :span="6">
                           <div style="height: 90px">
                             <img
-                              src="../../images/电流.png"
+                              src="../../../assets/images/dianliu.png"
                               width="35px"
                               height="35px"
                             />
@@ -1278,7 +1278,7 @@
                       <el-col :span="8">
                         <div style="height: 90px">
                           <img
-                            src="../../images/电压.png"
+                            src="../../../assets/images/dianya.png"
                             width="35px"
                             height="35px"
                           />
@@ -1289,7 +1289,7 @@
                       <el-col :span="8">
                         <div style="height: 90px">
                           <img
-                            src="../../images/电压.png"
+                            src="../../../assets/images/dianya.png"
                             width="35px"
                             height="35px"
                           />
@@ -1300,7 +1300,7 @@
                       <el-col :span="8">
                         <div style="height: 90px">
                           <img
-                            src="../../images/电压.png"
+                            src="../../../assets/images/dianya.png"
                             width="35px"
                             height="35px"
                           />
@@ -1324,7 +1324,7 @@
                       <el-col :span="6">
                         <div style="height: 90px">
                           <img
-                            src="../../images/温度计.png"
+                            src="../../../assets/images/wenduji.png"
                             width="16px"
                             height="35px"
                           />
@@ -1335,7 +1335,7 @@
                       <el-col :span="6">
                         <div style="height: 90px">
                           <img
-                            src="../../images/温度计.png"
+                            src="../../../assets/images/wenduji.png"
                             width="16px"
                             height="35px"
                           />
@@ -1346,7 +1346,7 @@
                       <el-col :span="6">
                         <div style="height: 90px">
                           <img
-                            src="../../images/温度计.png"
+                            src="../../../assets/images/wenduji.png"
                             width="16px"
                             height="35px"
                           />
@@ -1357,7 +1357,7 @@
                       <el-col :span="6">
                         <div style="height: 90px">
                           <img
-                            src="../../images/温度计.png"
+                            src="../../../assets/images/wenduji.png"
                             width="16px"
                             height="35px"
                           />
@@ -1838,11 +1838,15 @@
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="6">
-            <img src="../../images/four.png" height="137px" alt="" />
+            <img src="../../../assets/images/four.png" height="137px" alt="" />
           </el-col>
 
           <el-col :span="6">
-            <img src="../../images/battery4.png" height="137px" alt="" />
+            <img
+              src="../../../assets/images/battery4.png"
+              height="137px"
+              alt=""
+            />
           </el-col>
         </el-row>
       </div>
@@ -2026,10 +2030,10 @@
               <div class="right_two">
                 <el-row>
                   <el-col :span="12">
-                    <img src="../../images/four.png" alt=""
+                    <img src="../../../assets/images/four.png" alt=""
                   /></el-col>
                   <el-col :span="12"
-                    ><img src="../../images/battery4.png" alt=""
+                    ><img src="../../../assets/images/battery4.png" alt=""
                   /></el-col>
                 </el-row>
               </div>
@@ -3855,10 +3859,10 @@ export default {
   right: 20px;
   width: 330px;
   .right_one {
-    // background-image: ("../../images/zhengchangbili.png");
+    // background-image: ("../../../assets/images/zhengchangbili.png");
     height: 9 0px;
     background-size: 100% 100%;
-    background-image: url("../../images/矩形 10 拷贝 9@2x.png");
+    background-image: url("../../../assets/images/juxing5.png");
     .chaxun {
       padding-top: 20px;
       padding-left: 20px;

@@ -1597,10 +1597,10 @@ export default {
   right: 20px;
   width: 330px;
   .right_one {
-    // background-image: ("../../images/zhengchangbili.png");
+    // background-image: ("../../../assets/images/zhengchangbili.png");
     height: 90px;
     background-size: 100% 100%;
-    background-image: url("../../images/矩形 10 拷贝 9@2x.png");
+    background-image: url("../../../assets/images/juxing5.png");
     .chaxun {
       padding-top: 20px;
       padding-left: 20px;

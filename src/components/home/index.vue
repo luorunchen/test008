@@ -7,7 +7,7 @@
         <span>周五</span>
       </div>
       <div class="titleLeft">
-        <img src="../images/矩形 1 拷贝 2.png" alt="" />
+        <img src="../../assets/images/juxing2.png" alt="" />
         <div class="btnLeft">
           <div class="btnLeftOne"><span>首页</span></div>
           <div class="btnLeftTwo" @click="FireInternetOfThings">
@@ -17,10 +17,10 @@
       </div>
       <div class="titleIMG">
         <p class="titleName">智慧安全系统平台</p>
-        <img src="../images/矩形 1 拷贝 4@2x.png" alt="" />
+        <img src="../../assets/images/juxing4.png" alt="" />
       </div>
       <div class="titleRight">
-        <img src="../images/矩形 1 拷贝 3.png" alt="" />
+        <img src="../../assets/images/juxing3.png" alt="" />
         <div class="btnRight">
           <div class="btnRightOne" @click="FireManagement">
             <span>消防管理</span>
@@ -32,7 +32,12 @@
       </div>
       <div class="titlePassword">
         <span style="margin-right: 58px">
-          <img src="../images/密码.png" width="18px" height="15px" alt="" />
+          <img
+            src="../../assets//images/mima.png"
+            width="18px"
+            height="15px"
+            alt=""
+          />
           <el-button type="text" @click="dialogVisible = true"
             >更改密码</el-button
           >
@@ -104,7 +109,7 @@
         </span>
         <span @click="out">
           <img
-            src="../images/退出 (1).png"
+            src="../../assets//images/tuichu.png"
             width="18px"
             height="15px"
             alt=""
@@ -331,18 +336,14 @@ export default {
     },
     //地图部分
     init() {
-      let map = new AMap.Map("app", {
+      this.map = new AMap.Map("app", {
         center: [116.397428, 39.90923],
         resizeEnable: true,
-        zoom: 10,
+        zoom: 5,
         mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
       });
-
-      DeviceProjectNew(
-        this.utils.userName,
-        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
-        1
-      ).then((res) => {
+      this.map.setZoomAndCenter(4, [116.205467, 39.907761]);
+      DeviceProjectNew(this.utils.userName, "3", 1).then((res) => {
         console.log(res);
         const style = [
           {
@@ -699,6 +700,9 @@ export default {
       );
       push_ProjectRegion(this.utils.userName, "").then((res) => {
         console.log(res, 6666);
+        if (res.data.length <= 0) {
+          return this.$message.error("图表数据加载失败");
+        }
         let name = [];
         let num = [];
         res.data.forEach((element) => {
@@ -1004,7 +1008,7 @@ export default {
         display: none;
       }
       /deep/.el-dialog__body {
-        background-image: url("../images/椭圆 6 拷贝 8@2x.png");
+        background-image: url("../../assets//images/juxing7.png");
         // width: 373px;
         height: 358px;
         color: #fff;
@@ -1035,7 +1039,7 @@ export default {
       width: 100%;
       height: 165px;
 
-      background-image: url("../images/矩形 10 拷贝 9.png");
+      background-image: url("../../assets//images/juxing5.png");
       background-size: 100% 165px;
 
       // display: flex;
@@ -1138,7 +1142,7 @@ export default {
     .two {
       width: 100%;
       height: 190px;
-      background-image: url("../images/椭圆 6 拷贝 8.png");
+      background-image: url("../../assets/images/juxing7.png");
       background-size: 100% 190px;
       p {
         text-align: center;
@@ -1152,7 +1156,7 @@ export default {
     .three {
       width: 100%;
       height: 210px;
-      background-image: url("../images/椭圆 6 拷贝 8.png");
+      background-image: url("../../assets//images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -1166,7 +1170,7 @@ export default {
     .four {
       width: 100%;
       height: 220px;
-      background-image: url("../images/椭圆 6 拷贝 8.png");
+      background-image: url("../../assets//images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -1190,7 +1194,7 @@ export default {
     // top: 0;
     .one {
       height: 300px;
-      background-image: url("../images/椭圆 6 拷贝 8@2x.png");
+      background-image: url("../../assets//images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -1231,7 +1235,7 @@ export default {
     }
     .two {
       height: 240px;
-      background-image: url("../images/椭圆 6 拷贝 8.png");
+      background-image: url("../../assets//images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -1244,7 +1248,7 @@ export default {
     }
     .three {
       height: 250px;
-      background-image: url("../images/椭圆 6 拷贝 8.png");
+      background-image: url("../../assets//images/juxing7.png");
       background-size: 100% 100%;
       p {
         text-align: center;

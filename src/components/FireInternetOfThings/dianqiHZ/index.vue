@@ -104,8 +104,10 @@ export default {
     z-index: 999;
     width: 373px;
     .left_one {
-      background-image: url("../../images/zhengchangbili.png");
+      width: 100%;
       height: 450px;
+      background-image: url("../../../assets//images/zhengchangbili.png");
+
       background-size: 100% 100%;
       p {
         text-align: center;
@@ -156,7 +158,7 @@ export default {
       }
     }
     .left_two {
-      background-image: url("../../images/椭圆 6 拷贝 8@2x.png");
+      background-image: url("../../../assets/images/juxing7.png");
       height: 300px;
       background-size: 100% 100%;
       p {

@@ -1,16 +1,12 @@
 <template>
   <div id="app">
     <div class="title">
-      <img
-        class="titleIMG"
-        src="@/components/images/矩形 1 拷贝 4@2x.png"
-        alt=""
-      />
+      <img class="titleIMG" src="../../assets/images/juxing4.png" alt="" />
     </div>
     <div class="titleFZ">智慧安全系统平台</div>
     <div class="loginIMGLeft">
       <img
-        src="@/components/images/5bd85ea016f25@2x.png"
+        src="@/assets/images/fengmian.png"
         width="100%"
         height="100%"
         alt=""
@@ -18,7 +14,7 @@
     </div>
     <div class="loginImg">
       <img
-        src="@/components/images/矩形 10 拷贝 9@2x.png"
+        src="@/assets/images/juxing5.png"
         width="100%"
         height="100%"
         alt=""
@@ -100,8 +96,10 @@ export default {
     submitForm() {
       // alert("22");
 
-      let username = JSON.parse(this.ruleForm.pass);
-      let password = JSON.parse(this.ruleForm.checkPass);
+      // let username = JSON.parse(this.ruleForm.pass);
+      // let password = JSON.parse(this.ruleForm.checkPass);
+      let username = this.ruleForm.pass;
+      let password = this.ruleForm.checkPass;
 
       login(username, password).then((res) => {
         console.log(res);
@@ -124,7 +122,6 @@ export default {
             showClose: true,
             message: "账号或密码不正确",
             type: "error",
-            ssss,
           });
         }
       });

@@ -1,6 +1,6 @@
 import axios from 'axios';
 const service = axios.create({
-  baseURL: '/api', // api的base_url
+  baseURL: '/earlyWarn', // api的base_url
   timeout: 50000 // 请求超时时间
 });
 
