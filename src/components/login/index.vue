@@ -105,7 +105,7 @@ export default {
         console.log(res);
         if (res.data.status === true) {
           var role = res.data.role[0]; //权限
-
+          this.utils.userName = username;
           sessionStorage.setItem("userName", username);
           sessionStorage.setItem("role", res.data.role[0]);
           sessionStorage.setItem("new_role", res.data.new_role);

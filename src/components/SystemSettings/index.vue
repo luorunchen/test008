@@ -40,108 +40,18 @@
     </div>
     <div class="content_wapper">
       <template v-if="this.btnInfo == '用户管理'">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          size="mini"
-        >
-          <el-form-item label="审批人">
-            <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-          </el-form-item>
-          <el-form-item label="审批人">
-            <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-          </el-form-item>
-          <el-form-item label="活动区域">
-            <el-select v-model="formInline.region" placeholder="活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-            <!-- <el-button type="primary" @click="onSubmit">新增</el-button> -->
-            <el-button type="primary" @click="dialogVisible = true"
-              >新增
-            </el-button>
-          </el-form-item>
-        </el-form>
+        <YongHuGuanLi
+          @total="total"
+          ref="YongHuGuanLis"
+          :size="size"
+          :current="current"
+        />
       </template>
       <template v-if="this.btnInfo == '权限管理'">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          size="mini"
-        >
-          <el-form-item label="角色名称">
-            <el-input
-              v-model="formInline.user"
-              placeholder="角色名称"
-            ></el-input>
-          </el-form-item>
-
-          <el-form-item label="状态">
-            <el-select v-model="formInline.region" placeholder="状态">
-              <el-option label="启用" value="shanghai"></el-option>
-              <el-option label="禁用" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-            <!-- <el-button type="primary" @click="onSubmit">新增</el-button> -->
-            <el-button type="primary" @click="dialogVisible = true"
-              >新增
-            </el-button>
-          </el-form-item>
-        </el-form>
+        <QuanXianGuanLi @total="total" ref="YongHuGuanLis" />
       </template>
       <template v-if="this.btnInfo == '在线情况'">
-        <div class="onLineInfo">
-          <ul>
-            <li>
-              <p>7506</p>
-              <p>用户总数</p>
-            </li>
-            <li>
-              <p>7506</p>
-              <p>用户总数</p>
-            </li>
-            <li>
-              <p>7506</p>
-              <p>用户总数</p>
-            </li>
-            <li>
-              <p>7506</p>
-              <p>用户总数</p>
-            </li>
-          </ul>
-        </div>
-        <div class="onLineBG"></div>
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          size="mini"
-        >
-          <el-form-item label="账号">
-            <el-input v-model="formInline.user" placeholder="账号"></el-input>
-          </el-form-item>
-
-          <el-form-item label="状态">
-            <el-select v-model="formInline.region" placeholder="状态">
-              <el-option label="启用" value="shanghai"></el-option>
-              <el-option label="禁用" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-            <!-- <el-button type="primary" @click="onSubmit">新增</el-button> -->
-            <!-- <el-button type="primary" @click="dialogVisible = true"
-              >新增
-            </el-button> -->
-          </el-form-item>
-        </el-form>
+        <ZaiXianQingKuang />
       </template>
       <template v-if="this.btnInfo == '系统日志'">
         <el-form
@@ -171,163 +81,40 @@
             </el-button> -->
           </el-form-item>
         </el-form>
+        <template>
+          <el-table :data="tableData" style="width: 100%">
+            <el-table-column prop="date" label="序号"> </el-table-column>
+            <el-table-column prop="name" label="运行情况"> </el-table-column>
+            <el-table-column prop="address" label="服务开启时间">
+            </el-table-column>
+          </el-table>
+        </template>
       </template>
-      <div class="tabs">
-        <el-table :data="tableData" height="85%" border style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
-          </el-table-column>
-          <el-table-column label="地址">
-            <div class="caozuo">
-              <span @click="dialogVisible = true">编辑</span>
-              <span>禁用</span>
-              <span>删除</span>
-            </div>
-          </el-table-column>
-        </el-table>
-      </div>
+
       <div class="block">
         <span class="demonstration">完整功能</span>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="10"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="totals"
         >
         </el-pagination>
       </div>
-    </div>
-    <!-- 用户管理新增弹窗 -->
-    <el-dialog title="新增" :visible.sync="dialogVisible" width="50%">
-      <template v-if="this.btnInfo == '用户管理'">
-        <el-form
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          label-width="200px"
-          class="demo-ruleForm"
-          :inline="true"
-        >
-          <el-form-item label="账号" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-
-          <el-form-item label="手机号码" prop="delivery">
-            <el-input v-model="ruleForm.delivery"></el-input>
-          </el-form-item>
-          <el-form-item label="选择角色" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-              <el-checkbox label="后台技术人员" name="type"></el-checkbox>
-              <el-checkbox label="超级管理员" name="type"></el-checkbox>
-              <el-checkbox label="一般管理员" name="type"></el-checkbox>
-              <el-checkbox label="管理员" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="真实姓名" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="地址" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-          <el-form-item label="固定电话" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="公司名称(所属单位)" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >确 定</el-button
-          >
-        </span>
-      </template>
-      <template v-if="this.btnInfo == '权限管理'">
-        <el-form
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          label-width="200px"
-          class="demo-ruleForm"
-          :inline="true"
-        >
-          <el-form-item label="角色名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="区域权限" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-
-          <el-form-item label="用户管理" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-              <el-checkbox label="后台技术人员" name="type"></el-checkbox>
-              <el-checkbox label="超级管理员" name="type"></el-checkbox>
-              <el-checkbox label="一般管理员" name="type"></el-checkbox>
-              <el-checkbox label="管理员" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="项目管理" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-              <el-checkbox label="后台技术人员" name="type"></el-checkbox>
-              <el-checkbox label="超级管理员" name="type"></el-checkbox>
-              <el-checkbox label="一般管理员" name="type"></el-checkbox>
-              <el-checkbox label="管理员" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >确 定</el-button
-          >
-        </span>
-      </template>
-      <template v-if="this.btnInfo == '在线情况'"></template>
-      <template v-if="this.btnInfo == '系统日志'"></template>
-    </el-dialog>
-  </div>
-</template>
     </div>
   </div>
 </template>
 
 <script>
+import YongHuGuanLi from "../SystemSettings/YongHuGuanLi";
+import QuanXianGuanLi from "../SystemSettings/QuanXianGuanLi";
+import ZaiXianQingKuang from "../SystemSettings/ZaiXianQingKuang";
 export default {
   data() {
     return {
-      rules: {
-        name: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-        region: [
-          { required: true, message: "请选择活动区域", trigger: "change" },
-        ],
-
-        type: [
-          {
-            type: "array",
-            required: true,
-            message: "请至少选择一个活动性质",
-            trigger: "change",
-          },
-        ],
-        resource: [
-          { required: true, message: "请选择活动资源", trigger: "change" },
-        ],
-        desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }],
-      },
       ruleForm: {
         name: "",
         region: "",
@@ -337,6 +124,7 @@ export default {
         resource: "",
         desc: "",
       },
+      tableData: [],
       currentPage4: 4,
       //新增弹窗
       dialogVisible: false,
@@ -345,31 +133,24 @@ export default {
         user: "",
         region: "",
       },
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      size: 10,
+      current: 1,
+      totals: 0,
+      // gridSource_list: [],
     };
   },
   methods: {
+    total(data) {
+      console.log(data);
+      this.totals = data;
+    },
+    // gridSource(data) {
+    //   console.log(data, 46456);
+    //   this.gridSource_list = data;
+    // },
+    // dialogVisibleFun() {
+    //   this.dialogVisible = true;
+    // },
     getInfo(data) {
       this.btnInfo = data;
       window.name = data;
@@ -378,22 +159,21 @@ export default {
       console.log("submit!");
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(this.$refs.YongHuGuanLis);
+      this.size = val;
+      this.$refs.YongHuGuanLis.action(this.current, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
+      this.current = val;
+      this.$refs.YongHuGuanLis.action(val, this.size);
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // alert("submit!");
-          this.dialogVisible = false;
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
+    submitForm() {},
+  },
+  components: {
+    YongHuGuanLi,
+    QuanXianGuanLi,
+    ZaiXianQingKuang,
   },
   mounted() {
     if (window.name == "") {
@@ -419,6 +199,7 @@ export default {
       color: #fff;
     }
   }
+
   color: #fff;
   width: 100%;
   height: calc(100vh);
@@ -484,6 +265,7 @@ export default {
     }
   }
   .content_wapper {
+    position: relative;
     box-sizing: border-box;
     padding: 20px 20px 0 20px;
     margin: 0 30px;
@@ -531,6 +313,11 @@ export default {
     margin-left: -20px;
     margin-bottom: 20px;
     // float: left;
+  }
+  .block {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
   }
 }
 </style>

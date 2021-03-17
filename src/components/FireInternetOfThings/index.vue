@@ -249,25 +249,26 @@ export default {
       case "/FireInternetOfThings/EmergencyManagement":
         this.btnInfo = "应急处理";
         this.DeviceProjectNewFun("3,4,8");
+        this.pagetype = "8";
         break;
       case "/FireInternetOfThings/IntelligentFireAlarm":
         this.btnInfo = "智慧型消防报警";
-
+        this.pagetype = "13";
         this.DeviceProjectNewFun("10,15,16,19,18");
         break;
       case "/FireInternetOfThings/FireExtinguisher":
         this.btnInfo = "灭火器";
-
+        this.pagetype = "10";
         this.DeviceProjectNewFun("21");
         break;
       case "/FireInternetOfThings/PowerDetection":
         this.btnInfo = "电力检测系统";
-
+        this.pagetype = "12";
         this.DeviceProjectNewFun("12");
         break;
       case "/FireInternetOfThings/Panorama":
         this.btnInfo = "设备定位全景图";
-
+        this.pagetype = "12";
         this.DeviceProjectNewFun("3");
         break;
     }
@@ -314,6 +315,7 @@ export default {
         case "燃气探测器":
           this.DeviceProjectNewFun("1,6,11");
           this.mass.setMap(null);
+          this.pagetype = "7";
           break;
         case "应急处理":
           this.DeviceProjectNewFun("3,4,8");
@@ -321,18 +323,22 @@ export default {
         case "智慧型消防报警":
           this.DeviceProjectNewFun("10,15,16,19,18");
           this.mass.setMap(null);
+          this.pagetype = "13";
           break;
         case "灭火器":
           this.DeviceProjectNewFun("21");
           this.mass.setMap(null);
+          this.pagetype = "10";
           break;
         case "电力检测系统":
           this.DeviceProjectNewFun("12");
           this.mass.setMap(null);
+          this.pagetype = "12";
           break;
         case "设备全景定位图":
           this.DeviceProjectNewFun("3");
           this.mass.setMap(null);
+          this.pagetype = "2";
           break;
       }
     },
@@ -586,12 +592,12 @@ export default {
             {
               url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
               anchor: new AMap.Pixel(4, 4),
-              size: new AMap.Size(8, 8),
+              size: new AMap.Size(20, 20),
             },
             {
               url: "https://a.amap.com/jsapi_demos/static/images/mass0.png",
               anchor: new AMap.Pixel(6, 6),
-              size: new AMap.Size(11, 11),
+              size: new AMap.Size(23, 23),
             },
           ];
           // console.log(this.DeviceProjectNewData, 987987);

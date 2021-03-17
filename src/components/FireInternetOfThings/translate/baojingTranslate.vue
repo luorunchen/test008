@@ -279,7 +279,13 @@
           </el-table-column>
           <el-table-column prop="regdate" label="心跳时间"> </el-table-column>
           <el-table-column prop="address" label="操作">
-            <span @click="innerVisible = true" class="chakan">查看</span>
+            <template slot-scope="scope">
+              <span
+                @click="(innerVisible = true), see(scope.row.devId)"
+                class="chakan"
+                >查看</span
+              >
+            </template>
           </el-table-column>
         </el-table>
       </template>
@@ -359,7 +365,13 @@
           </el-table-column>
           <el-table-column prop="regdate" label="心跳时间"> </el-table-column>
           <el-table-column prop="address" label="操作">
-            <span @click="innerVisible = true" class="chakan">查看</span>
+            <template slot-scope="scope">
+              <span
+                @click="(innerVisible = true), see(scope.row.devId)"
+                class="chakan"
+                >查看</span
+              >
+            </template>
           </el-table-column>
         </el-table>
       </template>
@@ -391,9 +403,7 @@
       :modal-append-to-body="false"
     >
       <el-row
-        ><el-button
-          type="primary "
-          @click="(innerVisible_shebei = true), devicesSetting()"
+        ><el-button type="primary " @click="innerVisible_shebei = true"
           >设备设置</el-button
         >
         <el-button type="primary" @click="innerVisible_lishi = true"
@@ -459,8 +469,186 @@
 
         <div class="shebeiEcharts">
           <template
-            v-if="this.ElecDataList_typeName != ('离线' || '正常' || '')"
+            v-if="
+              this.ElecDataList_typeName == '正常' ||
+              this.ElecDataList_typeName == '离线' ||
+              this.ElecDataList_typeName == ''
+            "
           >
+            <el-row
+              :gutter="20"
+              v-for="(item, index) in getDeviceByDevIdList.mess2"
+              :key="index"
+            >
+              <el-col :span="8"
+                ><div class="grid-content bg-purple">
+                  <div class="imgWapper">
+                    <el-row>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianliu.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.oneAlarm }}A</p>
+                          <p>{{ shengyu_loudian.oneDianLiu }}A</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianliu.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.twoAlarm }}A</p>
+                          <p>{{ shengyu_loudian.twoDianLiu }}A</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianliu.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.threeAlarm }}A</p>
+                          <p>{{ shengyu_loudian.threeDianLiu }}A</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianliu.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.fourAlarm }}A</p>
+                          <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <ul>
+                      <li>
+                        报警状态: <span>{{ item.type }}</span>
+                      </li>
+                      <li>
+                        报警值: <span>{{ item.leakageAlarmCurrentValue }}</span>
+                      </li>
+                      <li>
+                        报警时间: <span>{{ item.regdate }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div></el-col
+              >
+              <el-col :span="8"
+                ><div class="grid-content bg-purple">
+                  <div class="imgWapper">
+                    <el-row>
+                      <el-col :span="8">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianya.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.oneVolatage }}V</p>
+                          <p>{{ shengyu_loudian.oneDianYa }}V</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianya.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.twoVolatage }}V</p>
+                          <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/dianya.png"
+                            width="35px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                          <p>{{ shengyu_loudian.threeDianYa }}V</p>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <ul>
+                      <li>报警状态:无</li>
+                      <li>报警值:无</li>
+                      <li>报警时间:无</li>
+                    </ul>
+                  </div>
+                </div></el-col
+              >
+              <el-col :span="8"
+                ><div class="grid-content bg-purple">
+                  <div class="imgWapper">
+                    <el-row>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/wenduji.png"
+                            width="16px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.oneTempera }}℃</p>
+                          <p>{{ shengyu_loudian.oneWenDu }}℃</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/wenduji.png"
+                            width="16px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.twoTempera }}℃</p>
+                          <p>{{ shengyu_loudian.twoWenDu }}℃</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/wenduji.png"
+                            width="16px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.threeTempera }}℃</p>
+                          <p>{{ shengyu_loudian.threeWenDu }}℃</p>
+                        </div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div style="height: 90px">
+                          <img
+                            src="../../../assets/images/wenduji.png"
+                            width="16px"
+                            height="35px"
+                          />
+                          <p>{{ shengyu_loudian.fourTempera }}℃</p>
+                          <p>{{ shengyu_loudian.fourWenDu }}℃</p>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <ul>
+                      <li>报警状态:无</li>
+                      <li>报警值:无</li>
+                      <li>报警时间:无</li>
+                    </ul>
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </template>
+          <template v-else>
             <el-row
               :gutter="20"
               v-for="(item, index) in getDeviceByDevIdList.mess5"
@@ -576,8 +764,8 @@
                               width="35px"
                               height="35px"
                             />
-                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
-                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                            <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                            <p>{{ shengyu_loudian.threeDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1266,119 +1454,6 @@
               </template>
             </el-row>
           </template>
-          <template v-else>
-            <el-row
-              :gutter="20"
-              v-for="(item, index) in getDeviceByDevIdList.mess2"
-              :key="index"
-            >
-              <el-col :span="8"
-                ><div class="grid-content bg-purple">
-                  <div class="imgWapper">
-                    <el-row>
-                      <el-col :span="6">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianliu.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                      <el-col :span="6">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianliu.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                      <el-col :span="6">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianliu.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                      <el-col :span="6">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianliu.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                    </el-row>
-                    <ul>
-                      <li>
-                        报警状态: <span>{{ item.type }}</span>
-                      </li>
-                      <li>
-                        报警值: <span>{{ item.leakageAlarmCurrentValue }}</span>
-                      </li>
-                      <li>
-                        报警时间: <span>{{ item.regdate }}</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div></el-col
-              >
-              <el-col :span="8"
-                ><div class="grid-content bg-purple">
-                  <div class="imgWapper">
-                    <el-row>
-                      <el-col :span="8">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianya.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                      <el-col :span="8">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianya.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                      <el-col :span="8">
-                        <div style="height: 90px">
-                          <img
-                            src="../../../assets/images/dianya.png"
-                            width="35px"
-                            height="35px"
-                          />
-                        </div>
-                      </el-col>
-                    </el-row>
-                    <ul>
-                      <li>报警状态:1</li>
-                      <li>报警值:1</li>
-                      <li>报警时间:1</li>
-                    </ul>
-                  </div>
-                </div></el-col
-              >
-              <el-col :span="8"
-                ><div class="grid-content bg-purple">
-                  <div class="imgWapper"></div>
-                  <ul>
-                    <li>报警状态:1</li>
-                    <li>报警值:1</li>
-                    <li>报警时间:1</li>
-                  </ul>
-                </div></el-col
-              >
-            </el-row>
-          </template>
 
           <div
             class="one_echarts"
@@ -1958,11 +2033,14 @@ export default {
           if (role == "1000" || power.indexOf("10003003") != -1) {
             resetclose(this.ElecDataList.DevData[0].productNumber, 0).then(
               (res) => {
-                if (res.message == "请求成功") {
-                  this.$message.success(res.message);
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
                 } else {
-                  this.$message.error(res.message);
+                  this.$message.error(res.data.message);
                 }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
             );
           } else {
@@ -1977,13 +2055,18 @@ export default {
             putMessToDeviceOn(
               this.ElecDataList.DevData[0].productNumber,
               "shutdown"
-            ).then((res) => {
-              if (res.message == "请求成功") {
-                alert("远程开机成功");
-              } else {
-                alert("请稍后重试");
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
             break;
           } else {
             this.$message.error("暂无权限");
@@ -1994,13 +2077,18 @@ export default {
             putMessToDeviceOn(
               this.ElecDataList.DevData[0].productNumber,
               "startup"
-            ).then((res) => {
-              if (res.message == "请求成功") {
-                alert("远程开机成功");
-              } else {
-                alert("请稍后重试");
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
             break;
           } else {
             this.message.error("暂无权限");
@@ -2012,13 +2100,18 @@ export default {
             putMessToDeviceOn(
               this.ElecDataList.DevData[0].productNumber,
               "voiceon"
-            ).then((res) => {
-              if (res.message == "请求成功") {
-                alert("开启蜂鸣器成功");
-              } else {
-                alert("请稍后重试");
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
             break;
           } else {
             this.$message.error("暂无权限");
@@ -2030,13 +2123,18 @@ export default {
             putMessToDeviceOn(
               this.ElecDataList.DevData[0].productNumber,
               "voiceoff"
-            ).then((res) => {
-              if (res.message == "请求成功") {
-                alert("开启蜂鸣器成功");
-              } else {
-                alert("请稍后重试");
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
             break;
           } else {
             this.message.error("暂无权限");
@@ -2047,11 +2145,14 @@ export default {
           if (role == "1000" || power.indexOf("10003001") != -1) {
             resetclose(this.ElecDataList.DevData[0].productNumber, 2).then(
               (res) => {
-                if (res.message == "请求成功") {
-                  alert("远程消音成功");
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
                 } else {
-                  alert("远程消音失败");
+                  this.$message.error(res.data.message);
                 }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
             );
           } else {
@@ -2065,13 +2166,18 @@ export default {
             putMessToDeviceOn(
               this.ElecDataList.DevData[0].productNumber,
               "openflow"
-            ).then((res) => {
-              if (res.message == "请求成功") {
-                alert("开启流量成功");
-              } else {
-                alert("请稍后重试");
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
             break;
           } else {
             this.$message.error("暂无权限");
@@ -2082,11 +2188,14 @@ export default {
           if (role == "1000" || power.indexOf("10003003") != -1) {
             resetclosefuwei(this.ElecDataList.DevData[0].productNumber, 2).then(
               (res) => {
-                if (res.status == "1") {
-                  this.$message.success(res.message);
+                if (res.data.status == "1") {
+                  this.$message.success(res.data.message);
                 } else {
-                  this.$message.error(res.message);
+                  this.$message.error(res.data.message);
                 }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
             );
           } else {
@@ -2098,13 +2207,16 @@ export default {
           if (role == "1000" || power.indexOf("10003004") != -1) {
             insertClouddog(this.ElecDataList.DevData[0].productNumber).then(
               (res) => {
-                if (res.list[0].status == "true") {
+                if (res.data.list[0].status == "true") {
                   this.$message.success(
                     "授权成功.工作日一天后将授权生效,非工作日将延期"
                   );
                 } else {
                   this.$message.error("授权失败");
                 }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
             );
           }
@@ -2116,16 +2228,21 @@ export default {
               this.ElecDataList.DevData[0].productNumber,
               this.utils,
               userName
-            ).then((res) => {
-              if (res.status == "true") {
-                layer.open({
-                  content: res.mess,
-                });
-                this.$message.success(res.mess);
-              } else {
-                this.$message.error(res.mess);
+            ).then(
+              (res) => {
+                if (res.data.status == "true") {
+                  layer.open({
+                    content: res.mess,
+                  });
+                  this.$message.success(res.data.mess);
+                } else {
+                  this.$message.error(res.data.mess);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
           }
           break;
         //下发保险单
@@ -2136,13 +2253,18 @@ export default {
             putMessToDevice(
               this.ElecDataList.DevData[0].productNumber,
               this.baoxiandanhao
-            ).then((res) => {
-              if (res.message == "请求成功") {
-                alert("下发保险单号成功");
-              } else {
-                this.$message.error("请稍后重试");
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  alert("下发保险单号成功");
+                } else {
+                  this.$message.error("请稍后重试");
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
               }
-            });
+            );
           }
           // var res = JSON.parse(result);
           // console.log(res);
@@ -2174,38 +2296,51 @@ export default {
       this.callPoliceList_loading = true;
       this.alarm = alarm;
 
+      let type;
       switch (this.$route.path) {
         case "/FireInternetOfThings/electricalFire":
+          // this.btnInfo = "电气火灾隐患";
+          type = 3;
           break;
         case "/FireInternetOfThings/FireWaterSystem":
           this.btnInfo = "消防水系统";
+          type = "4,8";
           break;
         case "/FireInternetOfThings/FireAlarmSystem":
           this.btnInfo = "火灾报警系统";
+          type = "0,5,20";
           break;
         case "/FireInternetOfThings/KeyParts":
           this.btnInfo = "重点部位";
+          type = "9,13,20";
           break;
         case "/FireInternetOfThings/SmartIndependentSmoke":
           this.btnInfo = "智慧型独立烟感";
+          type = "2";
           break;
         case "/FireInternetOfThings/GasDetector":
           this.btnInfo = "燃气探测器";
+          type = "1,6,11";
           break;
         case "/FireInternetOfThings/EmergencyManagement":
           this.btnInfo = "应急处理";
+          type = "3,4,8";
           break;
         case "/FireInternetOfThings/IntelligentFireAlarm":
           this.btnInfo = "智慧型消防报警";
+          type = "10,15,16,19,18";
           break;
         case "/FireInternetOfThings/FireExtinguisher":
           this.btnInfo = "灭火器";
+          type = "21";
           break;
         case "/FireInternetOfThings/PowerDetection":
           this.btnInfo = "电力检测系统";
+          type = "12";
           break;
         case "/FireInternetOfThings/Panorama":
           this.btnInfo = "设备定位全景图";
+          type = "3";
           break;
       }
       getDeviceStatus(
@@ -2323,7 +2458,6 @@ export default {
     },
     // 查看echart图片函数
     see(devId) {
-      this.callPoliceList_loading = true;
       //清空处置情况
       this.managementInput = "";
       const time = new Date();

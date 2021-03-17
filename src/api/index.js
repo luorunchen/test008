@@ -150,7 +150,7 @@ export function DeviceNum(username, type, region) {
   })
 }
 //接入设备报警查看接口
-export function getAlarmDevice(username, PageNo, alarm, PageSize, object) {
+export function getAlarmDevice(username, PageNo, alarm, PageSize, object, typeName) {
   return service({
     url: `/WebProject/getAlarmDevice.action`,
     method: 'GET',
@@ -159,7 +159,8 @@ export function getAlarmDevice(username, PageNo, alarm, PageSize, object) {
       PageNo,
       alarm,
       PageSize,
-      object
+      object,
+      typeName
     }
   })
 }
@@ -313,7 +314,7 @@ export function resetclosefuwei(imei, states) {
     url: `/resetclose.action`,
     method: 'GET',
     params: {
-      id,
+      imei,
       states
     }
   })
@@ -431,3 +432,389 @@ export function fracture(did, my_username, st_date, en_date) {
     }
   })
 }
+//高视达接口---------------------------------------------------------
+//设备管理
+export function getAllDeviceWeb(username, cp, col, state, kw, ls, deviceName, dSid) {
+  return service({
+    url: `/admin/device/getAllDeviceWeb.action`,
+    method: 'GET',
+    params: {
+      username, cp, col, state, kw, ls, deviceName, dSid
+    }
+  })
+}
+//项目管理
+export function getAllProjecForState(username, cp, col, state, kw, ls, pname) {
+  return service({
+    url: `/admin/project/getAllProjecForState.action`,
+    method: 'GET',
+    params: {
+      username, cp, col, state, kw, ls, pname
+    }
+  })
+}
+//编辑设备
+export function updateDeviceSim(devId, remark, my_username, installLocation) {
+  return service({
+    url: `/admin/device/check/updateDeviceSim.action`,
+    method: 'GET',
+    params: {
+      devId, remark, my_username, installLocation
+    }
+  })
+}
+//删除设备
+export function deleDevice(devId, username) {
+  return service({
+    url: `/admin/device/check/deleDevice.action`,
+    method: 'GET',
+    params: {
+      devId, username
+    }
+  })
+}
+//删除项目
+export function deleProject(devId, username) {
+  return service({
+    url: `/admin/project/check/deleProject.action`,
+    method: 'GET',
+    params: {
+      devId, username
+    }
+  })
+}
+//获取消防员/责任人数据
+export function getLegalFireMan(state, object) {
+  return service({
+    url: `/getLegalFireMan.action`,
+    method: 'GET',
+    params: {
+      state, object
+    }
+  })
+}
+//删除消防员/责任人数据
+export function deletegalFireMan(pid) {
+  return service({
+    url: `/admin/project/check/deletegalFireMan.action`,
+    method: 'GET',
+    params: {
+      pid
+    }
+  })
+}
+//新增设备
+export function addDevice(projName, devSignature, username, installLocation, long_lat, devtype, device_name, place, superiorEquipme, loopNumber, devId, devRemark, sms) {
+  return service({
+    url: `/admin/device/check/addDevice.action`,
+    method: 'GET',
+    params: {
+      projName, devSignature, username, installLocation, long_lat, devtype, device_name, place, superiorEquipme, loopNumber, devId, devRemark, sms
+    }
+  })
+}
+//新增人员
+export function addLegalFireMan(state, fname, username, fphone, tel, long_lat, long_latbai, ftelephone) {
+  return service({
+    url: `/admin/project/check/addLegalFireMan.action`,
+    method: 'GET',
+    params: {
+      state, fname, username, fphone, tel, long_lat, long_latbai, ftelephone
+    }
+  })
+}
+//新增项目
+export function addProject(username, projName, projLocation, fireGuardId, legalPersonId, projRemark, long_lat, placetype, code, gridmanId, street_charge) {
+  return service({
+    url: `/admin/project/check/addProject.action`,
+    method: 'GET',
+    params: {
+      username, projName, projLocation, fireGuardId, legalPersonId, projRemark, long_lat, placetype, code, gridmanId, street_charge
+    }
+  })
+}
+//新增项目
+export function newUpdateProjectSim(pid, projLocation, userName, userTel, resPeople, resTel, long_lat, projName, gridmanname, gridman, street_chargenanem, street_charge, long_latbai) {
+  return service({
+    url: `/admin/project/check/newUpdateProjectSim.action`,
+    method: 'GET',
+    params: {
+      pid, projLocation, userName, userTel, resPeople, resTel, long_lat, projName, gridmanname, gridman, street_chargenanem, street_charge, long_latbai
+    }
+  })
+}
+//新增项目
+export function getAllAlarmOrFault(username, type, proName, imei) {
+  return service({
+    url: `/getAllAlarmOrFault.action`,
+    method: 'GET',
+    params: {
+      username, type, proName, imei
+    }
+  })
+}
+//单位管理信息获取
+export function getProvince(username, otherParam, code) {
+  return service({
+    url: `/region/getProvince.action`,
+    method: 'GET',
+    params: {
+      username, otherParam, code
+    }
+  })
+}
+//单位管理信息获取
+export function getRegionList(username, pageSize, pno, region) {
+  return service({
+    url: `/region/getRegionList.action`,
+    method: 'GET',
+    params: {
+      username, pno, pageSize, region
+    }
+  })
+}
+//单位管理信息获取
+export function findRegion(username, region, pname) {
+  return service({
+    url: `region/findRegion.action`,
+    method: 'GET',
+    params: {
+      username, region, pname
+    }
+  })
+}
+//功率管理
+export function setPower(maxPower, minPower, devSignature) {
+  return service({
+    url: `setPower.action`,
+    method: 'GET',
+    params: {
+      maxPower, minPower, devSignature
+    }
+  })
+}
+//系统设置---------------------------------------------------------------------
+export function gridSource(username, pageNo, pageSize, object) {
+  return service({
+    url: `/admin/device/gridSource.action`,
+    method: 'GET',
+    params: {
+      username, pageNo, pageSize, object
+    }
+  })
+}
+//权限获取
+export function getPowerOther(username, role, powerOther) {
+  return service({
+    url: `/power/getPowerOther.action`,
+    method: 'GET',
+    params: {
+      username, role, powerOther
+    }
+  })
+}
+//用户编辑
+export function updateUser(user_name, realName, address, phone, company_phone, company, mobile, power, powerOther) {
+  return service({
+    url: `/admin/device/updateUser.action`,
+    method: 'GET',
+    params: {
+      user_name, realName, address, phone, company_phone, company, mobile, power, powerOther
+    }
+  })
+}
+//添加用户
+export function addUserRole(user_name, password, realName, phone, address, company_phone, company, mobile, role, power, powerOther) {
+  return service({
+    url: `admin/device/addUserRole.action`,
+    method: 'GET',
+    params: {
+      user_name, password, realName, address, phone, company_phone, company, mobile, role, power, powerOther
+    }
+  })
+}
+//添加用户
+export function pushRole_infos(username, r_name, pno, pageSize) {
+  return service({
+    url: `/power/pushRole_infos.action`,
+    method: 'GET',
+    params: {
+      username, r_name, pno, pageSize
+    }
+  })
+}
+//区域选择
+export function getRegon(username, code, type) {
+  return service({
+    url: `/power/getRegon.action`,
+    method: 'GET',
+    params: {
+      username, code, type
+    }
+  })
+}
+//权限管理 新增
+export function givePowerRole(role_name, username, p_id, region) {
+  return service({
+    url: `/power/givePowerRole.action`,
+    method: 'GET',
+    params: {
+      role_name, username, p_id, region
+    }
+  })
+}
+
+//权限管理 删除
+export function delPower(username, r_id, type) {
+  return service({
+    url: `/power/delPower.action`,
+    method: 'GET',
+    params: {
+      username, r_id, type
+    }
+  })
+}
+
+//权限管理 删除
+export function editPower(id, role_name, p_id, username, region) {
+  return service({
+    url: `/power/editPower.action`,
+    method: 'GET',
+    params: {
+      id, role_name, p_id, username, region
+    }
+  })
+}
+
+//在线情况
+export function RegisterOnline(my_username) {
+  return service({
+    url: `/WebProject/RegisterOnline.action`,
+    method: 'GET',
+    params: {
+      my_username
+    }
+  })
+}
+//系统日志
+export function getSyslog(my_username) {
+  return service({
+    url: `/WebProject/getSyslog`,
+    method: 'GET',
+    params: {
+      my_username
+    }
+  })
+}
+
+
+//设备号搜索
+export function selectDeviceByNumber(number) {
+  return service({
+    url: `/WebProject/selectDeviceByNumber.action`,
+    method: 'GET',
+    params: {
+      number
+    }
+  })
+}
+
+//获取图片
+export function getLogo(user_name) {
+  return service({
+    url: `/getLogo.action`,
+    method: 'GET',
+    params: {
+      user_name
+    }
+  })
+}
+
+
+//用电规划
+export function getDevTime(startTime, endTime, imei, week, state, content, username) {
+  return service({
+    url: `/getDevTime.action`,
+    method: 'GET',
+    params: {
+      startTime, endTime, imei, week, state, content, username
+    }
+  })
+}
+//分享项目
+export function addRegisterProject(pid, username) {
+  return service({
+    url: `/admin/project/addRegisterProject.action`,
+    method: 'GET',
+    params: {
+      pid, username
+    }
+  })
+}
+//分配项目
+export function addRegisterDevice(pid, username, ower) {
+  return service({
+    url: `/admin/device/addRegisterDevice.action`,
+    method: 'GET',
+    params: {
+      pid, username, ower
+    }
+  })
+}
+//历史报警
+export function getHistDeviceAlarm(productNumber, date) {
+  return service({
+    url: `/admin/deviceAlarm/getHistDeviceAlarm.action`,
+    method: 'GET',
+    params: {
+      productNumber, date
+    }
+  })
+}
+//修改密码
+export function updateuserpassword(passwordencrypt, password, user_name) {
+  return service({
+    url: `/updateuserpassword.action`,
+    method: 'GET',
+    params: {
+      passwordencrypt, password, user_name
+    }
+  })
+}
+
+//获取街道
+export function regionList(code) {
+  return service({
+    url: `/region/regionList.action`,
+    method: 'GET',
+    params: {
+      code
+    }
+  })
+}
+
+
+//获取操作记录
+export function getUserInfo(my_username, pname, deviceId, oldDate, newDate) {
+  return service({
+    url: `/WebProject/getUserInfo.action`,
+    method: 'GET',
+    params: {
+      my_username, pname, deviceId, oldDate, newDate
+    }
+  })
+}
+
+
+//获取操作记录
+export function getDeviceByDeploy(my_username, pageSize, type) {
+  return service({
+    url: `getDeviceByDeploy.action`,
+    method: 'GET',
+    params: {
+      my_username, pageSize, type
+    }
+  })
+}
+
+

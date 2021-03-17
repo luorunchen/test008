@@ -2,12 +2,17 @@
   <div id="app">
     <div class="title">
       <div class="titleFZ">
-        <span>123</span>
-        <span>2020-08-05</span>
-        <span>周五</span>
+        <span>{{ utils.userName }}</span>
+        <span>{{ day }}</span>
+        <span>{{ date }}</span>
       </div>
       <div class="titleLeft">
-        <img src="../../assets/images/juxing2.png" alt="" />
+        <img
+          src="../../assets/images/juxing2.png"
+          alt=""
+          width="100%"
+          height="100%"
+        />
         <div class="btnLeft">
           <div class="btnLeftOne"><span>首页</span></div>
           <div class="btnLeftTwo" @click="FireInternetOfThings">
@@ -17,10 +22,20 @@
       </div>
       <div class="titleIMG">
         <p class="titleName">智慧安全系统平台</p>
-        <img src="../../assets/images/juxing4.png" alt="" />
+        <img
+          src="../../assets/images/juxing4.png"
+          alt=""
+          width="100%"
+          height="100%"
+        />
       </div>
       <div class="titleRight">
-        <img src="../../assets/images/juxing3.png" alt="" />
+        <img
+          src="../../assets/images/juxing3.png"
+          alt=""
+          width="100%"
+          height="100%"
+        />
         <div class="btnRight">
           <div class="btnRightOne" @click="FireManagement">
             <span>消防管理</span>
@@ -31,13 +46,8 @@
         </div>
       </div>
       <div class="titlePassword">
-        <span style="margin-right: 58px">
-          <img
-            src="../../assets//images/mima.png"
-            width="18px"
-            height="15px"
-            alt=""
-          />
+        <span style="margin-right: 45px">
+          <img src="../../assets/images/mima.png" alt="" />
           <el-button type="text" @click="dialogVisible = true"
             >更改密码</el-button
           >
@@ -56,40 +66,40 @@
             >
               <!-- 原密码 -->
               <el-form-item
-                prop="age"
+                prop="Odd_Password"
                 :rules="[{ required: true, message: '原密码不能为空' }]"
               >
                 <el-input
+                  type="password"
                   prefix-icon="el-icon-goods"
                   placeholder="原密码"
-                  type="age"
-                  v-model.number="numberValidateForm.age"
+                  v-model="numberValidateForm.Odd_Password"
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
               <!-- 新密码 -->
               <el-form-item
-                prop="age"
+                prop="New_Password"
                 :rules="[{ required: true, message: '新密码不能为空' }]"
               >
                 <el-input
+                  type="password"
                   prefix-icon="el-icon-goods"
                   placeholder="新密码"
-                  type="age"
-                  v-model.number="numberValidateForm.age"
+                  v-model="numberValidateForm.New_Password"
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
               <!-- 确认密码 -->
               <el-form-item
-                prop="age"
+                prop="True_Password"
                 :rules="[{ required: true, message: '确认不能为空' }]"
               >
                 <el-input
+                  type="password"
                   placeholder="确认密码"
                   prefix-icon="el-icon-goods"
-                  type="age"
-                  v-model.number="numberValidateForm.age"
+                  v-model="numberValidateForm.True_Password"
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
@@ -193,37 +203,45 @@
       <div class="one">
         <p>报警信息</p>
         <div class="scroll_wapper">
-          <div
-            class="oneEchartWapper"
-            v-for="(item, index) in AlarmInfo"
-            :key="index"
-          >
-            <div class="oneEchart">
-              <div style="display: flex">
-                <div class="circular"></div>
-                <template>{{ item.isTrafficname }}</template>
-              </div>
-
-              <template>
-                {{ item.creationtime }}
-              </template>
+          <template v-if="this.AlarmInfo.length > 0">
+            <vueSeamlessScroll :data="AlarmInfo" :class-option="classOption">
+              <div
+                class="oneEchartWapper"
+                v-for="(item, index) in AlarmInfo"
+                :key="index"
               >
-            </div>
-            <div style="margin-left: 14px; color: #00e4ff">
-              <div>设备:{{ item.deviceno_name }}</div>
-              <div>地址:{{ item.address }}</div>
-            </div>
-          </div>
-          <p
-            v-if="this.AlarmInfo != ''"
-            @click="loadMore"
-            v-loading.lock="fullscreenLoading"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(12, 33, 77, 0.8)"
-          >
-            加载更多....
-          </p>
+                <div class="oneEchart">
+                  <div style="display: flex">
+                    <div class="circular"></div>
+                    <template>{{ item.isTrafficname }}</template>
+                  </div>
+
+                  <template>
+                    {{ item.creationtime }}
+                  </template>
+                  >
+                </div>
+                <div style="margin-left: 14px; color: #00e4ff">
+                  <div>设备:{{ item.deviceno_name }}</div>
+                  <div>地址:{{ item.address }}</div>
+                </div>
+              </div></vueSeamlessScroll
+            >
+          </template>
+          <template v-else>
+            <div class="no_AlarmInfo">暂无报警</div>
+          </template>
         </div>
+        <p
+          class="sc_p"
+          v-if="this.AlarmInfo != ''"
+          @click="loadMore"
+          v-loading.lock="fullscreenLoading"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(12, 33, 77, 0.8)"
+        >
+          加载更多....
+        </p>
       </div>
       <div class="two">
         <p>本周故障数及报警数</p>
@@ -234,13 +252,13 @@
         <div class="threeEchart_right"></div>
       </div>
     </div>
+    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
   </div>
 </template>
 
 
 <script>
 import {
-  sy_map,
   push_AlarmData,
   push_AlarmInfo,
   push_DeviceData,
@@ -250,11 +268,16 @@ import {
   push_ProjectRegion,
   AlarmInforMore,
   DeviceProjectNew,
+  updateuserpassword,
 } from "@/api/index.js";
+import md5 from "js-md5";
+import vueSeamlessScroll from "vue-seamless-scroll";
+import PublicPopUps from "../FireInternetOfThings/translate/publicPopUps";
 // import AMap from "AMap";
 export default {
   data() {
     return {
+      pagetype: 3,
       fullscreenLoading: false,
       pageSize: 1,
       AlarmInfo: "",
@@ -267,32 +290,78 @@ export default {
       },
       dialogVisible: false,
       numberValidateForm: {
-        age: "",
+        Odd_Password: "",
+        New_Password: "",
+        True_Password: "",
       },
+      date: "",
+      day: "",
     };
   },
   mounted() {
     this.init();
     this.drawLine();
     this.push_AlarmData_info("d");
+    this.day = this.$moment().format("MM-DD");
+    // //console.log(day);
+    const date = this.$moment().isoWeekday();
+    // //console.log(date);
+    switch (date) {
+      case 1:
+        this.date = "周一";
+        break;
+
+      case 2:
+        this.date = "周二";
+        break;
+      case 3:
+        this.date = "周三";
+        break;
+      case 4:
+        this.date = "周四";
+        break;
+      case 5:
+        this.date = "周五";
+        break;
+      case 6:
+        this.date = "周六";
+        break;
+      case 7:
+        this.date = "周日";
+        break;
+    }
+  },
+  computed: {
+    classOption() {
+      return {
+        step: 0.5, // 数值越大速度滚动越快
+        limitMoveNum: 3, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
+      };
+    },
   },
   methods: {
     //年月日信息获取
     push_AlarmData_info(data) {
-      // console.log(this.utils);
+      // //console.log(this.utils);
       this.btnColor = data;
       push_AlarmData(this.utils.userName, data).then((res) => {
-        // console.log(res);
+        // ////console.log(res);
         this.AlarmData.AlarmNo = res.data.AlarmNo;
         this.AlarmData.AlarmYes = res.data.AlarmYes;
         this.AlarmData.FaultNo = res.data.FaultNo;
         this.AlarmData.FaultYes = res.data.FaultYes;
       });
       push_AlarmInfo(this.utils.userName, data).then((res) => {
-        console.log(res.data.data, 99999);
+        ////console.log(res.data.data, 99999);
         this.AlarmInfo = res.data.data;
         this.pageCount = res.data.pageCount;
-        console.log(this.pageCount);
+        ////console.log(this.pageCount);
       });
     },
     //设备概况
@@ -321,9 +390,9 @@ export default {
           this.AlarmInfo.push(element);
           this.fullscreenLoading = false;
         });
-        console.log(res.data.data);
+        //console.log(res.data.data);
         // this.AlarmInfo.push(res.data.data);
-        console.log(this.AlarmInfo);
+        //console.log(this.AlarmInfo);
       });
     },
     //系统设置跳转
@@ -343,18 +412,22 @@ export default {
         mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
       });
       this.map.setZoomAndCenter(4, [116.205467, 39.907761]);
-      DeviceProjectNew(this.utils.userName, "3", 1).then((res) => {
-        console.log(res);
+      DeviceProjectNew(
+        this.utils.userName,
+        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+        1
+      ).then((res) => {
+        //console.log(res);
         const style = [
           {
             url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
             anchor: new AMap.Pixel(4, 4),
-            size: new AMap.Size(11, 11),
+            size: new AMap.Size(20, 20),
           },
           {
             url: "https://a.amap.com/jsapi_demos/static/images/mass0.png",
             anchor: new AMap.Pixel(6, 6),
-            size: new AMap.Size(11, 11),
+            size: new AMap.Size(23, 23),
           },
         ];
         let a = [];
@@ -375,20 +448,36 @@ export default {
         });
         const marker = new AMap.Marker({ content: " ", map: this.map });
         mass.setMap(this.map);
-
+        let _that = this;
         //绑定事件模块
-        // mass.on("mouseover", function (e) {
-        //   marker.setPosition(e.data.lnglat);
-        //   marker.setLabel({ content: e.data.name });
-        // });
+        mass.on("click", function (e) {
+          _that.$refs.publicPopUps.initOff();
+          _that.$refs.publicPopUps.echart_wapper(e.data.pid);
+        });
       });
     },
     submitForm(formName) {
+      let odd = this.numberValidateForm.Odd_Password;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          updateuserpassword(
+            this.numberValidateForm.New_Password,
+            md5(odd),
+            this.utils.userName
+          ).then(
+            (res) => {
+              if (res.data.list[0].status == true) {
+                this.$message.success("修改成功");
+              } else {
+                this.$message.error(res.data.list[0].err_msg);
+              }
+            },
+            () => {
+              this.$message.error("请稍后重试或联系管理员 ");
+            }
+          );
         } else {
-          console.log("error submit!!");
+          //console.log("error submit!!");
           return false;
         }
       });
@@ -491,7 +580,7 @@ export default {
               name: "访问来源",
               type: "pie",
               radius: "70%",
-              center: ["50%", "50%"],
+              center: ["60%", "50%"],
               avoidLabelOverlap: false,
               label: {
                 show: false,
@@ -520,14 +609,14 @@ export default {
       );
       var indictedCase = [10, 7, 15, 8];
       push_AlarmNumData(this.utils.userName, "").then((res) => {
-        // console.log(res.data[0].typeName);
+        // //console.log(res.data[0].typeName);
         let listName = [];
         let listNum = [];
         res.data.forEach((element) => {
           listName.push(element.typeName);
           listNum.push(element.num);
         });
-        // console.log(listName);
+        // //console.log(listName);
         myChart_four.setOption({
           // backgroundColor: "#051c71",
           // title: {
@@ -613,7 +702,7 @@ export default {
       );
 
       push_AlarmAndFault(this.utils.userName, "0").then((res) => {
-        console.log(res, 7777);
+        //console.log(res, 7777);
         let tiem = [];
         let data = [];
         let fault = [];
@@ -624,7 +713,7 @@ export default {
         res.data.Fault.forEach((element) => {
           fault.push(element.num);
         });
-        console.log(tiem);
+        //console.log(tiem);
         twoEchart_right.setOption({
           tooltip: {
             trigger: "axis",
@@ -699,9 +788,10 @@ export default {
         document.querySelector(".threeEchart_right")
       );
       push_ProjectRegion(this.utils.userName, "").then((res) => {
-        console.log(res, 6666);
+        //console.log(res, 6666);
         if (res.data.length <= 0) {
-          return this.$message.error("图表数据加载失败");
+          // return this.$message.error("图表数据加载失败");
+          return; //console.log("数据加载失败");
         }
         let name = [];
         let num = [];
@@ -868,6 +958,10 @@ export default {
       this.$router.push("/login");
     },
   },
+  components: {
+    vueSeamlessScroll,
+    PublicPopUps,
+  },
 };
 </script>
 <style lang='less' scoped>
@@ -940,21 +1034,27 @@ export default {
       padding-top: 15px;
       // width: 240px;
       height: 68px;
+
       // transform: translateX(-30%);
-      // text-align: center;
+      text-align: center;
+      img {
+        width: 478px;
+        height: 100%;
+      }
       // margin: 0 auto;
       .titleName {
         font-size: 35px;
         position: absolute;
-        z-index: 999;
-        left: 50%;
+        width: 478px;
+        // z-index: 999;
+        // left: 50%;
         // top: 50%;
-        transform: translateX(-50%);
+        // transform: translateX(-50%);
         line-height: 60px;
       }
     }
     .titleRight {
-      width: 500px;
+      width: 460px;
       height: 48px;
       .btnRight {
         // float: right;
@@ -1000,6 +1100,10 @@ export default {
         text-align: center;
         line-height: 40px;
         font-size: 18px;
+      }
+      img {
+        width: 18px;
+        height: 15px;
       }
       /deep/.el-dialog {
         background: none;
@@ -1203,12 +1307,19 @@ export default {
       }
       .scroll_wapper {
         overflow-y: auto;
-        height: 77%; //高度根据需求自行设定
+        height: 66%; //高度根据需求自行设定
         overflow-x: hidden;
+        .no_AlarmInfo {
+          font-size: 40px;
+          color: #999;
+          line-height: 200px;
+          text-align: center;
+        }
         .oneEchartWapper {
           width: 332px;
           margin: 0 auto;
           font-size: 14px;
+
           .oneEchart {
             display: flex;
             justify-content: space-between;
@@ -1224,13 +1335,13 @@ export default {
             }
           }
         }
-        p {
-          text-align: center;
-          line-height: 30px;
-          color: #999;
-          font-size: 14px;
-          cursor: pointer;
-        }
+      }
+      .sc_p {
+        text-align: center;
+        line-height: 30px;
+        color: #999;
+        font-size: 14px;
+        cursor: pointer;
       }
     }
     .two {

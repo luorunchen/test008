@@ -998,10 +998,13 @@ export default {
     },
   },
   updated() {
-    console.log(123);
+    // console.log(123);
     if (this.SElec_DetailElecDevice_List.length > 0) {
-      this.$refs.right_one.style.height = "450" + "px";
+      this.$refs.right_one.style.height = "2.34" + "rem";
     }
+    // if (this.SElec_DetailElecDevice_List_Copy.length > 0) {
+    //   this.$refs.right_one.style.height = "2.34" + "rem";
+    // }
   },
 };
 </script>
@@ -1599,8 +1602,8 @@ export default {
   .right_one {
     // background-image: ("../../../assets/images/zhengchangbili.png");
     height: 90px;
-    background-size: 100% 100%;
-    background-image: url("../../../assets/images/juxing5.png");
+    background-size: 100% 450px;
+    background-image: url("../../../assets/images/sousuo.png");
     .chaxun {
       padding-top: 20px;
       padding-left: 20px;
@@ -1608,6 +1611,7 @@ export default {
         background: #021019;
         color: #fff;
         border: 1px solid #3094d5;
+        width: 200px;
       }
     }
     .scroll_wapper {

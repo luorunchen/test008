@@ -122,7 +122,7 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: 'history',
+  // mode: 'history',
   base: '/lingdong1',
 })
 router.beforeEach((to, from, next) => {

@@ -20,24 +20,33 @@ module.exports = {
       'AMap': 'AMap' // 高德地图配置
     }
   },
+  chainWebpack: (config) => {
+    config.module
+      .rule('vue')
+      .test(/\.vue$/)
+      .use('style-vw-loader')
+      .loader('style-vw-loader')
+      .options({
+        viewportWidth: 1920,//传参
+      })
+  },
+  css: {
+    loaderOptions: {
+      css: {},
+      postcss: {
+        plugins: [
+          require('postcss-px2rem')({
+            remUnit: 192//列如设计稿尺寸为320
+          })
+        ],
 
+      }
+    }
+  },
   lintOnSave: false,
   publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
   productionSourceMap: false
-  // performance: { hints: false }
-  // configureWebpack: {
-  //   performance: {
-  //     hints: 'warning',
-  //     //入口起点的最大体积 整数类型（以字节为单位）
-  //     maxEntrypointSize: 50000000,
-  //     //生成文件的最大体积 整数类型（以字节为单位 300k）
-  //     maxAssetSize: 30000000,
-  //     //只给出 js 文件的性能提示
-  //     assetFilter: function (assetFilename) {
-  //       return assetFilename.endsWith('.js');
-  //     }
-  //   }
-  // }
+
 }

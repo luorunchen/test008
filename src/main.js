@@ -10,6 +10,9 @@ import * as echarts from 'echarts';
 import axios from 'axios'
 
 import utils from './utils/utils.js'
+import moment from 'moment'//导入文件 
+import "lib-flexible"
+Vue.prototype.$moment = moment;//赋值使用
 
 Vue.prototype.axios = axios;
 Vue.prototype.utils = utils;
