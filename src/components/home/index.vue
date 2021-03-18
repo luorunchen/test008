@@ -43,6 +43,9 @@
           <div class="btnRightTwo" @click="SystemSettings">
             <span>系统设置</span>
           </div>
+          <span @click="audioON" style="margin-left: 30px; line-height: 30px"
+            >报警声音({{ onOFF }})</span
+          >
         </div>
       </div>
       <div class="titlePassword">
@@ -221,7 +224,10 @@
                   </template>
                   >
                 </div>
-                <div style="margin-left: 14px; color: #00e4ff">
+                <div
+                  style="margin-left: 14px; color: #00e4ff"
+                  @click="alarmInfoClick(item.did, item.devicenoid)"
+                >
                   <div>设备:{{ item.deviceno_name }}</div>
                   <div>地址:{{ item.address }}</div>
                 </div>
@@ -296,6 +302,7 @@ export default {
       },
       date: "",
       day: "",
+      onOFF: "关",
     };
   },
   mounted() {
@@ -346,6 +353,21 @@ export default {
     },
   },
   methods: {
+    alarmInfoClick(devId, p_num) {
+      this.$refs.publicPopUps.see(devId, p_num);
+    },
+    // 声音开关
+    audioON() {
+      // console.log(123);
+      if (this.onOFF == "开") {
+        this.$store.commit("SoundSwitchFun", "关");
+        return (this.onOFF = "关");
+      }
+      if (this.onOFF == "关") {
+        this.onOFF = "开";
+        this.$store.commit("SoundSwitchFun", "开");
+      }
+    },
     //年月日信息获取
     push_AlarmData_info(data) {
       // //console.log(this.utils);
@@ -451,8 +473,13 @@ export default {
         let _that = this;
         //绑定事件模块
         mass.on("click", function (e) {
+          console.log(e);
           _that.$refs.publicPopUps.initOff();
           _that.$refs.publicPopUps.echart_wapper(e.data.pid);
+          _that.map.setZoomAndCenter(20, [
+            e.data.lnglat.lng,
+            e.data.lnglat.lat,
+          ]);
         });
       });
     },
@@ -993,6 +1020,7 @@ export default {
       width: 500px;
       height: 48px;
       .btnLeft {
+        font-size: 16px;
         float: right;
         display: flex;
         margin-top: -44px;
@@ -1060,6 +1088,7 @@ export default {
         // float: right;
         display: flex;
         margin-top: -44px;
+        font-size: 16px;
         // margin-right: 30px;
         margin-left: 30px;
         .btnRightOne {

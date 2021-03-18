@@ -207,9 +207,14 @@ export default {
       this.DeviceProjectNewFun(this.$store.state.initStatus); //   需要调用的方法
       // console.log(this.$store.state.initStatus);
     },
+    contractFile(val, lav) {
+      console.log(val);
+
+      this.map.setZoomAndCenter(20, val);
+    },
   },
   mounted() {
-    console.log(this.$route.path, 999999);
+    // console.log(this.$route.path, 999999);
 
     switch (this.$route.path) {
       case "/FireInternetOfThings":
@@ -586,6 +591,7 @@ export default {
         }
 
         this.DeviceProjectNewData = [...a, ...b];
+        this.$store.commit("DeviceProject", this.DeviceProjectNewData);
         // console.log(c, "我是aa,b");
         this.$nextTick(() => {
           const style = [
@@ -631,11 +637,15 @@ export default {
   components: {
     PublicPopUps,
   },
+
   computed: {
     status() {
       //  计算属性
       // console.log(this.$store.state.initStatus);
       return this.$store.state.initStatus; //  Vuex 中定义的属性
+    },
+    contractFile() {
+      return this.$store.state.map_lnglat;
     },
   },
 };

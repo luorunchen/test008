@@ -27,7 +27,9 @@
                   this.$route.name == 'EmergencyManagement' ||
                   this.$route.name == 'PowerDetection' ||
                   this.$route.name == 'Panorama' ||
-                  this.$route.name == 'home'
+                  this.$route.name == 'home' ||
+                  this.$route.name == 'FireManagement' ||
+                  this.$route.name == 'FireInternetOfThings'
                 "
               >
                 <div class="scroll_wapper">
@@ -481,6 +483,27 @@
           <div class="one">
             <p class="titleP">设备信息</p>
             <ul v-for="(item, index) in ElecDataList.DevData" :key="index">
+              <div
+                v-if="item.typeName == '正常'"
+                style="background: #13d61c"
+                class="ulInfo"
+              >
+                设备正常/{{ item.status }}
+              </div>
+              <div
+                v-if="item.typeName.indexOf('故障') >= 0"
+                style="background: #eb8814"
+                class="ulInfo"
+              >
+                设备故障/{{ item.status }}
+              </div>
+              <div
+                v-if="item.typeName.indexOf('报警') >= 0"
+                style="background: #d61313"
+                class="ulInfo"
+              >
+                设备报警/{{ item.status }}
+              </div>
               <li>
                 设备编号: <span>{{ item.productNumber }}</span>
               </li>
@@ -1462,15 +1485,15 @@
             </div>
           </template>
           <template v-else>
-            <div class="one_echarts">
+            <div class="one_echarts" v-loading="one_echarts_loading">
               <p class="titleP">电流统计图</p>
               <div class="echarts_wapper_one_search"></div>
             </div>
-            <div class="two_echarts">
+            <div class="two_echarts" v-loading="one_echarts_loading">
               <p class="titleP">温度统计图</p>
               <div class="echarts_wapper_two_search"></div>
             </div>
-            <div class="three_echarts">
+            <div class="three_echarts" v-loading="one_echarts_loading">
               <p class="titleP">电压统计图</p>
               <div class="echarts_wapper_three_search"></div>
             </div>
@@ -2187,6 +2210,7 @@ export default {
   props: ["pagetype"],
   data() {
     return {
+      one_echarts_loading: false,
       mwss5Status: true,
       DeviceHistory: "",
       ElecDataList_type_List: "",
@@ -2254,7 +2278,7 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.SElec_DetailElecDevice_List, 4564565);
+    // //console.log(this.SElec_DetailElecDevice_List, 4564565);
     // undefined;
   },
 
@@ -2301,13 +2325,13 @@ export default {
           // 视频下方底部控件
           // footer: ["talk", "broadcast", "hd", "fullScreen"], // 如果template参数不为simple,该字段将被覆盖
           // audio: 1, // 是否默认开启声音 0 - 关闭 1 - 开启
-          // openSoundCallBack: data => console.log("开启声音回调", data),
-          // closeSoundCallBack: data => console.log("关闭声音回调", data),
-          // startSaveCallBack: data => console.log("开始录像回调", data),
-          // stopSaveCallBack: data => console.log("录像回调", data),
-          // capturePictureCallBack: data => console.log("截图成功回调", data),
-          // fullScreenCallBack: data => console.log("全屏回调", data),
-          // getOSDTimeCallBack: data => console.log("获取OSDTime回调", data),
+          // openSoundCallBack: data => //console.log("开启声音回调", data),
+          // closeSoundCallBack: data => //console.log("关闭声音回调", data),
+          // startSaveCallBack: data => //console.log("开始录像回调", data),
+          // stopSaveCallBack: data => //console.log("录像回调", data),
+          // capturePictureCallBack: data => //console.log("截图成功回调", data),
+          // fullScreenCallBack: data => //console.log("全屏回调", data),
+          // getOSDTimeCallBack: data => //console.log("获取OSDTime回调", data),
           // width: 100, //如果指定了width、height则以这里为准
           height: 600, //如果没指定宽高，则以容器video-container为准
         });
@@ -2319,7 +2343,7 @@ export default {
     },
     //设备历史
     deviceHistory() {
-      console.log(this.DeviceHistory);
+      //console.log(this.DeviceHistory);
       getHistoryFault(
         this.ElecDataList.DevData[0].productNumber,
         this.DeviceHistory[0],
@@ -2328,7 +2352,7 @@ export default {
     },
     //报警推送
     baojingtuisong() {
-      console.log(this.checkList);
+      //console.log(this.checkList);
       let app = 0;
       let sms = 0;
       let phone = 0;
@@ -2339,7 +2363,7 @@ export default {
       //   sms = 1
       // }
       this.checkList.forEach((index, element) => {
-        console.log(index, element);
+        //console.log(index, element);
         if (index === "短信") {
           sms = 1;
         }
@@ -2420,7 +2444,7 @@ export default {
         let create_time = [];
         let temperature = [];
         rouselt.forEach((element, index) => {
-          console.log(element.rssi);
+          //console.log(element.rssi);
           rssi.push(element.rssi);
           create_time.push(element.create_time);
           temperature.push(element.temperature);
@@ -2528,11 +2552,11 @@ export default {
           });
         });
 
-        // console.log(option2);
+        // //console.log(option2);
 
         // var option2 = (Math.random() * 1000).toFixed(2) - 0;
         // option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-        // console.log((Math.random() * 100).toFixed(2) - 0);
+        // //console.log((Math.random() * 100).toFixed(2) - 0);
         // shui_echart.setOption(option, true);
       });
       this.$nextTick(() => {
@@ -2593,7 +2617,7 @@ export default {
     },
     equipment(data, num) {
       this.equipmentColor = data;
-      console.log(this.pagetype);
+      //console.log(this.pagetype);
       getDeviceByPid(
         this.devicepidData,
         num,
@@ -2608,13 +2632,24 @@ export default {
     echart_wapper(data) {
       this.loading = true;
 
-      // console.log(data)
+      // //console.log(data)
       // const type = 2;
       this.equipmentColor = "onLine";
       this.devicepidData = data;
       GetMapData(data, this.pagetype, this.utils.userName).then((res) => {
-        // console.log(res);
+        // //console.log(res);
         this.GetMapDataList = res.data;
+        //获取地图点
+        let map;
+        if (res.data.Company[0].MLng > 60) {
+          map = [res.data.Company[0].MLng * 1, res.data.Company[0].MLat * 1];
+        } else {
+          map = [res.data.Company[0].MLat * 1, res.data.Company[0].MLng * 1];
+        }
+
+        // console.log(map, "我是,ap");
+        this.$store.commit("set_map", map);
+
         //重点部位模块不需要Echart图表
         if (this.$route.path == "/FireInternetOfThings/KeyParts") {
           // this.GetMapDataList = res.data;
@@ -2630,7 +2665,7 @@ export default {
 
           let name = [];
           let data = [];
-          // console.log(res.data.Diagram, 333);
+          // //console.log(res.data.Diagram, 333);
           res.data.Diagram.forEach((element) => {
             name.push(element.date);
             data.push(element.num);
@@ -2693,17 +2728,19 @@ export default {
         }
 
         this.loading = false;
-        // console.log(res.data, "wwww");
+        // //console.log(res.data, "wwww");
       });
       getDeviceByPid(data, 1, this.pagetype, this.utils.userName).then(
         (res) => {
-          console.log(res.data, 3121);
+          //console.log(res.data, 3121);
           this.getDeviceByPidList = res.data;
         }
       );
     },
     // 查看echart图片函数
     async see(devId) {
+      this.one_echarts_loading = true;
+      this.innerVisible = true;
       await getDeviceByDevId(devId).then(
         (res) => {
           if (res.data == null || res.data == undefined) {
@@ -2721,18 +2758,23 @@ export default {
           ) {
             return this.$message.error("请稍后重试或联系管理员");
           }
-          // console.log(res, "sssqqq");
+          // //console.log(res, "sssqqq");
           this.getDeviceByDevIdList = res.data.list[0];
           // this.getDeviceByDevIdList.mess5[0].push(
           //   this.getDeviceByDevIdList.mess2[0]
           // );
           //
-          this.getDeviceByDevIdList.mess5.length <= 0
+          //console.log(Array.isArray(this.getDeviceByDevIdList.mess5));
+          !Array.isArray(this.getDeviceByDevIdList.mess5)
             ? (this.mwss5Status = false)
             : (this.mwss5Status = true);
+          //console.log(this.mwss5Status, 646654);
           if (this.mwss5Status == true) {
+            //判断数组是非为空数组
+            if (this.getDeviceByDevIdList.mess5.length <= 0) {
+              return (this.mwss5Status = false);
+            }
             this.getDeviceByDevIdList.mess5[0].date = this.getDeviceByDevIdList.mess2[0];
-            console.log(this.getDeviceByDevIdList, 646654);
           }
         },
         () => {
@@ -2745,22 +2787,24 @@ export default {
         this.ElecDataList_images = [];
         this.ElecDataList = res.data;
 
-        if (res.data.DevData[0].image != "") {
-          const list = res.data.DevData[0].image.split(",");
-          list.forEach((Element) => {
-            // Element =
-            let a = "http://edog-online.com/ctx/devPic/" + Element;
-            this.ElecDataList_images.push(a);
-          });
+        if (res.data.DevData.length > 0) {
+          if (res.data.DevData[0].image != "") {
+            const list = res.data.DevData[0].image.split(",");
+            list.forEach((Element) => {
+              // Element =
+              let a = "http://edog-online.com/ctx/devPic/" + Element;
+              this.ElecDataList_images.push(a);
+            });
+          }
         }
 
         this.ElecDataList_typeName = res.data.DevData[0].typeName;
-        console.log(this.ElecDataList_typeName);
+        //console.log(this.ElecDataList_typeName);
         if (this.$route.path != "/FireInternetOfThings/PowerDetection") {
           ReadParameterApi(res.data.DevData[0].productNumber).then((res) => {
-            // console.log(res, "ldjakjdla");
+            // //console.log(res, "ldjakjdla");
             // this.getDeviceByDevIdList.row = res.data.row;
-            // console.log(this.getDeviceByDevIdList, 7899987978);
+            // //console.log(this.getDeviceByDevIdList, 7899987978);
             this.shengyu_loudian = {
               oneAlarm: this.getDeviceByDevIdList.mess2[0]
                 .noLeakageAlarmACurrentValue,
@@ -2796,7 +2840,7 @@ export default {
               threeWenDu: res.data.row.CWenDu,
               fourWenDu: res.data.row.NWenDu,
             };
-            // console.log(this.shengyu_loudian);
+            // //console.log(this.shengyu_loudian);
           });
         }
       });
@@ -2808,6 +2852,7 @@ export default {
 
       if (this.$route.path == "/FireInternetOfThings/PowerDetection") {
         fracture(devId, this.utils.userName, "", "").then((res) => {
+          this.one_echarts_loading = false;
           this.$nextTick(() => {
             let one_echart_left = this.$echarts.init(
               document.querySelector(".echarts_wapper_one_search")
@@ -2899,6 +2944,7 @@ export default {
         });
       } else {
         ElectricDeviceDate(devId, now).then((res) => {
+          this.one_echarts_loading = false;
           let dianLiuUa = [];
           let dianLiuUb = [];
           let dianLiuUc = [];
@@ -3330,8 +3376,8 @@ export default {
           break;
         //下发保险单
         case "11":
-          // console.log(6554654);
-          // console.log(this.ElecDataList.DevData[0].productNumber, 789789);
+          // //console.log(6554654);
+          // //console.log(this.ElecDataList.DevData[0].productNumber, 789789);
           if (role == "1000" || power.indexOf("10003004") != -1) {
             putMessToDevice(
               this.ElecDataList.DevData[0].productNumber,
@@ -3350,23 +3396,23 @@ export default {
             );
           }
           // var res = JSON.parse(result);
-          // console.log(res);
+          // //console.log(res);
 
           break;
       }
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      //console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      //console.log(`当前页: ${val}`);
     },
     onSubmit() {
-      console.log("submit!");
+      //console.log("submit!");
     },
     // TabS 切换函数
     handleClick(tab, event) {
-      console.log(tab, event);
+      //console.log(tab, event);
     },
 
     //火灾报警
@@ -3378,10 +3424,10 @@ export default {
         type = 7;
       }
 
-      console.log(this.$route.path, 666666);
+      //console.log(this.$route.path, 666666);
       ElecData_type(devID, type).then((res) => {
         // res.data.DevInfo = [...res.data.DevInfo]
-        console.log(res);
+        //console.log(res);
         this.ElecDataList_type_List = res.data;
         if (res.data.DevInfo != null || res.data.DevInfo != undefined) {
           this.ElecDataList_type_List_DevInfo.dSName = res.data.DevInfo.dSName;
@@ -3848,8 +3894,12 @@ export default {
   .shebeiInfo {
     .one {
       width: 300px;
-      height: 315px;
+      color: #4b6082;
+
       box-shadow: 0px 0px 10px 0px rgba(3, 27, 29, 0.11);
+      span {
+        color: #000;
+      }
       .titleP {
         margin-left: 20px;
         line-height: 40px;
@@ -3878,6 +3928,16 @@ export default {
       /deep/.el-button--mini {
         margin: 10px 0 0 15px;
       }
+    }
+    .ulInfo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      text-align: center;
+      margin: 0 auto;
+      line-height: 150px;
+      color: #fff;
+      font-size: 20px;
     }
   }
   .shebeiEcharts {

@@ -12,6 +12,16 @@
         <p>-{{ btnInfo }}</p>
       </div>
       <div class="fenbuInfo">
+        <!-- <div
+          :class="
+            btnInfo == '电气火灾隐患' ? 'infoBtn infoBtnClick' : 'infoBtn'
+          "
+          @click="getInfo('电气火灾隐患')"
+        >
+         
+          <p>电气火灾隐患</p>
+         
+        </div> -->
         <div
           :class="btnInfo == '项目管理' ? 'infoBtn infoBtnClick' : 'infoBtn'"
           @click="getInfo('项目管理')"
@@ -30,789 +40,185 @@
         >
           <p>单位管理</p>
         </div>
+        <!-- <div
+          :class="btnInfo == '系统管理' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('系统管理')"
+        >
+          <router-link to="/SystemSettings"> <p>系统管理</p></router-link>
+        </div> -->
+        <!-- <div
+          :class="btnInfo == '系统设置' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('系统设置')"
+        >
+          <p>系统设置</p>
+        </div> -->
+        <!-- <div
+          :class="btnInfo == '报警故障' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('报警故障')"
+        >
+          <p>报警故障</p>
+        </div>
         <div
-          :class="btnInfo == '消防新闻' ? 'infoBtn infoBtnClick' : 'infoBtn'"
-          @click="getInfo('消防新闻')"
+          :class="btnInfo == '用电规划' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('用电规划')"
         >
-          <p>消防新闻</p>
+          <p>用电规划</p>
         </div>
+        <div
+          :class="btnInfo == '功率管理' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('功率管理')"
+        >
+          <p>功率管理</p>
+        </div>
+        <div
+          :class="btnInfo == '电量统计' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('电量统计')"
+        >
+          <p>电量统计</p>
+        </div>
+        <div
+          :class="
+            btnInfo == '线路老化预警' ? 'infoBtn infoBtnClick' : 'infoBtn'
+          "
+          @click="getInfo('线路老化预警')"
+        >
+          <p>线路老化预警</p>
+        </div>
+        <div
+          :class="
+            btnInfo == '烟雾火灾预警' ? 'infoBtn infoBtnClick' : 'infoBtn'
+          "
+          @click="getInfo('烟雾火灾预警')"
+        >
+          <p>烟雾火灾预警</p>
+        </div>
+        <div
+          :class="btnInfo == '短路预警' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('短路预警')"
+        >
+          <p>短路预警</p>
+        </div>
+        <div
+          :class="btnInfo == '漏电预警' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('漏电预警')"
+        >
+          <p>漏电预警</p>
+        </div> -->
       </div>
     </div>
-    <div class="content_wapper">
+    <div
+      id="content_wapperCopy"
+      :class="
+        this.btnInfo != '电气火灾隐患' ? 'content_wapper' : 'content_wapperCopy'
+      "
+    >
+      <template v-if="this.btnInfo == '电气火灾隐患'">
+        <div id="content_wapper"><DianQiHuoZhai /></div>
+
+        <!-- <router-view></router-view> -->
+      </template>
       <template v-if="this.btnInfo == '项目管理'">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          size="mini"
-        >
-          <el-form-item label="项目名称">
-            <el-input
-              v-model="formInline.user"
-              placeholder="项目名称"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="防火员">
-            <el-input v-model="formInline.user" placeholder="防火员"></el-input>
-          </el-form-item>
-          <el-form-item label="负责人">
-            <el-input v-model="formInline.user" placeholder="负责人"></el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-
-            <el-button type="primary" @click="dialogVisible = true"
-              >新增项目
-            </el-button>
-            <el-button type="primary" @click="onSubmit"
-              >删除责任人和防火员</el-button
-            >
-          </el-form-item>
-        </el-form>
-        <div class="tabs">
-          <el-table
-            ref="multipleTable"
-            :data="tableData"
-            tooltip-effect="dark"
-            style="width: 100%"
-          >
-            <el-table-column type="selection" width="55"> </el-table-column>
-            <el-table-column type="index" :index="indexMethod">
-            </el-table-column>
-            <el-table-column label="项目名称" width="120">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="项目位置" width="120">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="防火员"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="防火员电话"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="责任人"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="责任人电话"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="项目介绍"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column prop="address" label="备注" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column label="操作" show-overflow-tooltip>
-              <div class="caozuo">
-                <span @click="dialogVisible = true">编辑</span>
-                <span @click="delClick">删除</span>
-                <span @click="newClick">新增设备</span>
-              </div>
-            </el-table-column>
-          </el-table>
-        </div>
+        <XiangMuGuanLi />
       </template>
       <template v-if="this.btnInfo == '设备管理'">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          size="mini"
-        >
-          <el-form-item label="设备类型">
-            <el-input
-              v-model="formInline.user"
-              placeholder="设备类型"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="项目名称">
-            <el-input
-              v-model="formInline.user"
-              placeholder="项目名称"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="设备号">
-            <el-input v-model="formInline.user" placeholder="设备号"></el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-
-            <!-- <el-button type="primary" @click="dialogVisible = true"
-              >新增项目
-            </el-button>
-            <el-button type="primary" @click="onSubmit"
-              >删除责任人和防火员</el-button
-            > -->
-          </el-form-item>
-        </el-form>
-        <div class="tabs">
-          <el-table
-            ref="multipleTable"
-            :data="tableData"
-            tooltip-effect="dark"
-            style="width: 100%"
-          >
-            <el-table-column type="selection" width="55"> </el-table-column>
-            <el-table-column type="index" :index="indexMethod">
-            </el-table-column>
-            <el-table-column label="项目名称" width="120">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="项目位置" width="120">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="设备类型"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="设备号"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="注册时间"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="心跳时间"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="设备厂商"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="是否授权"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="保险单号"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="是否开启流量"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column prop="address" label="备注" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column label="操作" show-overflow-tooltip>
-              <div class="caozuo">
-                <span>编辑</span>
-                <span>删除</span>
-                <span>设置</span>
-              </div>
-            </el-table-column>
-          </el-table>
-        </div>
+        <SheBeiGuanLi />
       </template>
-      <template v-if="this.btnInfo == '单位管理'">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <div class="danwei_left">
-              <p class="titleP">行政区域</p>
-              <el-tree :data="data" :props="defaultProps" accordion> </el-tree>
-            </div>
-          </el-col>
-          <el-col :span="20">
-            <div class="danwei_right">
-              <div class="one"></div>
-              <div style="padding: 20px 0 0 40px">
-                <el-form
-                  :inline="true"
-                  :model="formInline"
-                  class="demo-form-inline"
-                  size="mini"
-                >
-                  <el-form-item label="单位名称">
-                    <el-input
-                      v-model="formInline.user"
-                      placeholder="单位名称"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="防火员">
-                    <el-input
-                      v-model="formInline.user"
-                      placeholder="防火员"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="项目负责人">
-                    <el-input
-                      v-model="formInline.user"
-                      placeholder="项目负责人"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                  </el-form-item>
-                </el-form>
-                <div class="tabs">
-                  <el-table
-                    ref="multipleTable"
-                    :data="tableData"
-                    tooltip-effect="dark"
-                    style="width: 97%"
-                  >
-                    <el-table-column type="selection" width="55">
-                    </el-table-column>
-                    <el-table-column type="index" :index="indexMethod">
-                    </el-table-column>
-                    <el-table-column label="单位名称" width="120">
-                      <template slot-scope="scope">{{
-                        scope.row.date
-                      }}</template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="所属区域" width="120">
-                    </el-table-column>
-                    <el-table-column
-                      prop="address"
-                      label="联系电话"
-                      show-overflow-tooltip
-                    >
-                    </el-table-column>
-                    <el-table-column
-                      prop="address"
-                      label="防火员"
-                      show-overflow-tooltip
-                    >
-                    </el-table-column>
-                    <el-table-column
-                      prop="address"
-                      label="项目负责人"
-                      show-overflow-tooltip
-                    >
-                    </el-table-column>
-                    <el-table-column
-                      prop="address"
-                      label="巡查点数"
-                      show-overflow-tooltip
-                    >
-                    </el-table-column>
-
-                    <el-table-column label="操作" show-overflow-tooltip>
-                      <div class="caozuo">
-                        <span @click="dialogVisible_search = true">查看</span>
-                      </div>
-                    </el-table-column>
-                  </el-table>
-                </div>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
+      <template v-if="this.btnInfo == '单位管理'"> <DanWeiGuanLi /> </template>
+      <template v-if="this.btnInfo == '报警故障'">
+        <BaoJingGuZhang />
       </template>
-      <template v-if="this.btnInfo == '消防新闻'">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          size="mini"
-        >
-          <el-form-item label="角色名称">
-            <el-input
-              v-model="formInline.user"
-              placeholder="角色名称"
-            ></el-input>
-          </el-form-item>
-
-          <el-form-item label="状态">
-            <el-select v-model="formInline.region" placeholder="状态">
-              <el-option label="启用" value="shanghai"></el-option>
-              <el-option label="禁用" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-            <!-- <el-button type="primary" @click="onSubmit">新增</el-button> -->
-            <!-- <el-button type="primary" @click="dialogVisible = true"
-              >新增
-            </el-button> -->
-          </el-form-item>
-        </el-form>
-        <div class="tabs">
-          <el-table
-            ref="multipleTable"
-            :data="tableData"
-            tooltip-effect="dark"
-            style="width: 100%"
-          >
-            <el-table-column type="selection" width="55"> </el-table-column>
-            <el-table-column type="index" :index="indexMethod">
-            </el-table-column>
-            <el-table-column label="新闻名称" width="1200">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="发表时间" width="400">
-            </el-table-column>
-
-            <el-table-column label="操作" show-overflow-tooltip>
-              <div class="caozuo">
-                <span @click="dialogVisible_search = true">查看</span>
-              </div>
-            </el-table-column>
-          </el-table>
-        </div>
+      <template v-if="this.btnInfo == '用电规划'">
+        <YongDianGuiHua />
       </template>
 
-      <div class="block">
-        <span class="demonstration">完整功能</span>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
-        >
-        </el-pagination>
-      </div>
+      <template v-if="this.btnInfo == '功率管理'">
+        <GongLvGuanLi />
+      </template>
+      <template v-if="this.btnInfo == '电量统计'">
+        <DianLiangTongJi />
+      </template>
+      <template v-if="this.btnInfo == '线路老化预警'">
+        <XianLvLaoHuaYuJing />
+      </template>
+      <template v-if="this.btnInfo == '烟雾火灾预警'">
+        <YanWuHuoZaiYuJing />
+      </template>
+      <template v-if="this.btnInfo == '短路预警'">
+        <DuanLvYuJing />
+      </template>
+      <template v-if="this.btnInfo == '漏电预警'">
+        <LouDianYuJing />
+      </template>
     </div>
-
-    <!-- 用户管理新增弹窗 -->
-    <el-dialog
-      title="新增"
-      :visible.sync="dialogVisible"
-      width="50%"
-      :modal-append-to-body="false"
-    >
-      <template v-if="this.btnInfo == '项目管理'">
-        <el-form
-          size="mini"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          label-width="300px"
-          class="demo-ruleForm"
-          :inline="true"
-        >
-          <el-form-item label="项目名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="项目位置" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-
-          <el-form-item label="防火员" prop="delivery">
-            <el-autocomplete placeholder="请输入内容"></el-autocomplete>
-            <el-button type="primary" plain @click="outerVisible = true"
-              >新增</el-button
-            >
-          </el-form-item>
-          <el-form-item label="责任人" prop="type">
-            <el-autocomplete placeholder="请输入内容"></el-autocomplete>
-            <el-button type="primary" plain @click="outerVisible = true"
-              >新增</el-button
-            >
-          </el-form-item>
-          <el-form-item label="网格员" prop="name">
-            <el-autocomplete placeholder="请输入内容"></el-autocomplete>
-            <el-button type="primary" plain @click="outerVisible = true"
-              >新增</el-button
-            >
-          </el-form-item>
-          <el-form-item label="街道负责人" prop="region">
-            <el-autocomplete placeholder="请输入内容"></el-autocomplete>
-            <el-button type="primary" plain @click="outerVisible = true"
-              >新增</el-button
-            >
-          </el-form-item>
-          <el-form-item label="应用场所" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="项目介绍(所属单位)" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >确 定</el-button
-          >
-        </span>
-      </template>
-      <template v-if="this.btnInfo == '设备管理'">
-        <el-form
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          label-width="200px"
-          class="demo-ruleForm"
-          :inline="true"
-        >
-          <el-form-item label="角色名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="区域权限" prop="region">
-            <el-input v-model="ruleForm.region"></el-input>
-          </el-form-item>
-
-          <el-form-item label="用户管理" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-              <el-checkbox label="后台技术人员" name="type"></el-checkbox>
-              <el-checkbox label="超级管理员" name="type"></el-checkbox>
-              <el-checkbox label="一般管理员" name="type"></el-checkbox>
-              <el-checkbox label="管理员" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="项目管理" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-              <el-checkbox label="后台技术人员" name="type"></el-checkbox>
-              <el-checkbox label="超级管理员" name="type"></el-checkbox>
-              <el-checkbox label="一般管理员" name="type"></el-checkbox>
-              <el-checkbox label="管理员" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >确 定</el-button
-          >
-        </span>
-      </template>
-      <!-- <template v-if="this.btnInfo == '单位管理'"></template>
-      <template v-if="this.btnInfo == '消防新闻'"></template> -->
-    </el-dialog>
-
-    <!-- 搜索内容弹窗 -->
-    <div class="titleWapper">
-      <el-dialog :visible.sync="dialogVisible_search" width="60%">
-        <p class="title_name">设备名称</p>
-
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <!-- 电气火灾展示数据 -->
-            <template>
-              <div class="scroll_wapper">
-                <div class="left_one">
-                  <ul>
-                    <li>在线监测</li>
-                    <li>更新时间</li>
-                    <li>报警类型</li>
-                    <li>位置</li>
-                  </ul>
-                </div>
-              </div>
-            </template>
-          </el-col>
-          <el-col :span="16">
-            <div class="right_wapper">
-              <el-row
-                style="margin-bottom: 20px"
-                v-show="this.$route.name != 'KeyParts'"
-                :gutter="20"
-              >
-                <el-col :span="8"
-                  ><div
-                    :class="
-                      equipmentColor == 'police' ? 'one equipmentColor' : 'one'
-                    "
-                    @click="equipment('police')"
-                  >
-                    <div class="one_item"></div>
-                    <p>1</p>
-                    <p>报警设备</p>
-                  </div></el-col
-                >
-                <el-col :span="8"
-                  ><div
-                    :class="
-                      equipmentColor == 'onLine' ? 'two equipmentColor' : 'two'
-                    "
-                    @click="equipment('onLine')"
-                  >
-                    <div class="two_item"></div>
-                    <p>1</p>
-                    <p>在线设备</p>
-                  </div></el-col
-                >
-                <el-col :span="8"
-                  ><div
-                    :class="
-                      equipmentColor == 'offLine'
-                        ? 'three equipmentColor'
-                        : 'three'
-                    "
-                    @click="equipment('offLine')"
-                  >
-                    <div class="three_item"></div>
-                    <p>1</p>
-                    <p>离线设备</p>
-                  </div></el-col
-                >
-              </el-row>
-
-              <el-row :gutter="20">
-                <el-col :span="12"
-                  ><div class="four">
-                    <p>单位简介</p>
-                    <p>
-                      大家看到啦数据库的垃圾的考拉手机打开胜利大街奥斯卡来得及奥斯卡来得及奥斯卡大家可达师姐裸考
-                    </p>
-                    <p>
-                      大家看到啦数据库的垃圾的考拉手机打开胜利大街奥斯卡来得及奥斯卡来得及奥斯卡大家可达师姐裸考
-                    </p>
-                    <p>大家看到啦数据库</p>
-                  </div></el-col
-                >
-                <el-col :span="12"
-                  ><div class="five">
-                    <p>一周内报警数</p>
-                    <div class="echart_wapper"></div></div
-                ></el-col>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
-      </el-dialog>
-    </div>
-
-    <!-- 新增人员弹窗 -->
-    <el-dialog
-      center
-      width="30%"
-      title="新增"
-      :visible.sync="outerVisible"
-      :modal-append-to-body="false"
-    >
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="姓名">
-          <el-input size="mini"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码">
-          <el-input size="mini"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">取 消</el-button>
-        <el-button type="primary" @click="outerVisible = false"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 
 <script>
+import BaoJingGuZhang from "./BaoJingGuZhang";
+import DanWeiGuanLi from "./DanWeiGuanLi";
+import XiangMuGuanLi from "./xiangmuguanli/xiangmuguanli";
+import SheBeiGuanLi from "./SheBeiGuanLi";
+import YongDianGuiHua from "./YongDianGuiHua";
+import GongLvGuanLi from "./GongLvGuanLi";
+import XianLvLaoHuaYuJing from "./XianLvLaoHuaYuJing";
+import DianLiangTongJi from "./DianLiangTongJi";
+import YanWuHuoZaiYuJing from "./YanWuHuoZaiYuJing";
+import DuanLvYuJing from "./DuanLvYuJing";
+import LouDianYuJing from "./LouDianYuJing";
+import DianQiHuoZhai from "./DianQiHuoZhai";
 export default {
   data() {
     return {
       outerVisible: false,
       equipmentColor: "police",
-      rules: {
-        name: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-        region: [
-          { required: true, message: "请选择活动区域", trigger: "change" },
-        ],
 
-        type: [
-          {
-            type: "array",
-            required: true,
-            message: "请至少选择一个活动性质",
-            trigger: "change",
-          },
-        ],
-        resource: [
-          { required: true, message: "请选择活动资源", trigger: "change" },
-        ],
-        desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }],
-      },
-      ruleForm: {
-        name: "",
-        region: "",
+      currentPage4: 1,
 
-        delivery: 12,
-        type: [],
-        resource: "",
-        desc: "",
-      },
-      currentPage4: 4,
-      //单位管理弹窗
-      dialogVisible_search: false,
-      //新增弹窗
-      dialogVisible: false,
       btnInfo: "项目管理",
-      formInline: {
-        user: "",
-        region: "",
-      },
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
-      data: [
-        {
-          label: "一级 1",
-          children: [
-            {
-              label: "二级 1-1",
-              children: [
-                {
-                  label: "三级 1-1-1",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "一级 2",
-          children: [
-            {
-              label: "二级 2-1",
-              children: [
-                {
-                  label: "三级 2-1-1",
-                },
-              ],
-            },
-            {
-              label: "二级 2-2",
-              children: [
-                {
-                  label: "三级 2-2-1",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "一级 3",
-          children: [
-            {
-              label: "二级 3-1",
-              children: [
-                {
-                  label: "三级 3-1-1",
-                },
-              ],
-            },
-            {
-              label: "二级 3-2",
-              children: [
-                {
-                  label: "三级 3-2-1",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      defaultProps: {
-        children: "children",
-        label: "label",
-      },
     };
   },
   methods: {
-    newClick() {},
-    // 项目管理删除
-    delClick() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
     equipment(data) {
       this.equipmentColor = data;
     },
     getInfo(data) {
       this.btnInfo = data;
       window.name = data;
+      // if (data == "电气火灾隐患") {
+      //   this.map = new AMap.Map("content_wapperCopy", {
+      //     center: [116.397428, 39.90923],
+      //     resizeEnable: true,
+      //     zoom: 10,
+      //     mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
+      //   });
+      //   this.map.setZoomAndCenter(4, [116.205467, 39.907761]);
+      // }
     },
     onSubmit() {
       console.log("submit!");
     },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    stop() {
+      var mo = function (e) {
+        e.preventDefault();
+      };
+      document.body.style.overflow = "hidden";
+      document.addEventListener("touchmove", mo, false); //禁止页面滑动
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // alert("submit!");
-          this.dialogVisible = false;
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    indexMethod(index) {
-      return index * 2;
-    },
+  },
+  components: {
+    XiangMuGuanLi,
+    SheBeiGuanLi,
+    BaoJingGuZhang,
+    DanWeiGuanLi,
+    YongDianGuiHua,
+    GongLvGuanLi,
+    DianLiangTongJi,
+    XianLvLaoHuaYuJing,
+    YanWuHuoZaiYuJing,
+    DuanLvYuJing,
+    LouDianYuJing,
+    DianQiHuoZhai,
   },
   mounted() {
     if (window.name == "") {
@@ -820,7 +226,16 @@ export default {
     } else if (window.name != "") {
       this.btnInfo = window.name;
     }
+    // this.map = new AMap.Map("content_wapper", {
+    //   center: [116.397428, 39.90923],
+    //   resizeEnable: true,
+    //   zoom: 10,
+    //   mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
+    // });
+    // this.map.setZoomAndCenter(4, [116.205467, 39.907761]);
+    this.stop();
   },
+
   destroyed() {
     window.name = "";
   },
@@ -1165,7 +580,7 @@ export default {
     height: 108px;
     // background: #030542;
     position: relative;
-    z-index: 999;
+    z-index: 99;
     .gotoSy {
       width: 190px;
       height: 76px;
@@ -1184,7 +599,7 @@ export default {
         font-weight: bold;
         text-align: center;
         &:nth-child(1) {
-          font-size: 46px;
+          font-size: 38px;
         }
         &:nth-child(2) {
           font-size: 26px;
@@ -1223,7 +638,23 @@ export default {
     padding: 20px 20px 0 20px;
     margin: 0 30px;
     height: 800px;
+    position: relative;
     background: #fff;
+  }
+  #content_wapper {
+    // box-sizing: border-box;
+    // padding: 20px 20px 0 20px;
+    // margin: 0 30px;
+    height: 830px;
+    // background: #fff;
+  }
+  .content_wapperCopy {
+    position: relative;
+    // box-sizing: border-box;
+    // padding: 20px 20px 0 20px;
+    // margin: 0 30px;
+    height: 800px;
+    // background: #fff;
   }
   .tabs {
     .caozuo {
