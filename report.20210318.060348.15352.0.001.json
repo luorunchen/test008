@@ -1,0 +1,151 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20210318.060348.15352.0.001.json",
+    "dumpEventTime": "2021-03-18T06:03:48Z",
+    "dumpEventTimeStamp": "1616018628377",
+    "processId": 15352,
+    "cwd": "C:\\Users\\Administrator\\Desktop\\xinhuixiaofang\\hello-world",
+    "commandLine": [
+      "node",
+      "C:\\Users\\Administrator\\Desktop\\xinhuixiaofang\\hello-world\\node_modules\\.bin\\\\..\\_@vue_cli-service@4.5.11@@vue\\cli-service\\bin\\vue-cli-service.js",
+      "serve"
+    ],
+    "nodejsVersion": "v12.10.0",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "win32",
+    "componentVersions": {
+      "node": "12.10.0",
+      "v8": "7.6.303.29-node.16",
+      "uv": "1.31.0",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.39.2",
+      "napi": "4",
+      "llhttp": "1.1.4",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1c",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019a",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "headersUrl": "https://nodejs.org/download/release/v12.10.0/node-v12.10.0-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.10.0/node-v12.10.0.tar.gz",
+      "libUrl": "https://nodejs.org/download/release/v12.10.0/win-x64/node.lib"
+    },
+    "osName": "Windows_NT",
+    "osRelease": "6.1.7601",
+    "osVersion": "Windows 7 Ultimate Service Pack 1",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 51647438,
+        "nice": 0,
+        "sys": 21407159,
+        "idle": 1621552519,
+        "irq": 226466
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 793686,
+        "nice": 0,
+        "sys": 15257490,
+        "idle": 1678555596,
+        "irq": 10244226
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 33711675,
+        "nice": 0,
+        "sys": 19804919,
+        "idle": 1641090053,
+        "irq": 229305
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 1287616,
+        "nice": 0,
+        "sys": 387069,
+        "idle": 1692931837,
+        "irq": 5850
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 44655598,
+        "nice": 0,
+        "sys": 43434500,
+        "idle": 1606516300,
+        "irq": 126532
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 250756,
+        "nice": 0,
+        "sys": 398317,
+        "idle": 1693957201,
+        "irq": 27378
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 35547448,
+        "nice": 0,
+        "sys": 86570196,
+        "idle": 1572488488,
+        "irq": 85582
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 34033848,
+        "nice": 0,
+        "sys": 7811001,
+        "idle": 1652761158,
+        "irq": 83257
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 69810213,
+        "nice": 0,
+        "sys": 41534657,
+        "idle": 1583261013,
+        "irq": 101151
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 664111,
+        "nice": 0,
+        "sys": 163676,
+        "idle": 1693777971,
+        "irq": 3915
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594,
+        "user": 46375634,
+        "nice": 0,
+        "sys": 28147603,
+        "idle": 1620082397,
+        "irq": 195531
+      },
+      {
+        "model": "Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz",
+        "speed": 2594
