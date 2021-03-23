@@ -29,14 +29,21 @@
         @click="fatherMethod('2')"
         :class="this.DeviceNumList.online == 0 ? 'pointer_events' : ''"
       >
-        <span>在线</span><span>{{ DeviceNumList.online }}></span>
+        <span v-if="$route.path === '/FireInternetOfThings/KeyParts'"
+          >离线</span
+        >
+        <span v-else>在线</span>
+        <span>{{ DeviceNumList.online }}></span>
       </li>
       <li
         @click="fatherMethod('3')"
         :class="this.DeviceNumList.offline == 0 ? 'pointer_events' : ''"
       >
-        <span>离线</span
-        ><span style="color: #ffff00">{{ DeviceNumList.offline }}></span>
+        <span v-if="$route.path === '/FireInternetOfThings/KeyParts'"
+          >在线</span
+        >
+        <span v-else>离线</span>
+        <span style="color: #ffff00">{{ DeviceNumList.offline }}></span>
       </li>
     </ul>
 
@@ -196,7 +203,10 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="(innerVisible = true), see(scope.row.devId)"
+                @click="
+                  (innerVisible = true),
+                    see(scope.row.devId, scope.row.productNumber)
+                "
                 class="chakan"
                 >查看</span
               >
@@ -283,7 +293,10 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="(innerVisible = true), see(scope.row.devId)"
+                @click="
+                  (innerVisible = true),
+                    see(scope.row.devId, scope.row.productNumber)
+                "
                 class="chakan"
                 >查看</span
               >
@@ -370,7 +383,10 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="(innerVisible = true), see(scope.row.devId)"
+                @click="
+                  (innerVisible = true),
+                    see(scope.row.devId, scope.row.productNumber)
+                "
                 class="chakan"
                 >查看</span
               >
@@ -409,7 +425,9 @@
         ><el-button type="primary " @click="innerVisible_shebei = true"
           >设备设置</el-button
         >
-        <el-button type="primary" @click="innerVisible_lishi = true"
+        <el-button
+          type="primary"
+          @click="(innerVisible_lishi = true), Historical_alarm()"
           >历史报警</el-button
         >
       </el-row>
@@ -531,29 +549,29 @@
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.oneAlarm }}A</p>
-                              <p>{{ shengyu_loudian.oneDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.oneAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.oneDianLiu }}mA</p>
                             </div>
                           </el-col>
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.twoAlarm }}A</p>
-                              <p>{{ shengyu_loudian.twoDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.twoAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.twoDianLiu }}mA</p>
                             </div>
                           </el-col>
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.threeAlarm }}A</p>
-                              <p>{{ shengyu_loudian.threeDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.threeAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.threeDianLiu }}mA</p>
                             </div>
                           </el-col>
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
-                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.fourAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}mA</p>
                             </div>
                           </el-col>
                         </template>
@@ -1276,17 +1294,26 @@
           <div class="one_echarts">
             <p class="titleP">电流统计图</p>
 
-            <div class="echarts_wapper_one"></div>
+            <div
+              class="echarts_wapper_one"
+              v-loading="one_echarts_loading"
+            ></div>
           </div>
           <div class="two_echarts">
             <p class="titleP">电压统计图</p>
 
-            <div class="echarts_wapper_two"></div>
+            <div
+              class="echarts_wapper_two"
+              v-loading="one_echarts_loading"
+            ></div>
           </div>
           <div class="three_echarts">
             <p class="titleP">温度统计图</p>
 
-            <div class="echarts_wapper_three"></div>
+            <div
+              class="echarts_wapper_three"
+              v-loading="one_echarts_loading"
+            ></div>
           </div>
           <div class="four_echarts">
             <p class="titleP">图片</p>
@@ -1295,7 +1322,7 @@
             </div>
             <div class="echarts_wapper_four">
               <div v-for="(item, index) in ElecDataList_images" :key="index">
-                <img :src="item" alt="" width="150px" height="150px" />
+                <img :src="item" alt="" />
               </div>
             </div>
           </div>
@@ -1573,7 +1600,7 @@
                       </el-form-item>
 
                       <el-form-item>
-                        <el-button type="primary" @click="deviceHistory"
+                        <el-button type="primary" @click="deviceHistory('故障')"
                           >查询</el-button
                         >
                       </el-form-item>
@@ -1612,18 +1639,20 @@
                       </el-form-item>
 
                       <el-form-item>
-                        <el-button type="primary" @click="deviceHistory"
+                        <el-button type="primary" @click="deviceHistory('操作')"
                           >查询</el-button
                         >
                       </el-form-item>
                     </el-form>
                     <template>
-                      <el-table :data="tableData" style="width: 100%">
-                        <el-table-column prop="date" label="日期" width="180">
+                      <el-table :data="caozuojilv" style="width: 100%">
+                        <el-table-column type="index" width="50">
                         </el-table-column>
-                        <el-table-column prop="name" label="姓名" width="180">
+                        <el-table-column prop="user_name" label="用户账号">
                         </el-table-column>
-                        <el-table-column prop="address" label="地址">
+                        <el-table-column prop="date" label="操作时间">
+                        </el-table-column>
+                        <el-table-column prop="info" label="操作内容">
                         </el-table-column>
                       </el-table>
                     </template>
@@ -1649,15 +1678,16 @@
         class="demo-form-inline"
       >
         <el-form-item label="日期:">
-          <el-col :span="11">
+          <el-col :span="24">
             <el-date-picker
               type="date"
-              placeholder="开始时间"
+              placeholder="时间"
               v-model="sizeForm.date1"
+              value-format="yyyy-MM-dd"
               style="width: 100%"
             ></el-date-picker>
           </el-col>
-          <el-col class="line" :span="2">-</el-col>
+          <!-- <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
             <el-date-picker
               type="date"
@@ -1665,21 +1695,26 @@
               v-model="sizeForm.date2"
               style="width: 100%"
             ></el-date-picker>
-          </el-col>
+          </el-col> -->
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-          <el-button type="primary" @click="onSubmit">导出</el-button>
+          <el-button type="primary" @click="onSubmit, Historical_alarm()"
+            >查询</el-button
+          >
+          <!-- <el-button type="primary" @click="onSubmit">导出</el-button> -->
         </el-form-item>
       </el-form>
       <template>
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180">
+        <el-table
+          v-loading="Historical_alarm_list_loading"
+          :data="Historical_alarm_list"
+          style="width: 100%"
+        >
+          <el-table-column prop="type" label="报警名称"> </el-table-column>
+          <el-table-column prop="regdate" label="报警时间"> </el-table-column>
+          <el-table-column prop="leakageAlarmCurrentValue" label="报警值">
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
-          </el-table-column>
-          <el-table-column prop="address" label="地址"> </el-table-column>
         </el-table>
       </template>
     </el-dialog>
@@ -1705,10 +1740,14 @@ import {
   SetParameterApi,
   UpdateDevicePush,
   getHistoryFault,
+  getHistDeviceAlarm,
+  getUserInfo,
 } from "@/api/index.js";
 export default {
   data() {
     return {
+      caozuojilv: [],
+      one_echarts_loading: false,
       DeviceHistory: "",
       fazhishezhi: {
         SYDL: "",
@@ -1764,12 +1803,39 @@ export default {
       },
       currentPage4: 1,
       tableData: [],
+      Historical_alarm_list_loading: false,
+      Historical_alarm_list: [],
     };
   },
   mounted() {
     this.DeviceNum();
   },
   methods: {
+    //历史报警
+    Historical_alarm() {
+      this.Historical_alarm_list_loading = true;
+      const time = new Date();
+      const year = time.getFullYear();
+      const month = time.getMonth() + 1;
+      const day = time.getDate();
+      let now = year + "-" + month + "-" + day;
+      if (this.sizeForm.date1 != "") {
+        now = this.sizeForm.date1;
+      }
+      // console.log(this.sizeForm.date1, 987987);
+      getHistDeviceAlarm(this.productNumber, now).then(
+        (res) => {
+          this.Historical_alarm_list_loading = false;
+          if (res.data == "") {
+            return this.$message.warning("暂无历史数据");
+          }
+          this.Historical_alarm_list = res.data.DevData;
+        },
+        () => {
+          this.$message.error("请稍后重试或联系管理员");
+        }
+      );
+    },
     windowsClick(data) {
       // let status = this.$store.state.initStatus; //
       this.$store.commit("changeStatus", data);
@@ -1792,13 +1858,37 @@ export default {
       this.$parent.callPolice(data.join(","));
     },
     //设备历史
-    deviceHistory() {
-      console.log(this.DeviceHistory);
-      getHistoryFault(
-        this.ElecDataList.DevData[0].productNumber,
-        this.DeviceHistory[0],
-        this.DeviceHistory[1]
-      ).then((res) => {});
+    deviceHistory(type) {
+      if (type == "故障") {
+        getHistoryFault(
+          this.ElecDataList.DevData[0].productNumber,
+          this.DeviceHistory[0],
+          this.DeviceHistory[1]
+        ).then((res) => {
+          if (res.data.length <= 0) {
+            return this.$message.error("暂无历史数据");
+          }
+        });
+      } else {
+        getUserInfo(
+          "",
+          "",
+          this.productNumber,
+          this.DeviceHistory[0],
+          this.DeviceHistory[1]
+        ).then(
+          (res) => {
+            this.caozuojilv = res.data;
+            if (res.data.length == 0) {
+              return this.$message.error("暂无历史数据");
+            }
+          },
+          () => {
+            this.$message.error("请稍后重试或联系管理员");
+          }
+        );
+      }
+      //console.log(this.DeviceHistory);
     },
     //报警推送
     baojingtuisong() {
@@ -2236,18 +2326,22 @@ export default {
           type = "3";
           break;
       }
-
-      DeviceNum(this.utils.userName, type, 1).then((res) => {
+      const region = sessionStorage.getItem("region");
+      DeviceNum(this.utils.userName, type, region).then((res) => {
         this.DeviceNumList = res.data;
         // console.log(this.DeviceNumList);
         let subNum = "000000" + this.DeviceNumList.deviceNum;
         this.deviceNum = subNum.substring(subNum.length - 6);
+        // alert(this.deviceNum);
+        if (this.deviceNum == "efined") {
+          this.deviceNum = "000000";
+        }
       });
     },
 
     // TabS 切换函数
     handleClick(tab, event) {
-      console.log(tab.label);
+      // console.log(tab.label);
       if (tab.label === "阀值设置") {
         ReadParameterApi(this.ElecDataList.DevData[0].productNumber).then(
           (res) => {
@@ -2267,21 +2361,89 @@ export default {
           }
         );
       }
+      if (tab.label === "设备历史故障") {
+        getHistoryFault(
+          this.ElecDataList.DevData[0].productNumber,
+          this.DeviceHistory[0],
+          this.DeviceHistory[1]
+        ).then(
+          (res) => {
+            if (res.data.length <= 0) {
+              return this.$message.error("暂无历史数据");
+            }
+            // this.DeviceHistory_LIST = res.data.DevData;
+          },
+          () => {
+            this.$message.error("请稍后重试或联系管理员");
+          }
+        );
+      }
+      if (tab.label === "设置操作记录") {
+        // console.log(123);
+        getUserInfo("", "", this.productNumber, "", "").then(
+          (res) => {
+            if (res.data.length <= 0) {
+              return this.$message.warning("暂无历史数据");
+            }
+            this.caozuojilv = res.data;
+          },
+          () => {
+            this.$message.error("请稍后重试或联系管理员");
+          }
+        );
+      }
     },
     // 查看echart图片函数
-    see(devId) {
+    async see(devId, productNumber) {
       //清空处置情况
       this.managementInput = "";
+      this.productNumber = productNumber;
       const time = new Date();
       const year = time.getFullYear();
       const month = time.getMonth() + 1;
       const day = time.getDate();
       const now = year + "-" + month + "-" + day;
-
-      getDeviceByDevId(devId).then((res) => {
-        // console.log(res, "sssqqq");
-        this.getDeviceByDevIdList = res.data.list[0];
-      });
+      this.one_echarts_loading = true;
+      await getDeviceByDevId(devId).then(
+        (res) => {
+          if (res.data == null || res.data == undefined) {
+            return this.$message.error("请稍后重试或联系管理员");
+          }
+          if (
+            res.data.list[0].mess5[0] == null &&
+            res.data.list[0].mess2 == "[]"
+          ) {
+            return this.$message.error("请稍后重试或联系管理员");
+          }
+          if (
+            res.data.list[0].mess5 == "[]" &&
+            res.data.list[0].mess2 == "[]"
+          ) {
+            return this.$message.error("请稍后重试或联系管理员");
+          }
+          // //console.log(res, "sssqqq");
+          this.getDeviceByDevIdList = res.data.list[0];
+          // this.getDeviceByDevIdList.mess5[0].push(
+          //   this.getDeviceByDevIdList.mess2[0]
+          // );
+          //
+          //console.log(Array.isArray(this.getDeviceByDevIdList.mess5));
+          !Array.isArray(this.getDeviceByDevIdList.mess5)
+            ? (this.mwss5Status = false)
+            : (this.mwss5Status = true);
+          //console.log(this.mwss5Status, 646654);
+          if (this.mwss5Status == true) {
+            //判断数组是非为空数组
+            if (this.getDeviceByDevIdList.mess5.length <= 0) {
+              return (this.mwss5Status = false);
+            }
+            this.getDeviceByDevIdList.mess5[0].date = this.getDeviceByDevIdList.mess2[0];
+          }
+        },
+        () => {
+          return this.$message.error("请稍后重试或联系管理员");
+        }
+      );
 
       // 设备详情接口
       ElecData(devId, now).then((res) => {
@@ -2348,7 +2510,7 @@ export default {
       ElectricDeviceDate(devId, now).then((res) => {
         // console.log(res.data, 2321232123212);
         this.callPoliceList_loading = false;
-
+        this.one_echarts_loading = false;
         let dianLiuUa = [];
         let dianLiuUb = [];
         let dianLiuUc = [];
@@ -2649,7 +2811,7 @@ export default {
 }
 .shezhi_left {
   // background: #bfa;
-  height: 160px;
+
   box-shadow: 0px 0px 10px 0px rgba(3, 27, 29, 0.11);
   .titleP {
     margin-left: 20px;
@@ -2717,7 +2879,7 @@ export default {
   margin-left: 30px;
   // width: 200px;
   height: 32px;
-
+  font-size: 16px;
   li {
     width: 32px;
     margin-right: 10px;
@@ -2805,6 +2967,9 @@ export default {
         padding-top: 3px;
         p {
           color: #fff;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
       ul {
@@ -3004,6 +3169,8 @@ export default {
 
         img {
           margin-left: 20px;
+          width: 150px;
+          height: 150px;
         }
         width: 100%;
         height: 160px;

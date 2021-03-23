@@ -285,41 +285,45 @@ export default {
     getText() {
       this.btnInfo = event.currentTarget.getAttribute("textInfo");
       // this.init();
-      console.log(this.btnInfo);
+      // console.log(this.btnInfo);
+      if (this.mass != undefined) {
+        this.mass.setMap(null);
+      }
       switch (this.btnInfo) {
         case "隐患整改进度":
-          this.mass.setMap(null);
           this.DeviceProjectNewFun("3");
-
           break;
         case "电气火灾隐患":
           this.DeviceProjectNewFun("3");
-          this.mass.setMap(null);
+          // alert(this.mass);
+          if (this.nass != undefined) {
+            this.mass.setMap(null);
+          }
           this.pagetype = "2";
           break;
         case "消防水系统":
           this.DeviceProjectNewFun("4,8");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "3";
           break;
         case "火灾报警系统":
           this.DeviceProjectNewFun("0,5,20");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "4";
           break;
         case "重点部位":
           this.DeviceProjectNewFun("9,13,20");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "5";
           break;
         case "智慧型独立烟感":
           this.DeviceProjectNewFun("2");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "6";
           break;
         case "燃气探测器":
           this.DeviceProjectNewFun("1,6,11");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "7";
           break;
         case "应急处理":
@@ -327,22 +331,22 @@ export default {
           break;
         case "智慧型消防报警":
           this.DeviceProjectNewFun("10,15,16,19,18");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "13";
           break;
         case "灭火器":
           this.DeviceProjectNewFun("21");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "10";
           break;
         case "电力检测系统":
           this.DeviceProjectNewFun("12");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "12";
           break;
-        case "设备全景定位图":
+        case "设备定位全景图":
           this.DeviceProjectNewFun("3");
-          this.mass.setMap(null);
+          // this.mass.setMap(null);
           this.pagetype = "2";
           break;
       }
@@ -578,8 +582,14 @@ export default {
     DeviceProjectNewFun(data) {
       // console.log(this.$refs.publicPopUps.initOff());
       this.loading_map = true;
-      DeviceProjectNew(this.utils.userName, data, 1).then((res) => {
+      const region = sessionStorage.getItem("region");
+      DeviceProjectNew(this.utils.userName, data, region).then((res) => {
         // this.DeviceProjectNewData = res.data.Company;
+        // console.log(res.data);
+        if (res.data.length <= 0) {
+          return (this.loading_map = false);
+        }
+
         let a = [];
         let b = [];
         for (let i = 0; i < res.data.Company.length; i++) {
@@ -617,7 +627,6 @@ export default {
           // this.DeviceProjectNewData = [];
           const marker = new AMap.Marker({ content: " ", map: this.map });
           this.mass.setMap(this.map);
-
           this.loading_map = false;
           // 保存this
           var _that = this;
@@ -664,6 +673,7 @@ export default {
     background: #030542;
     position: relative;
     z-index: 999;
+
     .gotoSy {
       width: 190px;
       height: 76px;

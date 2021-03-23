@@ -108,18 +108,19 @@
           > -->
           <el-select
             @focus="inputClick('防火员')"
-            v-model="mapInfo.huilu"
+            v-model="mapInfo.huilulist"
             filterable
             placeholder="请选择"
             @change="setq($event, '防火员')"
-            :filter-method="filter_method"
+            :filter-method="filter_method_FangHuo"
           >
             <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.user_name + item.phone"
-              :value="item.pid"
+              :value="parseInt(item.pid)"
             >
+              <!-- {{ item.user_name + item.phone }} -->
             </el-option>
           </el-select>
         </el-form-item>
@@ -138,17 +139,16 @@
           > -->
           <el-select
             @focus="inputClick('责任人')"
-            v-model="mapInfo.shebei"
+            v-model="mapInfo.shebeilist"
             filterable
             placeholder="请选择"
-            :loading="loading"
             @change="setq($event, '责任人')"
-            :filter-method="filter_method"
+            :filter-method="filter_method_ZeRen"
           >
             <el-option
               v-for="item in options"
               :key="item.value"
-              :value="item.pid"
+              :value="parseInt(item.pid)"
               :label="item.user_name + item.phone"
             >
             </el-option>
@@ -171,19 +171,18 @@
             <el-button slot="append">新增</el-button>
           </el-input> -->
           <el-select
-            :loading="loading"
             @focus="inputClick('街道')"
-            v-model="mapInfo.xintiao"
+            v-model="mapInfo.xintiaolist"
             filterable
             placeholder="请选择"
             @change="setq($event, '街道')"
-            :filter-method="filter_method"
+            :filter-method="filter_method_JieDao"
           >
             <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.user_name + item.phone"
-              :value="item.pid"
+              :value="parseInt(item.pid)"
             >
               {{ item.user_name + item.phone }}
             </el-option>
@@ -207,18 +206,17 @@
           > -->
           <el-select
             @focus="inputClick('网格员')"
-            v-model="mapInfo.zhuche"
+            v-model="mapInfo.zhuchelist"
             filterable
-            :loading="loading"
             placeholder="请选择"
             @change="setq($event, '网格员')"
-            :filter-method="filter_method"
+            :filter-method="filter_method_WangGe"
           >
             <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.user_name + item.phone"
-              :value="item.pid.toString()"
+              :value="parseInt(item.pid)"
             >
             </el-option>
           </el-select>
@@ -424,6 +422,7 @@ import {
   newUpdateProjectSim,
   addRegisterProject,
   regionList,
+  deleProject,
 } from "@/api/index.js";
 export default {
   data() {
@@ -454,6 +453,16 @@ export default {
         newType: "",
         code: "",
         where: "",
+        address: "",
+        zhuche: "",
+        xintiao: "",
+        shebei: "",
+        huilu: "",
+        huilulist: "",
+        zhuchelist: "",
+        xintiaolist: "",
+        shebeilist: "",
+        changsuo: "",
       },
       options: [],
       shebeiListValue: "",
@@ -585,7 +594,7 @@ export default {
           if (res.data.list[0].status == "true") {
             this.$message.success("删除成功");
           } else {
-            this.$message.error(res.data.list[0].mess);
+            this.$message.error("删除失败");
           }
         },
         (rej) => {
@@ -600,10 +609,20 @@ export default {
     },
     // 添加项目函数
     addProjectFun() {
-      // console.log(this.newType);
-      if (this.mapInfo.code == "") {
+      console.log(this.newType);
+      if (
+        this.mapInfo.code == undefined ||
+        this.mapInfo.code == null ||
+        this.mapInfo.code == ""
+      ) {
         return this.$message.error("请选择街道");
       }
+      console.log(this.mapInfo.code);
+      console.log(this.lanlat);
+      if (this.lanlat == undefined || this.lanlat == null) {
+        return this.$message.error("无法获取您的项目经纬度,请重新输入");
+      }
+
       if (this.newType == "新增") {
         addProject(
           this.utils.userName,
@@ -621,6 +640,10 @@ export default {
           (res) => {
             if (res.data.list[0].status == "true") {
               this.$message.success("添加成功");
+              this.getAllProjecForStateFun(
+                this.handleSizeChangeValue,
+                this.handleCurrentChangeValue
+              );
             } else {
               this.$message.error(res.data.list[0].mess);
             }
@@ -636,20 +659,24 @@ export default {
           this.mapInfo.pid,
           this.mapInfo.address,
           this.utils.userName,
-          this.mapInfo.huilu,
+          this.mapInfo.fangHuoYuanPhone,
           this.mapInfo.zeRenRen,
           this.mapInfo.zeRenRenPhone,
-          this.mapInfo.lanlat,
+          this.lanlat,
           this.mapInfo.name,
           this.mapInfo.wangGeYuan,
           this.mapInfo.wangGeYuanPhone,
           this.mapInfo.jieDao,
           this.mapInfo.jieDaoPhone,
-          this.mapInfo.lanlat
+          this.lanlat
         ).then(
           (res) => {
             if (res.data.status == "true") {
-              this.$message.success("添加成功");
+              this.$message.success("编辑成功");
+              this.getAllProjecForStateFun(
+                this.handleSizeChangeValue,
+                this.handleCurrentChangeValue
+              );
             } else {
               this.$message.error(res.data.mess);
             }
@@ -711,13 +738,117 @@ export default {
 
     //搜索功能
     filter_method(val) {
-      // console.log(val, "wwwwww");
+      // this.options = [];
+      console.log(val, "wwwwww");
       // this.loading = true;
       let arr = [];
       if (val) {
         this.loading = true;
         //val存在
         // console.log(this.optionsCopy.user_name.indexOf(val) > -1);
+        // console.log(this.optionsCopy, 9999);
+        this.options = this.optionsCopy.filter((item) => {
+          // console.log(item);
+          if (
+            item.user_name.indexOf(val) > -1 ||
+            item.phone.indexOf(val) > -1
+          ) {
+            arr.push(item);
+            // this.loading = false;
+            return item;
+          } else {
+            //val为空时，还原数组
+            this.options = this.optionsCopy.slice(0, 250);
+            // this.loading = false;
+          }
+        });
+        // console.log(this.options);
+      }
+      this.$forceUpdate();
+    },
+    //网格员搜索
+    filter_method_WangGe(val) {
+      let arr = [];
+      if (val) {
+        this.loading = true;
+        //val存在
+        // console.log(this.optionsCopy.user_name.indexOf(val) > -1);
+        // console.log(this.optionsCopy, 9999);
+        this.options = this.optionsCopy.filter((item) => {
+          // console.log(item);
+          if (
+            item.user_name.indexOf(val) > -1 ||
+            item.phone.indexOf(val) > -1
+          ) {
+            arr.push(item);
+            // this.loading = false;
+            return item;
+          } else {
+            //val为空时，还原数组
+            this.options = this.optionsCopy.slice(0, 250);
+            // this.loading = false;
+          }
+        });
+      }
+    },
+    //防火员搜索
+    filter_method_FangHuo(val) {
+      let arr = [];
+      if (val) {
+        this.loading = true;
+        //val存在
+        // console.log(this.optionsCopy.user_name.indexOf(val) > -1);
+        // console.log(this.optionsCopy, 9999);
+        this.options = this.optionsCopy.filter((item) => {
+          // console.log(item);
+          if (
+            item.user_name.indexOf(val) > -1 ||
+            item.phone.indexOf(val) > -1
+          ) {
+            arr.push(item);
+            // this.loading = false;
+            return item;
+          } else {
+            //val为空时，还原数组
+            this.options = this.optionsCopy.slice(0, 250);
+            // this.loading = false;
+          }
+        });
+      }
+    },
+    //责任人搜索
+    filter_method_ZeRen(val) {
+      let arr = [];
+      if (val) {
+        this.loading = true;
+        //val存在
+        // console.log(this.optionsCopy.user_name.indexOf(val) > -1);
+        // console.log(this.optionsCopy, 9999);
+        this.options = this.optionsCopy.filter((item) => {
+          // console.log(item);
+          if (
+            item.user_name.indexOf(val) > -1 ||
+            item.phone.indexOf(val) > -1
+          ) {
+            arr.push(item);
+            // this.loading = false;
+            return item;
+          } else {
+            //val为空时，还原数组
+            this.options = this.optionsCopy.slice(0, 250);
+            // this.loading = false;
+          }
+        });
+      }
+    },
+    //街道搜索
+    filter_method_JieDao(val) {
+      let arr = [];
+      if (val) {
+        this.loading = true;
+        //val存在
+        // console.log(this.optionsCopy.user_name.indexOf(val) > -1);
+        // console.log(this.optionsCopy, 9999);
         this.options = this.optionsCopy.filter((item) => {
           // console.log(item);
           if (
@@ -751,7 +882,7 @@ export default {
       )
         .then(() => {
           if (powerId == 1000 || rid.indexOf("10003005") != -1) {
-            deleDevice(pid, this.utils.userName).then((res) => {
+            deleProject(pid, this.utils.userName).then((res) => {
               if (res.data.list[0].status == "true") {
                 this.$message({
                   type: "success",
@@ -778,7 +909,8 @@ export default {
         });
     },
     setq(value, name) {
-      // console.log(value, name);
+      // String(value);
+      console.log(value, name);
       let obj = {};
       obj = this.options.find((item) => {
         // console.log(item);
@@ -787,25 +919,33 @@ export default {
       if (name == "责任人") {
         this.mapInfo.zeRenRen = obj.user_name;
         this.mapInfo.zeRenRenPhone = obj.phone;
+        this.mapInfo.shebei = value;
+        this.mapInfo.shebeilist = `${obj.user_name},${obj.phone}`;
       }
       if (name == "防火员") {
         this.mapInfo.fangHuoYuan = obj.user_name;
         this.mapInfo.fangHuoYuanPhone = obj.phone;
+        this.mapInfo.huilu = value;
+        this.mapInfo.huilulist = `${obj.user_name},${obj.phone}`;
       }
       if (name == "街道") {
         this.mapInfo.jieDao = obj.user_name;
         this.mapInfo.jieDao = obj.phone;
+        this.mapInfo.xintiao = value;
+        this.mapInfo.xintiaolist = `${obj.user_name},${obj.phone}`;
       }
       if (name == "网格员") {
         this.mapInfo.wangGeYuan = obj.user_name;
         this.mapInfo.wangGeYuanPhone = obj.phone;
+        this.mapInfo.zhuche = value;
+        this.mapInfo.zhuchelist = `${obj.user_name},${obj.phone}`;
       }
 
       // let getName = "";
       // getName = obj.locationName;
       // this.mapInfo
-      console.log(obj.phone);
-
+      console.log(obj.user_name + "," + obj.phone);
+      // this.mapInfo.huilu = obj.user_name + "," + obj.phone;
       this.$forceUpdate();
     },
 
@@ -813,6 +953,7 @@ export default {
     inputClick(name) {
       let status;
       let obj = "";
+      this.options = [];
       if (name == "防火员") {
         status = 0;
       }
@@ -833,12 +974,18 @@ export default {
         // console.log(res.data.mess);
         let arr = JSON.parse(res.data.mess);
         console.log(arr);
+        arr.map((element) => {
+          String(element.pid);
+        });
+
         this.optionsCopy = arr;
+
         this.options = arr.slice(0, 250);
       });
     },
     // 编辑弹窗点击函数
     bj_map(data, index) {
+      this.addNewOpenFun("编辑");
       this.mapInfo.name = this.getAllProjecForState_list[index].name;
       this.mapInfo.pid = this.getAllProjecForState_list[index].pid;
       this.mapInfo.type = this.getAllProjecForState_list[index].dSName;
@@ -953,12 +1100,16 @@ export default {
       let devId = "";
       let devRemark = "";
       // let sms = "0";
+      if (this.lanlat == undefined || this.lanlat == null) {
+        return this.$message.error("无法获取您的项目经纬度,请重新输入");
+      }
+
       addDevice(
         projName,
         this.mapInfo.bianhao, //设备编号
         this.utils.userName,
         this.mapInfo.address, //安装地址
-        this.mapInfo.lnglat, //经纬度
+        this.lnglat, //经纬度
         this.shebeiListValue, //设备类型
         this.mapInfo.name, //设备名称
         this.mapInfo.changsuo, //应用场所

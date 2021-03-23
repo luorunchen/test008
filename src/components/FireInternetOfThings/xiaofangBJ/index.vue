@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="left_two">
-        <p>接入烟感设备</p>
+        <p>接入设备</p>
 
         <Translate />
       </div>
@@ -58,7 +58,8 @@ export default {
       });
     },
     DeviceAlarm() {
-      DeviceAlarm(this.utils.userName, "10,15,16,19,18", 1).then((res) => {
+      const region = sessionStorage.getItem("region");
+      DeviceAlarm(this.utils.userName, "10,15,16,19,18", region).then((res) => {
         this.DeviceAlarmList = res.data;
         let num = 0;
         // console.log(res.data, 99);
@@ -112,7 +113,7 @@ export default {
         margin-left: 30px;
         // width: 200px;
         height: 32px;
-
+        font-size: 16px;
         li {
           width: 32px;
           margin-right: 10px;

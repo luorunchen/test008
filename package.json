@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "echarts": "^5.0.0",
+    "echarts-liquidfill": "^3.0.0",
     "element-ui": "^2.15.0",
     "ezuikit-js": "^0.2.3",
     "lib-flexible": "^0.3.2",

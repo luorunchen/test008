@@ -58,7 +58,8 @@ export default {
     },
 
     DeviceAlarm() {
-      DeviceAlarm(this.utils.userName, 3, 1).then((res) => {
+      const region = sessionStorage.getItem("region");
+      DeviceAlarm(this.utils.userName, 3, region).then((res) => {
         this.DeviceAlarmList = res.data;
         let num = 0;
         // console.log(res.data, 99);
@@ -75,6 +76,7 @@ export default {
           // this.baojingNum = str + num;
           let str = "000000" + num;
           this.baojingNum = str.substring(str.length - 6);
+          // alert(this.baojingNum);
         }
       });
     },
@@ -108,7 +110,7 @@ export default {
       height: 450px;
       background-image: url("../../../assets//images/zhengchangbili.png");
 
-      background-size: 100% 100%;
+      background-size: 100% 450px;
       p {
         text-align: center;
         line-height: 70px;
@@ -120,7 +122,7 @@ export default {
         // width: 200px;
         // padding-bottom: 10px;
         height: 32px;
-
+        font-size: 16px;
         li {
           width: 32px;
           margin-right: 10px;

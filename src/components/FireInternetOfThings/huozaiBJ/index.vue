@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="left_two">
-        <p>接入电气火灾探测器</p>
+        <p>接入火灾报警,消防主机设备</p>
 
         <Translate />
       </div>
@@ -58,7 +58,8 @@ export default {
       });
     },
     DeviceAlarm() {
-      DeviceAlarm(this.utils.userName, "0,5,20", 1).then((res) => {
+      const region = sessionStorage.getItem("region");
+      DeviceAlarm(this.utils.userName, "0,5,20", region).then((res) => {
         this.DeviceAlarmList = res.data;
         let num = 0;
         // console.log(res.data, 99);
@@ -117,7 +118,7 @@ export default {
         margin-left: 30px;
         // width: 200px;
         height: 32px;
-
+        font-size: 16px;
         li {
           width: 32px;
           margin-right: 10px;
@@ -158,7 +159,7 @@ export default {
       p {
         text-align: center;
         line-height: 65px;
-        font-size: 18px;
+        font-size: 16px;
       }
       .title {
         margin-top: 10px;

@@ -43,7 +43,9 @@
           <div class="btnRightTwo" @click="SystemSettings">
             <span>系统设置</span>
           </div>
-          <span @click="audioON" style="margin-left: 30px; line-height: 30px"
+          <span
+            @click="audioON"
+            style="margin-left: 30px; line-height: 30px; cursor: pointer"
             >报警声音({{ onOFF }})</span
           >
         </div>
@@ -434,11 +436,15 @@ export default {
         mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
       });
       this.map.setZoomAndCenter(4, [116.205467, 39.907761]);
+      const region = sessionStorage.getItem("region");
       DeviceProjectNew(
         this.utils.userName,
         "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
-        1
+        region
       ).then((res) => {
+        if (res.data.length <= 0) {
+          return (this.loading_map = false);
+        }
         //console.log(res);
         const style = [
           {
@@ -454,6 +460,7 @@ export default {
         ];
         let a = [];
         let b = [];
+        // console.log(res.data.Company.length);
         for (let i = 0; i < res.data.Company.length; i++) {
           if (res.data.Company[i].style == 1) {
             b.push(res.data.Company[i]);
@@ -468,6 +475,8 @@ export default {
           cursor: "pointer",
           style: style,
         });
+        console.log(mass, 999);
+        console.log(this.map, 999);
         const marker = new AMap.Marker({ content: " ", map: this.map });
         mass.setMap(this.map);
         let _that = this;
@@ -1032,10 +1041,11 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
-          background: rgb(7, 82, 194);
+          background: #3094d5;
           text-decoration: none;
           color: #fff;
           transform: skewX(25deg);
+          cursor: pointer;
           span {
             font-weight: 900;
             transform: skewX(-25deg);
@@ -1051,6 +1061,7 @@ export default {
           text-decoration: none;
           color: #fff;
           transform: skewX(25deg);
+          cursor: pointer;
           span {
             font-weight: 900;
             transform: skewX(-25deg);
@@ -1102,6 +1113,7 @@ export default {
           text-decoration: none;
           color: #fff;
           transform: skewX(-25deg);
+          cursor: pointer;
           span {
             font-weight: 900;
             transform: skewX(25deg);
@@ -1117,6 +1129,7 @@ export default {
           text-decoration: none;
           color: #fff;
           transform: skewX(-25deg);
+          cursor: pointer;
           span {
             font-weight: 900;
             transform: skewX(25deg);

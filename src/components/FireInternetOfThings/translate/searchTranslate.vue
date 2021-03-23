@@ -51,7 +51,7 @@
                 class="olList"
                 v-for="(item, index) in SElec_DetailElecDevice_List_Copy"
                 :key="index"
-                @click="see(item.BH)"
+                @click="see(item.BH, item.text)"
               >
                 <li v-if="item.text != null || item.text != undefined">
                   <span v-if="item.value != null || item.value != undefined"
@@ -166,9 +166,15 @@ export default {
   },
 
   methods: {
-    see(data) {
-      this.$refs.publicPopUps.initOff();
-      this.$refs.publicPopUps.echart_wapper(data);
+    see(data, address) {
+      //是否为地址搜索
+      if (address == undefined) {
+        this.$refs.publicPopUps.initOff();
+        this.$refs.publicPopUps.echart_wapper(data);
+      } else {
+        this.$refs.publicPopUps.see(data);
+      }
+      // console.log(address, 98798789798);
     },
     echart_wapper(data) {
       this.$refs.publicPopUps.initOff();
@@ -199,7 +205,7 @@ export default {
             dataInfo.push(this.listData[i]);
           }
         }
-        console.log(dataInfo);
+        // console.log(dataInfo);
         if (dataInfo.length <= 0) {
           return this.$message.error("关键词未查询到相关信息");
         }

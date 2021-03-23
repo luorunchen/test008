@@ -474,12 +474,12 @@ export function deleDevice(devId, username) {
   })
 }
 //删除项目
-export function deleProject(devId, username) {
+export function deleProject(pid, username) {
   return service({
     url: `/admin/project/check/deleProject.action`,
     method: 'GET',
     params: {
-      devId, username
+      pid, username
     }
   })
 }
@@ -813,6 +813,17 @@ export function getDeviceByDeploy(my_username, pageSize, type) {
     method: 'GET',
     params: {
       my_username, pageSize, type
+    }
+  })
+}
+
+//设备报警详情
+export function getBluebirdevent(imei) {
+  return service({
+    url: `/getBluebirdevent.action`,
+    method: 'GET',
+    params: {
+      imei
     }
   })
 }

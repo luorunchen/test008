@@ -12,6 +12,7 @@ import axios from 'axios'
 import utils from './utils/utils.js'
 import moment from 'moment'//导入文件 
 import "lib-flexible"
+import 'echarts-liquidfill'
 Vue.prototype.$moment = moment;//赋值使用
 
 Vue.prototype.axios = axios;
