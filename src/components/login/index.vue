@@ -106,6 +106,9 @@ export default {
         if (res.data.status === true) {
           var role = res.data.role[0]; //权限
           this.utils.userName = username;
+          if (res.data.region == null) {
+            res.data.region = "";
+          }
           sessionStorage.setItem("userName", username);
           sessionStorage.setItem("role", res.data.role[0]);
           sessionStorage.setItem("new_role", res.data.new_role);

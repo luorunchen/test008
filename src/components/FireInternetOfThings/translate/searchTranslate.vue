@@ -185,6 +185,7 @@ export default {
       let dataInfo = [];
       if (reg.test(this.formInline.user)) {
         selectDeviceByNumber(this.formInline.user).then((res) => {
+          this.loading = false;
           res.data.forEach((el, index) => {
             el.text = el.productNumber;
             el.MC = el.installLocation;

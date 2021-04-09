@@ -9,6 +9,7 @@ export default new Vuex.Store({
     DeviceProjectNewData: [],
     SoundSwitch: "关",
     map_lnglat: [116.397428, 39.90923],
+
   },
   mutations: {
     changeStatus(state, status) {  //  重复赋值
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     SoundSwitchFun(state, status) {  //  重复赋值
       state.SoundSwitch = status;
     },
+
   },
   actions: {
   },

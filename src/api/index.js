@@ -432,7 +432,7 @@ export function fracture(did, my_username, st_date, en_date) {
     }
   })
 }
-//高视达接口---------------------------------------------------------
+
 //设备管理
 export function getAllDeviceWeb(username, cp, col, state, kw, ls, deviceName, dSid) {
   return service({
@@ -824,6 +824,18 @@ export function getBluebirdevent(imei) {
     method: 'GET',
     params: {
       imei
+    }
+  })
+}
+
+
+//重点部位NFC查看
+export function getNFCInspectionByDevId(devId) {
+  return service({
+    url: `/admin/device/getNFCInspectionByDevId.action`,
+    method: 'GET',
+    params: {
+      devId
     }
   })
 }

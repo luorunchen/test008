@@ -59,6 +59,7 @@ export default {
           this.audo.play();
         });
       }
+      // if()
     },
   },
   computed: {
@@ -107,6 +108,7 @@ export default {
     const _that = this;
     goEasy.subscribe({
       channel: this.utils.userName, //替换为您自己的channel
+
       onMessage: function (message) {
         const res = message.content;
         const arr = res.split(",");
@@ -140,13 +142,13 @@ export default {
 }
 #baoj {
   .weiyi {
-    /deep/.el-dialog__header {
+    .el-dialog__header {
       padding: 0;
       background: #4c0e25;
       border: #b81c7f 1px solid;
       border-bottom: none;
     }
-    /deep/.el-dialog__body {
+    .el-dialog__body {
       background: #4c0e25;
       color: #fff;
       padding: 10px 20px;
@@ -156,7 +158,7 @@ export default {
         margin-bottom: 10px;
       }
     }
-    /deep/.el-dialog__title {
+    .el-dialog__title {
       width: 255px;
       height: 30px;
       background: linear-gradient(90deg, #812145, #4c0e25);

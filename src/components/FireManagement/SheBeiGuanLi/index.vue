@@ -924,9 +924,9 @@ export default {
         this.fazhishezhi.CXDY
       ).then((res) => {
         if (res.data.status == 1) {
-          this.$message.success("参数设置成功");
+          this.$message.success("设置成功");
         } else {
-          this.$message.error("参数设置失败");
+          this.$message.error("设置失败");
         }
       });
     },
@@ -1025,6 +1025,8 @@ export default {
       );
     },
     open(name, devID) {
+      const powerId = sessionStorage.getItem("new_role");
+      const rid = sessionStorage.getItem("power");
       this.$confirm(
         `此操作将永久删除 <span style='color:red'>${name}</span> 设备, 是否继续?`,
 

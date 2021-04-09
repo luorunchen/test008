@@ -38,8 +38,10 @@
           <p v-else>禁用</p>
         </template>
       </el-table-column>
-      <el-table-column property="crDate" label="创建时间"> </el-table-column>
-      <el-table-column property="upDate" label="修改时间"> </el-table-column>
+      <el-table-column property="crDate" label="创建时间" sortable>
+      </el-table-column>
+      <el-table-column property="upDate" label="修改时间" sortable>
+      </el-table-column>
       <el-table-column property="address" label="操作">
         <template slot-scope="scope">
           <div class="caozuo">

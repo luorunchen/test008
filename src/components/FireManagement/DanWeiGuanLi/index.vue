@@ -118,7 +118,7 @@
         </div>
       </el-col>
     </el-row>
-    <PublicPopUps ref="publicPopUps" />
+    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
   </div>
 </template>
 
@@ -128,6 +128,7 @@ import PublicPopUps from "../../FireInternetOfThings/translate/publicPopUps";
 export default {
   data() {
     return {
+      pagetype: 9,
       loading: true,
       props: {
         label: "name",

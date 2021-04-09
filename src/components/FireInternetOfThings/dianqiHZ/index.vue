@@ -8,17 +8,18 @@
             <li>{{ item }}</li>
           </ul>
         </div>
-
-        <ul
-          class="ulList"
-          v-for="(item, index) in DeviceAlarmList"
-          :key="index"
-        >
-          <li @click="callPolice(item.pid)">
-            <span>{{ item.typeName }}</span
-            ><span>共{{ item.value }}条未处理></span>
-          </li>
-        </ul>
+        <div class="scroll_wapper">
+          <ul
+            class="ulList"
+            v-for="(item, index) in DeviceAlarmList"
+            :key="index"
+          >
+            <li @click="callPolice(item.pid)">
+              <span>{{ item.typeName }}</span
+              ><span>共{{ item.value }}条未处理></span>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="left_two">
         <p>接入电气火灾探测器</p>
@@ -44,6 +45,7 @@ export default {
       baojingNum: "",
       DeviceAlarmList: "",
       pagetype: 2,
+
       // DeviceNumList: "",
     };
   },
@@ -158,6 +160,16 @@ export default {
           margin-top: 15px;
         }
       }
+    }
+    .scroll_wapper {
+      margin-top: 15px;
+      // position: relative;
+      overflow-y: auto;
+      height: 300px; //高度根据需求自行设定
+      overflow-x: hidden;
+    }
+    .scroll_wapper ::-webkit-scrollbar {
+      display: none; /*隐藏滚动条*/
     }
     .left_two {
       background-image: url("../../../assets/images/juxing7.png");

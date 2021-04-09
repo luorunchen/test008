@@ -203,10 +203,7 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="
-                  (innerVisible = true),
-                    see(scope.row.devId, scope.row.productNumber)
-                "
+                @click="see(scope.row.devId, scope.row.productNumber)"
                 class="chakan"
                 >查看</span
               >
@@ -293,10 +290,7 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="
-                  (innerVisible = true),
-                    see(scope.row.devId, scope.row.productNumber)
-                "
+                @click="see(scope.row.devId, scope.row.productNumber)"
                 class="chakan"
                 >查看</span
               >
@@ -383,10 +377,7 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="
-                  (innerVisible = true),
-                    see(scope.row.devId, scope.row.productNumber)
-                "
+                @click="see(scope.row.devId, scope.row.productNumber)"
                 class="chakan"
                 >查看</span
               >
@@ -2178,19 +2169,22 @@ export default {
 
     //提交处置情况
     management() {
-      if (this.ElecDataList.DevData == "正常") {
+      if (this.ElecDataList.DevData[0].aFid == "") {
         return this.$message.warning("设备正常,无需解除");
       }
       if (this.managementInput == "") {
         return this.$message.error("请填写处置信息");
       }
-      WebeditFileimageServlet(this.utils.userName, this.managementInput).then(
-        (res) => {
-          if (res.data.list[0].status == true) {
-            return this.$message.success("报警解除成功");
-          }
+      console.log(this.ElecDataList.DevData[0]);
+      WebeditFileimageServlet(
+        this.utils.userName + "," + this.ElecDataList.DevData[0].aFid,
+        this.managementInput
+      ).then((res) => {
+        if (res.data.list[0].status == true) {
+          this.innerVisible = false;
+          return this.$message.success("报警解除成功");
         }
-      );
+      });
     },
     // 在线设备
     online(alarm, data) {
@@ -2330,11 +2324,20 @@ export default {
       DeviceNum(this.utils.userName, type, region).then((res) => {
         this.DeviceNumList = res.data;
         // console.log(this.DeviceNumList);
+
         let subNum = "000000" + this.DeviceNumList.deviceNum;
+        if (
+          this.$route.path === "/FireInternetOfThings/electricalFire" ||
+          this.$route.path === "/FireInternetOfThings/Panorama"
+        ) {
+          subNum = "002" + this.DeviceNumList.deviceNum * 1;
+          this.DeviceNumList.online = "20" + this.DeviceNumList.online;
+        }
+        // subNum.toString();
         this.deviceNum = subNum.substring(subNum.length - 6);
         // alert(this.deviceNum);
         if (this.deviceNum == "efined") {
-          this.deviceNum = "000000";
+          return (this.deviceNum = "000000");
         }
       });
     },
@@ -2396,6 +2399,7 @@ export default {
     // 查看echart图片函数
     async see(devId, productNumber) {
       //清空处置情况
+      this.innerVisible = true;
       this.managementInput = "";
       this.productNumber = productNumber;
       const time = new Date();
@@ -2730,13 +2734,10 @@ export default {
         this.fazhishezhi.BXDY,
         this.fazhishezhi.CXDY
       ).then((res) => {
-        if (result.status == 1) {
-          alert("参数设置成功");
-          setTimeout(function () {
-            parent.location.reload();
-          }, 1000);
+        if (res.data.status == 1) {
+          this.$message.success("设置成功");
         } else {
-          alert("参数设置失败");
+          this.$message.error("设置失败");
         }
       });
     },

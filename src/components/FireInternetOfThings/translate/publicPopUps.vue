@@ -288,7 +288,10 @@
                     v-for="(item, index) in GetMapDataList.mess"
                     :key="index"
                   >
-                    <el-row :gutter="10">
+                    <el-row
+                      :gutter="10"
+                      v-if="item.productNumber.indexOf('_') != -1"
+                    >
                       <el-col :span="6">
                         <img
                           src="../../../assets/images/视频@2x.png"
@@ -305,9 +308,35 @@
                               type="primary"
                               size="mini"
                               @click="
-                                (KeyPartsDialog = true), getvideoFun(index)
+                                (KeyPartsDialog = true),
+                                  getvideoFun(item.productNumber)
                               "
                               >查看视频</el-button
+                            >
+                          </li>
+                        </ul>
+                      </el-col>
+                    </el-row>
+                    <el-row :gutter="10" v-else>
+                      <el-col :span="6">
+                        <img
+                          src="../../../assets/images/nfc.jpg"
+                          alt=""
+                          style="margin: 15px 0 0 15px"
+                        />
+                      </el-col>
+                      <el-col :span="18">
+                        <ul>
+                          <li>设备号:{{ item.devId }}</li>
+                          <li>位置:{{ item.installLocation }}</li>
+                          <li>
+                            <el-button
+                              type="primary"
+                              size="mini"
+                              @click="
+                                (KeyPartsDialog = true), getvideoFun(item.devId)
+                              "
+                              >巡检记录</el-button
                             >
                           </li>
                         </ul>
@@ -2301,12 +2330,23 @@
 
     <!-- 重点部位弹窗 -->
     <el-dialog
-      title="查看视频"
+      :title="getNFCInspectionByDevIdList.length > 0 ? '巡检记录' : '查看视频'"
       :visible.sync="KeyPartsDialog"
       width="50%"
       :modal-append-to-body="false"
     >
       <div id="ezuikitTalkData"></div>
+
+      <template v-if="this.getNFCInspectionByDevIdList.length > 0">
+        <el-table :data="getNFCInspectionByDevIdList[0].mess">
+          <el-table-column prop="productNumber" label="设备位置">
+          </el-table-column>
+          <el-table-column prop="device_name" label="设备名称">
+          </el-table-column>
+          <el-table-column prop="date" label="安装时间"> </el-table-column>
+          <el-table-column prop="isMess" label="设备状态"> </el-table-column>
+        </el-table>
+      </template>
     </el-dialog>
     <!-- 独立烟感弹窗 -->
     <el-dialog
@@ -2496,6 +2536,7 @@ import {
   getUserInfo,
   getHistoryFault,
   getBluebirdevent,
+  getNFCInspectionByDevId,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
@@ -2503,6 +2544,7 @@ export default {
   props: ["pagetype"],
   data() {
     return {
+      getNFCInspectionByDevIdList: [],
       FireAlarmSystem_loading: false,
       getBluebirdevent_List: [],
       caozuojilv: [],
@@ -2618,59 +2660,68 @@ export default {
       this.dialogVisible = true;
     },
     //萤石云视频
-    getvideoFun(index) {
-      getvideo().then((res) => {
+    getvideoFun(productNumber) {
+      //这是视频展示数据
+
+      this.$nextTick(() => {
         const item = document.getElementById("ezuikitTalkData");
 
         //动态删除多出的子元素
         while (item.firstChild) {
           item.removeChild(item.firstChild);
         }
-
-        const deviceSerial = this.GetMapDataList.mess[
-          index
-        ].productNumber.split("_")[0];
-        const deviceSerial2 = this.GetMapDataList.mess[
-          index
-        ].productNumber.split("_")[1];
-
-        var ezuikitTalkData = {
-          accessToken: global.accessToken, // 应用accessToken
-          ezopen:
-            "ezopen://" +
-            deviceSerial2 +
-            "@open.ys7.com/" +
-            deviceSerial +
-            "/1.hd.live", // 包含设备信息的ezopen协议
-          decoderPath: "./", // 当前页面与插件主文件ezuiit-talk相对路径
-        };
-        new EZUIKit.EZUIKitPlayer({
-          autoplay: true,
-          id: "ezuikitTalkData",
-          accessToken: res.data.accessToken,
-          url: ezuikitTalkData.ezopen, // 这里的url可以是直播地址.live  ，也可以是回放地址.rec 或 .cloud.rec
-          template: "simple", // simple - 极简版;standard-标准版;security - 安防版(预览回放);voice-语音版；
-          // 视频上方头部控件
-          header: ["capturePicture", "talk"], // 如果templete参数不为simple,该字段将被覆盖
-          plugin: ["talk"], // 加载插件，talk-对讲
-          // 视频下方底部控件
-          // footer: ["talk", "broadcast", "hd", "fullScreen"], // 如果template参数不为simple,该字段将被覆盖
-          // audio: 1, // 是否默认开启声音 0 - 关闭 1 - 开启
-          // openSoundCallBack: data => //console.log("开启声音回调", data),
-          // closeSoundCallBack: data => //console.log("关闭声音回调", data),
-          // startSaveCallBack: data => //console.log("开始录像回调", data),
-          // stopSaveCallBack: data => //console.log("录像回调", data),
-          // capturePictureCallBack: data => //console.log("截图成功回调", data),
-          // fullScreenCallBack: data => //console.log("全屏回调", data),
-          // getOSDTimeCallBack: data => //console.log("获取OSDTime回调", data),
-          // width: 100, //如果指定了width、height则以这里为准
-          height: 600, //如果没指定宽高，则以容器video-container为准
-        });
-        // getvideo_ycy(res.data.accessToken, deviceSerial).then((red) => {
-        //   // this.GetMapDataList.mess
-        // });
-        this.$forceUpdate();
       });
+      if (productNumber.toString().indexOf("_") != -1) {
+        this.getNFCInspectionByDevIdList = [];
+
+        getvideo().then((res) => {
+          const deviceSerial = productNumber.split("_")[0];
+          const deviceSerial2 = productNumber.split("_")[1];
+
+          var ezuikitTalkData = {
+            accessToken: global.accessToken, // 应用accessToken
+            ezopen:
+              "ezopen://" +
+              deviceSerial2 +
+              "@open.ys7.com/" +
+              deviceSerial +
+              "/1.hd.live", // 包含设备信息的ezopen协议
+            decoderPath: "./", // 当前页面与插件主文件ezuiit-talk相对路径
+          };
+          new EZUIKit.EZUIKitPlayer({
+            autoplay: true,
+            id: "ezuikitTalkData",
+            accessToken: res.data.accessToken,
+            url: ezuikitTalkData.ezopen, // 这里的url可以是直播地址.live  ，也可以是回放地址.rec 或 .cloud.rec
+            template: "simple", // simple - 极简版;standard-标准版;security - 安防版(预览回放);voice-语音版；
+            // 视频上方头部控件
+            header: ["capturePicture", "save"], // 如果templete参数不为simple,该字段将被覆盖
+            plugin: ["talk"], // 加载插件，talk-对讲
+            // 视频下方底部控件
+            footer: ["talk", "broadcast", "hd", "fullScreen"], // 如果template参数不为simple,该字段将被覆盖
+            audio: 1, // 是否默认开启声音 0 - 关闭 1 - 开启
+            openSoundCallBack: (data) => console.log("开启声音回调", data),
+            closeSoundCallBack: (data) => console.log("关闭声音回调", data),
+            startSaveCallBack: (data) => console.log("开始录像回调", data),
+            stopSaveCallBack: (data) => console.log("录像回调", data),
+            capturePictureCallBack: (data) => console.log("截图成功回调", data),
+            fullScreenCallBack: (data) => console.log("全屏回调", data),
+            getOSDTimeCallBack: (data) => console.log("获取OSDTime回调", data),
+            // width: 100, //如果指定了width、height则以这里为准
+            height: 600, //如果没指定宽高，则以容器video-container为准
+          });
+          // getvideo_ycy(res.data.accessToken, deviceSerial).then((red) => {
+          //   // this.GetMapDataList.mess
+          // });
+          this.$forceUpdate();
+        });
+      } else {
+        getNFCInspectionByDevId(productNumber).then((res) => {
+          console.log(res.data);
+          this.getNFCInspectionByDevIdList = res.data.list;
+          // console.log(this.getNFCInspectionByDevIdList);
+        });
+      }
     },
     //设备历史
     deviceHistory(type) {
@@ -2755,31 +2806,31 @@ export default {
         this.fazhishezhi.BXDY,
         this.fazhishezhi.CXDY
       ).then((res) => {
-        if (result.status == 1) {
-          alert("参数设置成功");
-          setTimeout(function () {
-            parent.location.reload();
-          }, 1000);
+        if (res.data.status == 1) {
+          this.$message.success("设置成功");
         } else {
-          alert("参数设置失败");
+          this.$message.error("设置失败");
         }
       });
     },
     //提交处置情况
     management() {
-      if (this.ElecDataList.DevData == "正常") {
+      if (this.ElecDataList.DevData[0].aFid == "") {
         return this.$message.warning("设备正常,无需解除");
       }
       if (this.managementInput == "") {
         return this.$message.error("请填写处置信息");
       }
-      WebeditFileimageServlet(this.utils.userName, this.managementInput).then(
-        (res) => {
-          if (res.data.list[0].status == true) {
-            return this.$message.success("报警解除成功");
-          }
+      console.log(this.ElecDataList.DevData[0]);
+      WebeditFileimageServlet(
+        this.utils.userName + "," + this.ElecDataList.DevData[0].aFid,
+        this.managementInput
+      ).then((res) => {
+        if (res.data.list[0].status == true) {
+          this.innerVisible = false;
+          return this.$message.success("报警解除成功");
         }
-      );
+      });
     },
     //独立烟感
     SmartIndependentSmokeSee(devId, imei) {
@@ -4532,12 +4583,11 @@ export default {
       }
     }
     .one_echarts {
-      &:nth-child(1){
-        img{
+      &:nth-child(1) {
+        img {
           width: 44px;
-        height: 48px;
+          height: 48px;
         }
-        
       }
       height: 340px;
       // background: #bfa;

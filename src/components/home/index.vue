@@ -207,7 +207,7 @@
     <div class="infoRight">
       <div class="one">
         <p>报警信息</p>
-        <div class="scroll_wapper">
+        <div class="scroll_wapper" @click="handleClick($event)">
           <template v-if="this.AlarmInfo.length > 0">
             <vueSeamlessScroll :data="AlarmInfo" :class-option="classOption">
               <div
@@ -230,8 +230,10 @@
                   style="margin-left: 14px; color: #00e4ff"
                   @click="alarmInfoClick(item.did, item.devicenoid)"
                 >
-                  <div>设备:{{ item.deviceno_name }}</div>
-                  <div>地址:{{ item.address }}</div>
+                  <div :data-id="(item.did, item.devicenoid)">
+                    设备:{{ item.deviceno_name }}
+                  </div>
+                  <div :data-id="item.did">地址:{{ item.address }}</div>
                 </div>
               </div></vueSeamlessScroll
             >
@@ -285,7 +287,7 @@ import PublicPopUps from "../FireInternetOfThings/translate/publicPopUps";
 export default {
   data() {
     return {
-      pagetype: 3,
+      pagetype: 2,
       fullscreenLoading: false,
       pageSize: 1,
       AlarmInfo: "",
@@ -307,6 +309,7 @@ export default {
       onOFF: "关",
     };
   },
+
   mounted() {
     this.init();
     this.drawLine();
@@ -340,6 +343,7 @@ export default {
         break;
     }
   },
+
   computed: {
     classOption() {
       return {
@@ -355,6 +359,10 @@ export default {
     },
   },
   methods: {
+    handleClick(event) {
+      console.log(event.target);
+    },
+
     alarmInfoClick(devId, p_num) {
       this.$refs.publicPopUps.see(devId, p_num);
     },
