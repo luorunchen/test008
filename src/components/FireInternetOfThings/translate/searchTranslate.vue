@@ -51,7 +51,7 @@
                 class="olList"
                 v-for="(item, index) in SElec_DetailElecDevice_List_Copy"
                 :key="index"
-                @click="see(item.BH, item.text)"
+                @click="see(item.BH, item.text, item.productNumber)"
               >
                 <li v-if="item.text != null || item.text != undefined">
                   <span v-if="item.value != null || item.value != undefined"
@@ -141,7 +141,7 @@ export default {
       getDeviceByDevIdList: "",
       shengyu_loudian: "",
       ElecDataList_typeName: "",
-      currentPage4: 4,
+      currentPage4: 1,
       tableData: [],
       getHistoryFault: "",
     };
@@ -166,13 +166,47 @@ export default {
   },
 
   methods: {
-    see(data, address) {
+    see(data, address, productNumber) {
       //是否为地址搜索
+
       if (address == undefined) {
         this.$refs.publicPopUps.initOff();
         this.$refs.publicPopUps.echart_wapper(data);
       } else {
-        this.$refs.publicPopUps.see(data);
+        let dSid;
+
+        switch (this.$route.path) {
+          //烟感
+          case "/FireInternetOfThings/SmartIndependentSmoke":
+            dSid = "2";
+            break;
+          //火灾报警
+          case "/FireInternetOfThings/FireAlarmSystem":
+            dSid = "5";
+            break;
+          //消防水
+          case "/FireInternetOfThings/FireWaterSystem":
+            dSid = "4";
+            break;
+          //燃气
+          case "/FireInternetOfThings/GasDetector":
+            dSid = "5";
+            break;
+          //智慧型消防
+          case "/FireInternetOfThings/IntelligentFireAlarm":
+            dSid = "2";
+            break;
+
+          // case "/FireInternetOfThings/FireAlarmSystem":
+          //   dSid = "4";
+          //   break;
+          //默认电气
+          default:
+            dSid = "3";
+            break;
+        }
+
+        this.$refs.publicPopUps.openTypeFun(data, productNumber, dSid);
       }
       // console.log(address, 98798789798);
     },

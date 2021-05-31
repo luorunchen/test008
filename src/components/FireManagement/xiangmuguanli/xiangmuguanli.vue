@@ -67,12 +67,7 @@
         <el-table-column label="操作" show-overflow-tooltip>
           <template slot-scope="scope">
             <div class="caozuo">
-              <span
-                @click="
-                  (dialogVisible = true), bj_map(scope.row.devId, scope.row)
-                "
-                >编辑</span
-              >
+              <span @click="bj_map(scope.row.devId, scope.row)">编辑</span>
               <span @click="open(scope.row.pid, scope.row.name)">删除</span>
               <span @click="newClick(scope.row.pid, scope.row)">新增设备</span>
               <span @click="fenxiangClick(scope.row.pid)">分享</span>
@@ -101,6 +96,7 @@
       <el-form :inline="true" class="demo-form-inline" label-width="100px">
         <el-form-item label="项目名称">
           <el-input
+            @input="clear($event, '项目名称')"
             v-model="mapInfo.projectname"
             placeholder="审批人"
           ></el-input>
@@ -135,7 +131,11 @@
       </el-form>
       <el-form label-width="100px" :inline="true" class="demo-form-inline">
         <el-form-item label="应用场所">
-          <el-input v-model="mapInfo.type" placeholder="审批人"></el-input>
+          <el-input
+            v-model="mapInfo.type"
+            @input="clear($event, '应用场所')"
+            placeholder="审批人"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="责任人">
@@ -278,8 +278,8 @@
             placement="right"
           >
             <el-input
+              @input="clear($event, '项目位置')"
               id="tipinput"
-              @input="clear"
               v-model="mapInfo.address"
             ></el-input>
           </el-tooltip>
@@ -377,6 +377,7 @@
       <el-form label-width="100px" :inline="true" class="demo-form-inline">
         <el-form-item label="应用场所">
           <el-input
+            @input="clear($event, '应用场所')"
             v-model="mapInfo.changsuo"
             placeholder="请填写备注"
           ></el-input>
@@ -402,7 +403,7 @@
           >
             <el-input
               id="tipinput"
-              @input="clear"
+              @input="clear($event, '项目位置')"
               v-model="mapInfo.address"
             ></el-input>
           </el-tooltip>
@@ -413,7 +414,7 @@
             placeholder="请填写备注"
           ></el-input>
         </el-form-item>
-        <div id="container2"></div>
+        <div id="container"></div>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addNewSheBeiVisible = false">取 消</el-button>
@@ -563,6 +564,26 @@ export default {
   },
 
   methods: {
+    //清空输入框方法
+    clear(event, type) {
+      console.log(event, type, 66666666);
+      // if (type == "应该场所") {
+      // }
+      switch (type) {
+        case "应用场所":
+          this.mapInfo.type = event;
+          break;
+        case "项目名称":
+          this.mapInfo.projectname = event;
+          break;
+        // case "项目位置":
+        //   this.mapInfo.address = event;
+        //   break;
+      }
+      // this.mapInfo.address = event;
+      // console.log(this.mapInfo.address);
+      this.$forceUpdate();
+    },
     regionList_change(val) {
       // console.log(val.substring(0, 9));
       // console.log(val);
@@ -577,35 +598,46 @@ export default {
     },
     //分享按钮
     fenxiangClick(pid) {
-      this.$prompt("请输入分享的账号", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        // inputErrorMessage: "邮箱格式不正确",
-      })
-        .then(({ value }) => {
-          addRegisterProject(pid, this.utils.userName).then(
-            (res) => {
-              if (res.data.list[0].status == "true") {
-                this.$message({
-                  type: "success",
-                  message: "分享成功,您分享的账号是: " + value,
-                });
-              } else {
-                this.$message.error("分享失败");
-              }
-            },
-            () => {
-              this.$message.error("请稍后重试或联系管理员");
-            }
-          );
+      if (
+        this.utils.powerId == 1000 ||
+        this.utils.rid.indexOf("10002007") != -1
+      ) {
+        this.$prompt("请输入分享的账号", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+          // inputErrorMessage: "邮箱格式不正确",
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消输入",
+          .then(({ value }) => {
+            addRegisterProject(pid, this.utils.userName).then(
+              (res) => {
+                if (res.data.list[0].status == "true") {
+                  this.$message({
+                    type: "success",
+                    message: "分享成功,您分享的账号是: " + value,
+                  });
+                } else {
+                  this.$message.error("分享失败");
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消输入",
+            });
           });
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
         });
+      }
     },
     //删除防火员和责任人
     deletegalFireManFun() {
@@ -624,16 +656,18 @@ export default {
     },
     //删除防火员和责任人
     deletFun() {
-      this.deletVisible = true;
-      this.mapInfo.delet = "";
+      if (this.utils.powerId == 1000) {
+        this.deletVisible = true;
+        this.mapInfo.delet = "";
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
+        });
+      }
     },
-    //清空输入框方法
-    clear(event) {
-      console.log(event);
-      this.mapInfo.address = event;
-      // console.log(this.mapInfo.address);
-      this.$forceUpdate();
-    },
+
     // 添加项目函数
     addProjectFun() {
       if (this.lanlat == undefined || this.lanlat == null) {
@@ -651,7 +685,7 @@ export default {
 
         addProject(
           this.utils.userName,
-          this.mapInfo.name, //项目名称
+          this.mapInfo.projectname, //项目名称
           this.mapInfo.address, //项目地址
           this.mapInfo.huilu, //防火员
           this.mapInfo.shebei, //责任人
@@ -718,13 +752,24 @@ export default {
     },
     //添加人员打开弹窗
     addNewOpenFun(type) {
-      //判断新增还是编辑
-      // console.log(type);
-      this.newType = type;
-      // console.log(this.mapInfo.newType);
-      this.dialogVisible = true;
-      this.mapInfo = [];
-      this.mapFun();
+      if (
+        this.utils.powerId == 1000 ||
+        this.utils.rid.indexOf("10002001") != -1
+      ) {
+        //判断新增还是编辑
+        // console.log(type);
+        this.newType = type;
+        // console.log(this.mapInfo.newType);
+        this.dialogVisible = true;
+        this.mapInfo = [];
+        this.mapFun();
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
+        });
+      }
     },
     //新增人员
     addNew(state) {
@@ -947,18 +992,18 @@ export default {
     open(pid, name) {
       const powerId = sessionStorage.getItem("new_role");
       const rid = sessionStorage.getItem("power");
-      this.$confirm(
-        `此操作将永久删除 <span style='color:red'>${name}</span> 项目, 是否继续?`,
+      if (powerId == 1000 || rid.indexOf("10002003") != -1) {
+        this.$confirm(
+          `此操作将永久删除 <span style='color:red'>${name}</span> 项目, 是否继续?`,
 
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          dangerouslyUseHTMLString: true,
-          type: "warning",
-        }
-      )
-        .then(() => {
-          if (powerId == 1000 || rid.indexOf("10003005") != -1) {
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            dangerouslyUseHTMLString: true,
+            type: "warning",
+          }
+        )
+          .then(() => {
             deleProject(pid, this.utils.userName).then((res) => {
               if (res.data.list[0].status == "true") {
                 this.$message({
@@ -973,17 +1018,21 @@ export default {
                 this.$message.error(res.data.list[0].mess);
               }
             });
-          } else {
-            this.$message.error("您的权限不足");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          this.$message({
-            type: "info",
-            message: "已取消删除",
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
           });
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
         });
+      }
     },
     setq(value, name) {
       // String(value);
@@ -1062,34 +1111,46 @@ export default {
     },
     // 编辑弹窗点击函数
     bj_map(data, row) {
-      this.addNewOpenFun("编辑");
-      console.log(row);
-      this.mapInfo.projectname = row.name;
-      // this.mapInfo.name = "123";
-      this.mapInfo.pid = row.pid;
-      this.mapInfo.type = row.dSName;
-      // this.mapInfo.huilu = row.fireman + row.firemanPhone;
-      this.mapInfo.shebeilist = row.legalman + row.legalmanPhone;
-      this.mapInfo.zhuche = row.regdate;
-      // this.mapInfo.address = row.location;
-      this.mapInfo.xintiao = row.heartbeatTime;
-      this.mapInfo.changshan = row.dVName;
-      this.mapInfo.remak = row.remark;
-      this.devID = data;
-      // this.mapInfo.zeRenRen = row;
-      // this.mapInfo.huilu = row.fireman;
-      this.mapInfo.huilulist = row.fireman + "," + row.firemanPhone;
-      this.mapInfo.xintiaolist = row.street_chargenanem + row.street_charge;
-      this.mapInfo.zhuchelist = row.gridmanname + row.gridman;
-      this.mapInfo.zeRenRen = row.legalman;
-      this.mapInfo.zeRenRenPhone = row.legalmanPhone;
-      this.mapInfo.wangGeYuan = row.gridmanname;
-      this.mapInfo.wangGeYuanPhone = row.gridman;
-      this.mapInfo.jieDao = row.street_chargenanem;
-      this.mapInfo.jieDaoPhone = row.street_charge;
-      this.lanlat = row.lat;
-      this.mapInfo.address = row.location;
-      this.mapFun();
+      if (
+        this.utils.powerId == 1000 ||
+        this.utils.rid.indexOf("10002001") != -1
+      ) {
+        this.dialogVisible = true;
+        this.addNewOpenFun("编辑");
+        console.log(row);
+        this.mapInfo.projectname = row.name;
+        // this.mapInfo.name = "123";
+        this.mapInfo.pid = row.pid;
+        this.mapInfo.type = row.dSName;
+        // this.mapInfo.huilu = row.fireman + row.firemanPhone;
+        this.mapInfo.shebeilist = row.legalman + row.legalmanPhone;
+        this.mapInfo.zhuche = row.regdate;
+        // this.mapInfo.address = row.location;
+        this.mapInfo.xintiao = row.heartbeatTime;
+        this.mapInfo.changshan = row.dVName;
+        this.mapInfo.remak = row.remark;
+        this.devID = data;
+        // this.mapInfo.zeRenRen = row;
+        // this.mapInfo.huilu = row.fireman;
+        this.mapInfo.huilulist = row.fireman + "," + row.firemanPhone;
+        this.mapInfo.xintiaolist = row.street_chargenanem + row.street_charge;
+        this.mapInfo.zhuchelist = row.gridmanname + row.gridman;
+        this.mapInfo.zeRenRen = row.legalman;
+        this.mapInfo.zeRenRenPhone = row.legalmanPhone;
+        this.mapInfo.wangGeYuan = row.gridmanname;
+        this.mapInfo.wangGeYuanPhone = row.gridman;
+        this.mapInfo.jieDao = row.street_chargenanem;
+        this.mapInfo.jieDaoPhone = row.street_charge;
+        this.lanlat = row.lat;
+        this.mapInfo.address = row.location;
+        this.mapFun();
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
+        });
+      }
     },
     mapFun() {
       this.$nextTick(() => {
@@ -1099,12 +1160,7 @@ export default {
           zoom: 10,
           mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
         });
-        this.map = new AMap.Map("container2", {
-          center: [116.397428, 39.90923],
-          resizeEnable: true,
-          zoom: 10,
-          mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
-        });
+
         //输入提示
         var autoOptions = {
           input: "tipinput",
@@ -1175,10 +1231,21 @@ export default {
     },
     // 新增设备
     newClick(pid, row) {
-      this.addNewSheBeiVisible = true;
-      this.mapFun();
-      this.addPid = pid;
-      this.mapInfo = {};
+      if (
+        this.utils.powerId == 1000 ||
+        this.utils.rid.indexOf("10002001") != -1
+      ) {
+        this.addNewSheBeiVisible = true;
+        this.mapFun();
+        this.addPid = pid;
+        this.mapInfo = {};
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
+        });
+      }
     },
     //新增设备确定按钮
     addNewSheBeiTrue() {

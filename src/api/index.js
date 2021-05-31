@@ -454,12 +454,12 @@ export function getAllProjecForState(username, cp, col, state, kw, ls, pname) {
   })
 }
 //编辑设备
-export function updateDeviceSim(devId, remark, my_username, installLocation) {
+export function updateDeviceSim(devId, remark, my_username, installLocation, long_lat) {
   return service({
     url: `/admin/device/check/updateDeviceSim.action`,
     method: 'GET',
     params: {
-      devId, remark, my_username, installLocation
+      devId, remark, my_username, installLocation, long_lat
     }
   })
 }

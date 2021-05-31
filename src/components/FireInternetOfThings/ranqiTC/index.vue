@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="left_two">
-        <p>接入烟感设备</p>
+        <p>接入燃气设备</p>
 
         <Translate />
       </div>

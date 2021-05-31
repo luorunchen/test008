@@ -27,7 +27,6 @@
                   this.$route.name == 'EmergencyManagement' ||
                   this.$route.name == 'PowerDetection' ||
                   this.$route.name == 'Panorama' ||
-                  this.$route.name == 'home' ||
                   this.$route.name == 'FireManagement' ||
                   this.$route.name == 'FireInternetOfThings'
                 "
@@ -187,10 +186,7 @@
                 <div class="scroll_wapper">
                   <div
                     class="left_one"
-                    @click="
-                      (FireAlarmSystemDialog = true),
-                        FireAlarmSystem(item.devId, item.productNumber)
-                    "
+                    @click="FireAlarmSystem(item.devId, item.productNumber)"
                     v-for="(item, index) in getDeviceByPidList['mess']"
                     :key="index"
                   >
@@ -567,6 +563,263 @@
                   </div>
                 </div>
               </template>
+
+              <!-- 首页展示数据 -->
+              <template v-if="this.$route.name == 'home'">
+                <div class="scroll_wapper">
+                  <div
+                    class="left_one"
+                    @click="
+                      HomePageData(item.devId, item.productNumber, item.dSid)
+                    "
+                    v-for="(item, index) in getDeviceByPidList['mess']"
+                    :key="index"
+                  >
+                    <!-- 烟感展示数据 -->
+                    <template v-if="item.dSid == 2">
+                      <el-row :gutter="10">
+                        <el-col :span="6">
+                          <!-- 烟感正常设备 -->
+                          <img
+                            v-if="item.dSid == 2 && item.typeName == '正常'"
+                            src="../../../assets/images/yangan_zhengchang.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 门磁正常设备 -->
+                          <img
+                            v-if="item.dSid == 10 && item.typeName == '正常'"
+                            src="../../../assets/images/menchi_zhengchang.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 水浸正常设备 -->
+                          <img
+                            v-if="item.dSid == 18 && item.typeName == '正常'"
+                            src="../../../assets/images/shuijin_zhengchang.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 声光报警正常设备 -->
+                          <img
+                            v-if="item.dSid == 15 && item.typeName == '正常'"
+                            src="../../../assets/images/shengguang_zhengchang.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 手动报警正常设备 -->
+                          <img
+                            v-if="item.dSid == 16 && item.typeName == '正常'"
+                            src="../../../assets/images/shoudong_zhengchang.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 紧急报警正常设备 -->
+                          <img
+                            v-if="item.dSid == 19 && item.typeName == '正常'"
+                            src="../../../assets/images/jinji_zhengchang.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 门磁报警设备 -->
+                          <img
+                            v-if="
+                              item.dSid == 10 &&
+                              item.typeName.indexOf('报警') > 0
+                            "
+                            src="../../../assets/images/menchi_baojing.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 水浸报警设备 -->
+                          <img
+                            v-if="
+                              item.dSid == 18 &&
+                              item.typeName.indexOf('报警') > 0
+                            "
+                            src="../../../assets/images/shuijin_baojing.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 声光报警设备 -->
+                          <img
+                            v-if="
+                              item.dSid == 15 &&
+                              item.typeName.indexOf('报警') > 0
+                            "
+                            src="../../../assets/images/shengguan_baojing.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 手动报警设备 -->
+                          <img
+                            v-if="
+                              item.dSid == 16 &&
+                              item.typeName.indexOf('报警') > 0
+                            "
+                            src="../../../assets/images/shoudong_baojing.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 紧急报警设备 -->
+                          <img
+                            v-if="
+                              item.dSid == 19 &&
+                              item.typeName.indexOf('报警') > 0
+                            "
+                            src="../../../assets/images/jinji_baojing.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 门磁离线设备 -->
+                          <img
+                            v-else-if="item.dSid == 10 && item.typeName == ''"
+                            src="../../../assets/images/menci_lixian.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 水浸离线设备 -->
+                          <img
+                            v-else-if="item.dSid == 18 && item.typeName == ''"
+                            src="../../../assets/images/shuijin_lixian.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 声光离线设备 -->
+                          <img
+                            v-else-if="item.dSid == 15 && item.typeName == ''"
+                            src="../../../assets/images/shengguang_lixian.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 手动报警离线设备 -->
+                          <img
+                            v-else-if="item.dSid == 16 && item.typeName == ''"
+                            src="../../../assets/images/shoudong_lixian.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!--紧急报警离线设备 -->
+                          <img
+                            v-else-if="item.dSid == 19 && item.typeName == ''"
+                            src="../../../assets/images/jinji_lixian.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 灭火器设备 -->
+                          <img
+                            v-else-if="pagetype == '10'"
+                            src="../../../assets/images/miehuoqi.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 烟感报警设备 -->
+                          <img
+                            v-else-if="
+                              item.typeName.indexOf('报警') > 0 &&
+                              item.dSid == 2
+                            "
+                            src="../../../assets/images/yangan_baojing.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                          <!-- 烟感离线设备 -->
+                          <img
+                            v-else-if="item.dSid == 2 && item.typeName == ''"
+                            src="../../../assets/images/yangan_lixian.png"
+                            alt=""
+                            width="84px"
+                            height="84px"
+                          />
+                        </el-col>
+                        <el-col :span="18"
+                          ><ul>
+                            <li>在线监测:{{ item.productNumber }}</li>
+                            <li>更新时间:{{ item.heartbeatTime }}</li>
+                            <li>
+                              报警类型:
+                              <span
+                                style="color: #f830af"
+                                v-if="item.typeName != '正常'"
+                              >
+                                {{ item.typeName }}</span
+                              ><span style="color: #6dff64" v-else>
+                                {{ item.typeName }}</span
+                              >
+                            </li>
+
+                            <li>位置:{{ item.installLocation }}</li>
+                          </ul></el-col
+                        >
+                      </el-row>
+                    </template>
+
+                    <!-- 电气火灾展示数据 -->
+                    <template v-if="item.dSid == 3 || item.dSid == 24">
+                      <div class="scroll_wapper">
+                        <el-row :gutter="10">
+                          <el-col :span="6">
+                            <img
+                              v-if="
+                                item.typeName != '正常' && item.typeName != ''
+                              "
+                              src="../../../assets/images/yongdianlian_baojing@2x.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName == '正常'"
+                              src="../../../assets/images/用电量@2x.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName == ''"
+                              src="../../../assets/images/yongdianlian_lixian.png"
+                              alt=""
+                            />
+                          </el-col>
+                          <el-col :span="18"
+                            ><ul>
+                              <li>在线监测:{{ item.productNumber }}</li>
+                              <li>更新时间:{{ item.heartbeatTime }}</li>
+                              <li>
+                                报警类型:
+                                <span
+                                  style="color: #f830af"
+                                  v-if="item.typeName != '正常'"
+                                >
+                                  {{ item.typeName }}</span
+                                ><span style="color: #6dff64" v-else>
+                                  {{ item.typeName }}</span
+                                >
+                              </li>
+
+                              <li>位置:{{ item.installLocation }}</li>
+                            </ul></el-col
+                          >
+                        </el-row>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
             </el-col>
             <el-col :span="16">
               <div class="right_wapper">
@@ -792,9 +1045,170 @@
             v-if="this.$route.name == 'PowerDetection'"
           >
             <p class="titleP">实时值</p>
+
+            <el-row v-show="mwss5Status == true">
+              <div v-if="getDeviceByDevIdList.mess5.length > 1">
+                <el-col :span="12">
+                  <div
+                    style="
+                      background: #1071e2;
+                      height: 89px;
+                      text-align: center;
+                      border-radius: 0;
+                      color: #fff;
+                    "
+                  >
+                    <img src="../../../assets/images/wenduji.png" alt="" />
+                    <!-- {{ item.date }} -->
+
+                    <p>{{ FireExtinguisherStatus.date.value2 }}℃</p>
+                  </div>
+                  <ul>
+                    <li>
+                      灭火器状态:
+                      <span
+                        v-if="
+                          FireExtinguisherStatus.typeName.indexOf('灭火器') >= 0
+                        "
+                        style="color: #d83333"
+                      >
+                        {{ FireExtinguisherStatus.typeName }}</span
+                      >
+                      <span v-else style="color: blue">正常</span>
+                    </li>
+                    <li>
+                      报警时间:
+                      <span
+                        v-if="
+                          FireExtinguisherStatus.typeName.indexOf('灭火器') >= 0
+                        "
+                        style="color: #d83333"
+                      >
+                        {{ FireExtinguisherStatus.alarmFaultDate }}</span
+                      >
+                      <span v-else style="color: blue">无</span>
+                    </li>
+                  </ul>
+                </el-col>
+                <el-col :span="12">
+                  <div
+                    style="
+                      background: #1071e2;
+                      height: 89px;
+                      text-align: center;
+                      border-radius: 0;
+                      color: #fff;
+                    "
+                  >
+                    <img src="../../../assets/images/shuidi.png" alt="" />
+                    <p>{{ SmokeState.date.value1 }}%</p>
+                  </div>
+                  <ul>
+                    <li>
+                      烟感状态:
+                      <span
+                        v-if="SmokeState.typeName.indexOf('烟雾') >= 0"
+                        style="color: #d83333"
+                      >
+                        {{ SmokeState.typeName }}</span
+                      >
+                      <span v-else style="color: blue">正常</span>
+                    </li>
+                    <li>
+                      报警时间:
+                      <span
+                        v-if="SmokeState.typeName.indexOf('烟雾') >= 0"
+                        style="color: #d83333"
+                      >
+                        {{ SmokeState.alarmFaultDate }}</span
+                      >
+                      <span v-else style="color: blue">无</span>
+                    </li>
+                  </ul>
+                </el-col>
+              </div>
+              <div
+                v-else
+                v-for="(item, index) in getDeviceByDevIdList.mess5"
+                :key="index"
+              >
+                <el-col :span="12">
+                  <div
+                    style="
+                      background: #1071e2;
+                      height: 89px;
+                      text-align: center;
+                      border-radius: 0;
+                      color: #fff;
+                    "
+                  >
+                    <img src="../../../assets/images/wenduji.png" alt="" />
+                    <p>{{ item.date.value2 }}℃</p>
+                  </div>
+                  <ul>
+                    <li>
+                      灭火器状态:
+                      <span
+                        v-if="item.typeName.indexOf('灭火器') >= 0"
+                        style="color: #d83333"
+                      >
+                        {{ item.typeName }}</span
+                      >
+                      <span v-else style="color: blue">正常</span>
+                    </li>
+                    <li>
+                      报警时间:
+                      <span
+                        v-if="item.typeName.indexOf('灭火器') >= 0"
+                        style="color: #d83333"
+                      >
+                        {{ item.alarmFaultDate }}</span
+                      >
+                      <span v-else style="color: blue">无</span>
+                    </li>
+                  </ul>
+                </el-col>
+                <el-col :span="12">
+                  <div
+                    style="
+                      background: #1071e2;
+                      height: 89px;
+                      text-align: center;
+                      border-radius: 0;
+                      color: #fff;
+                    "
+                  >
+                    <img src="../../../assets/images/shuidi.png" alt="" />
+                    <p>{{ item.date.value1 }}%</p>
+                  </div>
+                  <ul>
+                    <li>
+                      烟感状态:
+                      <span
+                        v-if="item.typeName.indexOf('烟雾') >= 0"
+                        style="color: #d83333"
+                      >
+                        {{ item.typeName }}</span
+                      >
+                      <span v-else style="color: blue">正常</span>
+                    </li>
+                    <li>
+                      报警时间:
+                      <span
+                        v-if="item.typeName.indexOf('烟雾') >= 0"
+                        style="color: #d83333"
+                      >
+                        {{ item.alarmFaultDate }}</span
+                      >
+                      <span v-else style="color: blue">无</span>
+                    </li>
+                  </ul>
+                </el-col>
+              </div>
+            </el-row>
             <el-row
-              v-show="mwss5Status == true"
-              v-for="(item, index) in getDeviceByDevIdList.mess5"
+              v-show="mwss5Status == false"
+              v-for="(item, index) in getDeviceByDevIdList.mess2"
               :key="index"
             >
               <el-col :span="12">
@@ -808,81 +1222,7 @@
                   "
                 >
                   <img src="../../../assets/images/wenduji.png" alt="" />
-                  <p>{{ item.date.value2 }}℃</p>
-                </div>
-                <ul>
-                  <li>
-                    灭火器状态:
-                    <span
-                      v-if="item.typeName.indexOf('灭火器') >= 0"
-                      style="color: #d83333"
-                    >
-                      {{ item.typeName }}</span
-                    >
-                    <span v-else style="color: blue">正常</span>
-                  </li>
-                  <li>
-                    报警时间:
-                    <span
-                      v-if="item.typeName.indexOf('灭火器') >= 0"
-                      style="color: #d83333"
-                    >
-                      {{ item.alarmFaultDate }}</span
-                    >
-                    <span v-else style="color: blue">无</span>
-                  </li>
-                </ul>
-              </el-col>
-              <el-col :span="12">
-                <div
-                  style="
-                    background: #1071e2;
-                    height: 89px;
-                    text-align: center;
-                    border-radius: 0;
-                    color: #fff;
-                  "
-                >
-                  <img src="../../../assets/images/shuidi.png" alt="" />
-                  <p>{{ item.date.value1 }}%</p>
-                </div>
-                <ul>
-                  <li>
-                    烟感状态:
-                    <span
-                      v-if="item.typeName.indexOf('烟雾') >= 0"
-                      style="color: #d83333"
-                    >
-                      {{ item.typeName }}</span
-                    >
-                    <span v-else style="color: blue">正常</span>
-                  </li>
-                  <li>
-                    报警时间:
-                    <span
-                      v-if="item.typeName.indexOf('烟雾') >= 0"
-                      style="color: #d83333"
-                    >
-                      {{ item.alarmFaultDate }}</span
-                    >
-                    <span v-else style="color: blue">无</span>
-                  </li>
-                </ul>
-              </el-col>
-            </el-row>
-            <el-row v-show="mwss5Status == false">
-              <el-col :span="12">
-                <div
-                  style="
-                    background: #1071e2;
-                    height: 89px;
-                    text-align: center;
-                    border-radius: 0;
-                    color: #fff;
-                  "
-                >
-                  <img src="../../../assets/images/wenduji.png" alt="" />
-                  <p>0℃</p>
+                  <p>{{ item.value2 }}℃</p>
                 </div>
                 <ul>
                   <li>灭火器状态:正常</li>
@@ -900,7 +1240,7 @@
                   "
                 >
                   <img src="../../../assets/images/shuidi.png" alt="" />
-                  <p>0%</p>
+                  <p>{{ item.value1 }}%</p>
                 </div>
                 <ul>
                   <li>烟感状态:正常</li>
@@ -940,22 +1280,22 @@
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.oneAlarm }}mA</p>
-                              <p>{{ shengyu_loudian.oneDianLiu }}mA</p>
+                              <p>{{ shengyu_loudian.oneAlarm }}A</p>
+                              <p>{{ shengyu_loudian.oneDianLiu }}A</p>
                             </div>
                           </el-col>
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.twoAlarm }}mA</p>
-                              <p>{{ shengyu_loudian.twoDianLiu }}mA</p>
+                              <p>{{ shengyu_loudian.twoAlarm }}A</p>
+                              <p>{{ shengyu_loudian.twoDianLiu }}A</p>
                             </div>
                           </el-col>
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.threeAlarm }}mA</p>
-                              <p>{{ shengyu_loudian.threeDianLiu }}mA</p>
+                              <p>{{ shengyu_loudian.threeAlarm }}A</p>
+                              <p>{{ shengyu_loudian.threeDianLiu }}A</p>
                             </div>
                           </el-col>
                           <el-col :span="6">
@@ -1003,8 +1343,8 @@
                         <el-col :span="8">
                           <div class="imgWapper_img">
                             <img src="../../../assets/images/dianya.png" />
-                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
-                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                            <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                            <p>{{ shengyu_loudian.threeDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1116,8 +1456,8 @@
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
-                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.fourAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}mA</p>
                             </div>
                           </el-col>
                         </template>
@@ -1152,8 +1492,8 @@
                         <el-col :span="8">
                           <div class="imgWapper_img">
                             <img src="../../../assets/images/dianya.png" />
-                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
-                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                            <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                            <p>{{ shengyu_loudian.threeDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1287,8 +1627,8 @@
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
-                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.fourAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}mA</p>
                             </div>
                           </el-col>
                         </template>
@@ -1337,8 +1677,8 @@
                         <el-col :span="8">
                           <div class="imgWapper_img">
                             <img src="../../../assets/images/dianya.png" />
-                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
-                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                            <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                            <p>{{ shengyu_loudian.threeDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1441,8 +1781,8 @@
                           <el-col :span="6">
                             <div class="imgWapper_img">
                               <img src="../../../assets/images/dianliu.png" />
-                              <p>{{ shengyu_loudian.fourAlarm }}A</p>
-                              <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                              <p>{{ shengyu_loudian.fourAlarm }}mA</p>
+                              <p>{{ shengyu_loudian.fourDianLiu }}mA</p>
                             </div>
                           </el-col>
                         </template>
@@ -1476,8 +1816,8 @@
                         <el-col :span="8">
                           <div class="imgWapper_img">
                             <img src="../../../assets/images/dianya.png" />
-                            <p>{{ shengyu_loudian.twoVolatage }}V</p>
-                            <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                            <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                            <p>{{ shengyu_loudian.threeDianYa }}V</p>
                           </div>
                         </el-col>
                       </el-row>
@@ -1590,8 +1930,8 @@
                         <el-col :span="6">
                           <div class="imgWapper_img">
                             <img src="../../../assets/images/dianliu.png" />
-                            <p>{{ shengyu_loudian.fourAlarm }}A</p>
-                            <p>{{ shengyu_loudian.fourDianLiu }}A</p>
+                            <p>{{ shengyu_loudian.fourAlarm }}mA</p>
+                            <p>{{ shengyu_loudian.fourDianLiu }}mA</p>
                           </div>
                         </el-col>
                       </template>
@@ -1625,8 +1965,8 @@
                       <el-col :span="8">
                         <div class="imgWapper_img">
                           <img src="../../../assets/images/dianya.png" />
-                          <p>{{ shengyu_loudian.twoVolatage }}V</p>
-                          <p>{{ shengyu_loudian.twoDianYa }}V</p>
+                          <p>{{ shengyu_loudian.threeVolatage }}V</p>
+                          <p>{{ shengyu_loudian.threeDianYa }}V</p>
                         </div>
                       </el-col>
                     </el-row>
@@ -2106,12 +2446,18 @@
       </el-form>
       <template>
         <el-table
+          height="400px"
           v-loading="Historical_alarm_list_loading"
           :data="Historical_alarm_list"
           style="width: 100%"
+          :default-sort="{
+            prop: 'regdate',
+            order: 'descending',
+          }"
         >
           <el-table-column prop="type" label="报警名称"> </el-table-column>
-          <el-table-column prop="regdate" label="报警时间"> </el-table-column>
+          <el-table-column prop="regdate" label="报警时间" sortable>
+          </el-table-column>
           <el-table-column prop="leakageAlarmCurrentValue" label="报警值">
           </el-table-column>
         </el-table>
@@ -2186,7 +2532,7 @@
         <div class="one">
           <p>设备详情</p>
           <ul
-            v-if="ElecDataList_type_List_DevInfo.dVName != undefined"
+            v-if="this.$route.path != '/FireInternetOfThings/GasDetector'"
             v-loading="FireAlarmSystem_loading"
           >
             <li>
@@ -2207,7 +2553,7 @@
           </ul>
           <ul
             v-loading="FireAlarmSystem_loading"
-            v-show="ElecDataList_type_List_DevInfo.dVName == undefined"
+            v-else
             v-for="(item, index) in ElecDataList_type_List.Data"
             :key="index"
           >
@@ -2257,23 +2603,31 @@
             </el-form-item>
             <template>
               <el-table
+                v-if="this.$route.path != '/FireInternetOfThings/GasDetector'"
                 v-loading="FireAlarmSystem_loading"
-                v-if="ElecDataList_type_List_DevInfo.dVName != undefined"
                 height="300"
                 :data="ElecDataList_type_List.mess12"
                 style="width: 100%"
                 border
+                :default-sort="{
+                  prop: 'time',
+                  order: 'descending',
+                }"
               >
                 <el-table-column type="index" width="50"> </el-table-column>
-                <el-table-column prop="d_type" label="设备类型" width="180">
+                <el-table-column
+                  prop="facilitiesType"
+                  label="设备类型"
+                  width="180"
+                >
                 </el-table-column>
-                <el-table-column prop="desc" label="设备详情" width="180">
+                <el-table-column prop="descr" label="设备详情" width="180">
                 </el-table-column>
-                <el-table-column prop="dstr" label="设备标识">
+                <el-table-column prop="device_name" label="设备标识">
                 </el-table-column>
-                <el-table-column prop="alarmType" label="报警类型">
+                <el-table-column prop="valStr" label="报警类型">
                 </el-table-column>
-                <el-table-column prop="date" label="报警时间">
+                <el-table-column prop="time" label="报警时间" sortable>
                 </el-table-column>
               </el-table>
               <el-table
@@ -2283,6 +2637,10 @@
                 :data="ElecDataList_type_List.DevData"
                 style="width: 100%"
                 border
+                :default-sort="{
+                  prop: 'alarmFaultDate',
+                  order: 'descending',
+                }"
               >
                 <el-table-column type="index" width="50"> </el-table-column>
                 <el-table-column prop="typeName" label="报警类型" width="180">
@@ -2291,9 +2649,12 @@
                 </el-table-column>
                 <el-table-column prop="installLocation" label="设备位置">
                 </el-table-column>
-                <!-- <el-table-column prop="alarmType" label="报警类型">
-                </el-table-column> -->
-                <el-table-column prop="alarmFaultDate" label="报警时间">
+
+                <el-table-column
+                  prop="alarmFaultDate"
+                  label="报警时间"
+                  sortable
+                >
                 </el-table-column>
               </el-table>
             </template>
@@ -2496,11 +2857,19 @@
                   height="300px"
                   :data="ElecDataList_noIndexOf.Data"
                   style="width: 100%"
+                  :default-sort="{
+                    prop: 'alarmFaultDate',
+                    order: 'descending',
+                  }"
                 >
                   <el-table-column type="index" width="50"> </el-table-column>
                   <el-table-column prop="typeName" label="报警类型">
                   </el-table-column>
-                  <el-table-column prop="alarmFaultDate" label="报警时间">
+                  <el-table-column
+                    prop="alarmFaultDate"
+                    label="报警时间"
+                    sortable
+                  >
                   </el-table-column>
                 </el-table>
               </template>
@@ -2537,6 +2906,7 @@ import {
   getHistoryFault,
   getBluebirdevent,
   getNFCInspectionByDevId,
+  SetParameterApi,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
@@ -2544,6 +2914,22 @@ export default {
   props: ["pagetype"],
   data() {
     return {
+      FireExtinguisherStatus: {
+        date: {
+          value1: 1,
+          value2: 1,
+        },
+        typeName: "",
+        alarmFaultDate: "",
+      },
+      SmokeState: {
+        date: {
+          value1: 1,
+          value2: 1,
+        },
+        typeName: "",
+        alarmFaultDate: "",
+      },
       getNFCInspectionByDevIdList: [],
       FireAlarmSystem_loading: false,
       getBluebirdevent_List: [],
@@ -2609,10 +2995,12 @@ export default {
         user: "",
         region: "",
       },
-      getDeviceByDevIdList: "",
+      getDeviceByDevIdList: {
+        mess5: [],
+      },
       shengyu_loudian: "",
       ElecDataList_typeName: "",
-      currentPage4: 4,
+      currentPage4: 1,
       tableData: [],
 
       time: "",
@@ -2624,6 +3012,43 @@ export default {
   },
 
   methods: {
+    //首页地图点类型识别
+    HomePageData(devID, productNumber, dSid) {
+      // console.log(devID, productNumber, dSid, 666666);
+      this.openTypeFun(devID, productNumber, dSid.toString());
+    },
+    //首页报警信息打开的方法
+    openTypeFun(devID, imei, type) {
+      switch (type) {
+        //烟感
+        case "2":
+          this.SmartIndependentSmokeSee(devID, imei);
+          break;
+        // 消防水
+        case "4":
+          this.shuiyaSee("yeya", devID);
+          break;
+        //电气火灾
+        case "3":
+          this.see(devID, imei);
+          break;
+        case "24":
+          this.see(devID, imei);
+          break;
+        case "10":
+          this.SmartIndependentSmokeSee(devID, imei);
+          break;
+        case "5":
+          this.FireAlarmSystem(devID, imei);
+          break;
+      }
+      //独立烟感
+      // this.SmartIndependentSmokeSee();
+      // //火灾报警
+      // this.FireAlarmSystem();
+      // //消防水
+      // this.shuiyaSee();
+    },
     //导出elc表格
     exportElx() {
       console.log(this.ElecDataList_type_List_DevInfo, 987987987);
@@ -2815,32 +3240,45 @@ export default {
     },
     //提交处置情况
     management() {
-      if (this.ElecDataList.DevData[0].aFid == "") {
+      let state =
+        this.ElecDataList == ""
+          ? this.ElecDataList_noIndexOf.mess6[0].aFid
+          : this.ElecDataList.DevData[0].aFid;
+      // if(this.ElecDataList==''){
+
+      // }
+      // console.log(this.ElecDataList, "62");
+      if (state == "") {
         return this.$message.warning("设备正常,无需解除");
       }
       if (this.managementInput == "") {
         return this.$message.error("请填写处置信息");
       }
-      console.log(this.ElecDataList.DevData[0]);
+      // console.log(this.ElecDataList.DevData[0]);
       WebeditFileimageServlet(
-        this.utils.userName + "," + this.ElecDataList.DevData[0].aFid,
+        this.utils.userName + "," + state,
         this.managementInput
       ).then((res) => {
         if (res.data.list[0].status == true) {
           this.innerVisible = false;
+          this.SmartIndependentSmokeDialog = false;
           return this.$message.success("报警解除成功");
         }
       });
     },
     //独立烟感
     SmartIndependentSmokeSee(devId, imei) {
+      this.managementInput = "";
+      this.SmartIndependentSmokeDialog = true;
       if (this.$route.path === "/FireInternetOfThings/IntelligentFireAlarm") {
         ElecData_type(devId, 6).then((res) => {
           this.ElecDataList_noIndexOf = res.data;
+          // this.ElecDataList = res.data;
         });
       } else {
         ElecData_type(devId, this.pagetype).then((res) => {
           this.ElecDataList_noIndexOf = res.data;
+          // this.ElecDataList = res.data;
         });
       }
 
@@ -2906,6 +3344,7 @@ export default {
     },
     // 水压表
     shuiyaSee(data, devId) {
+      this.FireWaterSystemDialog = true;
       // this.seeInfo = data;
       let max;
       let name;
@@ -3192,6 +3631,7 @@ export default {
     },
     // 查看echart图片函数
     async see(devId, productNumber) {
+      this.managementInput = "";
       this.one_echarts_loading = true;
       this.innerVisible = true;
       this.productNumber = productNumber;
@@ -3219,16 +3659,31 @@ export default {
           // );
           //
           //console.log(Array.isArray(this.getDeviceByDevIdList.mess5));
+          // this.FireExtinguisherStatus = this.getDeviceByDevIdList.mess2[0];
+          // console.log(this.FireExtinguisherStatus, 46456465);
+          // this.SmokeState = this.getDeviceByDevIdList.mess2[1];
           !Array.isArray(this.getDeviceByDevIdList.mess5)
             ? (this.mwss5Status = false)
             : (this.mwss5Status = true);
-          //console.log(this.mwss5Status, 646654);
+          console.log(this.mwss5Status, 646654);
+
           if (this.mwss5Status == true) {
             //判断数组是非为空数组
             if (this.getDeviceByDevIdList.mess5.length <= 0) {
               return (this.mwss5Status = false);
             }
+
+            if (this.getDeviceByDevIdList.mess5.length >= 1) {
+            } else {
+            }
             this.getDeviceByDevIdList.mess5[0].date = this.getDeviceByDevIdList.mess2[0];
+            this.FireExtinguisherStatus = this.getDeviceByDevIdList.mess5[0];
+
+            if (this.getDeviceByDevIdList.mess5[1] != undefined) {
+              this.getDeviceByDevIdList.mess5[1].date = this.getDeviceByDevIdList.mess2[0];
+
+              this.SmokeState = this.getDeviceByDevIdList.mess5[1];
+            }
           }
         },
         () => {
@@ -3238,24 +3693,30 @@ export default {
       // 设备详情接口
       ElecData(devId, now).then((res) => {
         //重置照片
+        console.log(res, "---------------------------------");
         this.ElecDataList_images = [];
         this.ElecDataList = res.data;
-
-        if (res.data.DevData.length > 0) {
-          if (res.data.DevData[0].image != "") {
-            const list = res.data.DevData[0].image.split(",");
-            list.forEach((Element) => {
-              // Element =
-              let a = "http://edog-online.com/ctx/devPic/" + Element;
-              this.ElecDataList_images.push(a);
-            });
+        // console.log(res.data=='',9999);
+        //判断接口里面是否有数据
+        if (res.data != "") {
+          if (res.data.DevData.length > 0) {
+            if (res.data.DevData[0].image != "") {
+              const list = res.data.DevData[0].image.split(",");
+              list.forEach((Element) => {
+                // Element =
+                let a = "http://edog-online.com/ctx/devPic/" + Element;
+                this.ElecDataList_images.push(a);
+              });
+            }
           }
+          this.ElecDataList_typeName = res.data.DevData[0].typeName;
+        } else {
+          return this.$message.error("请稍后重试或联系管理员");
         }
 
-        this.ElecDataList_typeName = res.data.DevData[0].typeName;
         //console.log(this.ElecDataList_typeName);
         if (this.$route.path != "/FireInternetOfThings/PowerDetection") {
-          ReadParameterApi(res.data.DevData[0].productNumber).then((res) => {
+          ReadParameterApi(productNumber).then((res) => {
             // //console.log(res, "ldjakjdla");
             // this.getDeviceByDevIdList.row = res.data.row;
             // //console.log(this.getDeviceByDevIdList, 7899987978);
@@ -3564,7 +4025,7 @@ export default {
               trigger: "axis",
             },
             legend: {
-              data: ["A电压(A)", "B电压(A)", "C电压(A)"],
+              data: ["A电压(V)", "B电压(V)", "C电压(V)"],
             },
             grid: {
               left: "3%",
@@ -3587,19 +4048,19 @@ export default {
             },
             series: [
               {
-                name: "A电压(A)",
+                name: "A电压(V)",
                 type: "line",
                 // stack: "总量",
                 data: dianYaA.reverse(),
               },
               {
-                name: "B电压(A)",
+                name: "B电压(V)",
                 type: "line",
                 // stack: "总量",
                 data: dianYaB.reverse(),
               },
               {
-                name: "C电压(A)",
+                name: "C电压(V)",
                 type: "line",
                 // stack: "总量",
                 data: dianYaC.reverse(),
@@ -3927,6 +4388,7 @@ export default {
     //火灾报警
     FireAlarmSystem(devID, productNumber) {
       this.FireAlarmSystem_loading = true;
+      this.FireAlarmSystemDialog = true;
       let type;
       if (this.$route.path === "/FireInternetOfThings/FireAlarmSystem") {
         type = 4;
@@ -3939,13 +4401,16 @@ export default {
         // res.data.DevInfo = [...res.data.DevInfo]
         // if(res.data)
         this.FireAlarmSystem_loading = false;
-        console.log(res.data == "");
-        if (res.data == "") {
+        // console.log(res.data == "");
+        if (res.data == "" || res.data.mess12 == "[]") {
           // this.this.ElecDataList_type_List_DevInfo = {};
           this.ElecDataList_type_List = [];
-          return this.$message.error("请稍后重试或联系管理员");
+          // return this.$message.error("请稍后重试或联系管理员");
+        } else {
+          this.ElecDataList_type_List = res.data;
+          // this.ElecDataList_type_List.mess12.reverse();
         }
-        this.ElecDataList_type_List = res.data;
+
         if (res.data.DevInfo != null || res.data.DevInfo != undefined) {
           this.ElecDataList_type_List_DevInfo.dSName = res.data.DevInfo.dSName;
           this.ElecDataList_type_List_DevInfo.dVName = res.data.DevInfo.dVName;
@@ -3955,14 +4420,15 @@ export default {
             res.data.DevInfo.installLocation;
         }
       });
-      getBluebirdevent(productNumber).then((res) => {
-        // this.FireAlarmSystem_loading = false
-        console.log(res.data);
-        if (res.data.list == "[]") {
-          return "";
-        }
-        this.getBluebirdevent_List = res.data.list;
-      });
+
+      // getBluebirdevent(productNumber).then((res) => {
+      //   // this.FireAlarmSystem_loading = false
+
+      //   if (res.data.list == "[]") {
+      //     return;
+      //   }
+      //   this.getBluebirdevent_List = res.data.list;
+      // });
     },
   },
 };

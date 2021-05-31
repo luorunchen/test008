@@ -219,6 +219,7 @@ export default {
     switch (this.$route.path) {
       case "/FireInternetOfThings":
         this.DeviceProjectNewFun("3");
+        this.pagetype = "2";
         this.echart();
         break;
       case "/FireInternetOfThings/electricalFire":
@@ -292,6 +293,7 @@ export default {
       switch (this.btnInfo) {
         case "隐患整改进度":
           this.DeviceProjectNewFun("3");
+          this.pagetype = "2";
           break;
         case "电气火灾隐患":
           this.DeviceProjectNewFun("3");

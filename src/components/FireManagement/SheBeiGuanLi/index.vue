@@ -73,12 +73,7 @@
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <div class="caozuo">
-              <span
-                @click="
-                  (dialogVisible = true), bj_map(scope.row.devId, scope.$index)
-                "
-                >编辑</span
-              >
+              <span @click="bj_map(scope.row.devId, scope.$index)">编辑</span>
               <span @click="open(scope.row.name, scope.row.devId)">删除</span>
               <span @click="fenPei(scope.row.pid)">分配</span>
               <span
@@ -480,7 +475,7 @@ export default {
       activeName: "second",
       DeviceHistory: "",
       dialogVisible_set: false,
-      currentPage4: 4,
+      currentPage4: 1,
       dialogVisible: false,
       formInline: {
         user: "",
@@ -615,7 +610,8 @@ export default {
         this.devID,
         this.mapInfo.remak,
         this.utils.userName,
-        this.mapInfo.address
+        this.mapInfo.address,
+        this.lanlat
       ).then((res) => {
         if (res.data.list[0].status == "true") {
           this.$message.success("设备更新成功");
@@ -841,37 +837,50 @@ export default {
     },
 
     bj_map(data, index) {
-      this.mapInfo.name = this.getAllDeviceWeb_list[index].name;
-      this.mapInfo.type = this.getAllDeviceWeb_list[index].dSName;
-      this.mapInfo.shebei = this.getAllDeviceWeb_list[index].productNumber;
-      this.mapInfo.zhuche = this.getAllDeviceWeb_list[index].regdate;
-      this.mapInfo.xintiao = this.getAllDeviceWeb_list[index].heartbeatTime;
-      this.mapInfo.changshan = this.getAllDeviceWeb_list[index].dVName;
-      this.mapInfo.remak = this.getAllDeviceWeb_list[index].remark;
-      this.devID = data;
-      this.$nextTick(() => {
-        this.map = new AMap.Map("container", {
-          center: [116.397428, 39.90923],
-          resizeEnable: true,
-          zoom: 10,
-          mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
-        });
-        //输入提示
-        var autoOptions = {
-          input: "tipinput",
-        };
-        var auto = new AMap.Autocomplete(autoOptions);
-        this.placeSearch = new AMap.PlaceSearch({
-          map: this.map,
-        }); //构造地点查询类
+      if (
+        this.utils.powerId == 1000 ||
+        this.utils.rid.indexOf("10003005") != -1
+      ) {
+        this.dialogVisible = true;
+        this.mapInfo.name = this.getAllDeviceWeb_list[index].name;
+        this.mapInfo.type = this.getAllDeviceWeb_list[index].dSName;
+        this.mapInfo.shebei = this.getAllDeviceWeb_list[index].productNumber;
+        this.mapInfo.zhuche = this.getAllDeviceWeb_list[index].regdate;
+        this.mapInfo.xintiao = this.getAllDeviceWeb_list[index].heartbeatTime;
+        this.mapInfo.changshan = this.getAllDeviceWeb_list[index].dVName;
+        this.mapInfo.remak = this.getAllDeviceWeb_list[index].remark;
+        this.devID = data;
+        this.$nextTick(() => {
+          this.map = new AMap.Map("container", {
+            center: [116.397428, 39.90923],
+            resizeEnable: true,
+            zoom: 10,
+            mapStyle: "amap://styles/dcb78e5f043e25116ab6bdeaa6813234",
+          });
+          //输入提示
+          var autoOptions = {
+            input: "tipinput",
+          };
+          var auto = new AMap.Autocomplete(autoOptions);
+          this.placeSearch = new AMap.PlaceSearch({
+            map: this.map,
+          }); //构造地点查询类
 
-        AMap.event.addListener(auto, "select", this.select); //注册监听，当选中某条记录时会触发
-        AMap.event.addListener(this.placeSearch, "markerClick", (e) => {
-          // console.log(e.data.location.lng, e.data.location.lat); // 经纬度
-          console.log(e, 654);
-          this.mapInfo.address = `${e.data.cityname}${e.data.adname}${e.data.address}`;
+          AMap.event.addListener(auto, "select", this.select); //注册监听，当选中某条记录时会触发
+          AMap.event.addListener(this.placeSearch, "markerClick", (e) => {
+            // console.log(e.data.location.lng, e.data.location.lat); // 经纬度
+            console.log(e, 654);
+            this.lanlat = e.data.location.lng + "," + e.data.location.lat;
+            this.mapInfo.address = `${e.data.cityname}${e.data.adname}${e.data.address}`;
+          });
         });
-      });
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
+        });
+      }
     },
     //报警推送
     baojingtuisong() {
@@ -948,7 +957,7 @@ export default {
       console.log(e);
       this.placeSearch.setCity(e.poi.adcode);
       this.placeSearch.search(e.poi.name); //关键字查询查询
-
+      this.lanlat = e.poi.location.lng + "," + e.poi.location.lat;
       this.mapInfo.address =
         e.poi.district + "" + e.poi.address + "" + e.poi.name;
     },
@@ -1027,40 +1036,47 @@ export default {
     open(name, devID) {
       const powerId = sessionStorage.getItem("new_role");
       const rid = sessionStorage.getItem("power");
-      this.$confirm(
-        `此操作将永久删除 <span style='color:red'>${name}</span> 设备, 是否继续?`,
 
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          dangerouslyUseHTMLString: true,
-          type: "warning",
-        }
-      )
-        .then(() => {
-          if (powerId == 1000 || rid.indexOf("10003005") != -1) {
-            deleDevice(devID).then((res) => {
-              if (res.data.list[0].status == "true") {
-                this.$message({
-                  type: "success",
-                  message: "删除成功!",
-                });
-                this.getAllDeviceWebFun(
-                  this.handleSizeChangeValue,
-                  this.handleCurrentChangeValue
-                );
-              }
-            });
-          } else {
-            this.$message.error("您的权限不足");
+      if (powerId == 1000 || rid.indexOf("10003007") != -1) {
+        this.$confirm(
+          `此操作将永久删除 <span style='color:red'>${name}</span> 设备, 是否继续?`,
+
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            dangerouslyUseHTMLString: true,
+            type: "warning",
           }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
+        )
+          .then(() => {
+         
+              deleDevice(devID).then((res) => {
+                if (res.data.list[0].status == "true") {
+                  this.$message({
+                    type: "success",
+                    message: "删除成功!",
+                  });
+                  this.getAllDeviceWebFun(
+                    this.handleSizeChangeValue,
+                    this.handleCurrentChangeValue
+                  );
+                }
+              });
+           
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
           });
+      } else {
+        return this.$message({
+          showClose: true,
+          message: "暂无权限，请向上级申请",
+          type: "error",
         });
+      }
     },
     indexMethod() {},
   },
