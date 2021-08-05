@@ -14,6 +14,9 @@
         <p>报警内容: {{ arlme.type }}</p>
         <p>报警地址:{{ arlme.address }}</p>
         <p>设备号:{{ arlme.imei }}</p>
+        <el-button type="danger" size="mini" style="width: 100%" @click="handle"
+          >查看</el-button
+        >
         <!-- <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogVisible = false"
@@ -22,7 +25,7 @@
         </span> -->
       </el-dialog>
     </div>
-
+    <PublicPopUps ref="publicPopUps" />
     <!-- <p @click="www">12321</p> -->
     <router-view></router-view>
   </div>
@@ -30,6 +33,7 @@
 
 <script>
 import Home from "@/components/FireInternetOfThings";
+import PublicPopUps from "@/components/FireInternetOfThings/translate/publicPopUps";
 export default {
   data() {
     return {
@@ -40,6 +44,7 @@ export default {
   },
   components: {
     Home,
+    PublicPopUps,
   },
   watch: {
     username(val) {
@@ -65,6 +70,14 @@ export default {
     },
   },
   methods: {
+    handle() {
+      console.log(123);
+      this.$refs.publicPopUps.openTypeFun(
+        this.arlme.did,
+        this.arlme.imei,
+        this.arlme.pid
+      );
+    },
     handleClose(done) {
       if (this.listData == "开") {
         this.audo.pause();
@@ -109,6 +122,8 @@ export default {
           _that.arlme.imei = arr[0];
           _that.arlme.type = arr[4];
           _that.arlme.address = arr[3];
+          _that.arlme.pid = arr[5];
+          _that.arlme.did = arr[1];
           _that.dialogVisible = true;
         },
         onSuccess: function (message) {

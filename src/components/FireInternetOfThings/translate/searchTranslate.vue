@@ -72,7 +72,7 @@
         </template>
       </div>
     </div>
-    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
+    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" :popUps="yes" />
     <!-- 搜索内容弹窗 -->
   </div>
 </template>
@@ -84,6 +84,7 @@ export default {
   props: ["SElec_DetailElecDevice_List", "pagetype"],
   data() {
     return {
+      yes: "yes",
       DeviceHistory: "",
       SElec_DetailElecDevice_List_Copy: [],
       fazhishezhi: {

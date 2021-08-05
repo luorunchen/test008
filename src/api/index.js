@@ -840,4 +840,15 @@ export function getNFCInspectionByDevId(devId) {
   })
 }
 
+//燃气探测-探头
+export function getGasInfo(device) {
+  return service({
+    url: `/WebProject/getGasInfo.action`,
+    method: 'GET',
+    params: {
+      device
+    }
+  })
+}
+
 

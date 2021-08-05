@@ -788,19 +788,24 @@ export default {
         if (this.DeviceNumList.deviceNum == undefined) {
           return (this.deviceNum = "000000");
         }
-        if (
-          this.$route.path === "/FireInternetOfThings/electricalFire" ||
-          this.$route.path === "/FireInternetOfThings/Panorama"
-        ) {
-          subNum = "002" + this.DeviceNumList.deviceNum * 1;
-          this.DeviceNumList.online = "20" + this.DeviceNumList.online;
+
+        if (this.DeviceNumList.deviceNum * 1 > 100) {
+          if (
+            this.$route.path === "/FireInternetOfThings/electricalFire" ||
+            this.$route.path === "/FireInternetOfThings/Panorama"
+          ) {
+            subNum ="000000"+ (20000 + this.DeviceNumList.deviceNum * 1);
+            this.DeviceNumList.online = "20" + this.DeviceNumList.online;
+            // subNum.toString();
+            console.log(subNum.toString());
+          }
         }
-        // subNum.toString();
+
         this.deviceNum = subNum.substring(subNum.length - 6);
-        // alert(this.deviceNum);
-        if (this.deviceNum == "efined") {
-          return (this.deviceNum = "000000");
-        }
+        // // alert(this.deviceNum);
+        // if (this.deviceNum == "efined") {
+        //   return (this.deviceNum = "000000");
+        // }
       });
     },
 

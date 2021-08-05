@@ -941,6 +941,7 @@
       title="查看"
       :visible.sync="innerVisible"
       :modal-append-to-body="false"
+      :before-close="handleClose"
     >
       <el-row
         ><el-button type="primary " @click="innerVisible_shebei = true"
@@ -2033,36 +2034,62 @@
             <div class="one_echarts">
               <p class="titleP">湿度统计图</p>
               <div class="echarts_wapper_one_search"></div>
+              <!-- <div class="echarts_wapper_one_search_copy" v-else></div> -->
             </div>
             <div class="two_echarts">
               <p class="titleP">温度统计图</p>
               <div class="echarts_wapper_two_search"></div>
+              <!-- <div class="echarts_wapper_two_search_copy" v-else></div> -->
             </div>
             <div class="three_echarts" style="display: none">
               <p class="titleP">电压统计图</p>
-              <div class="echarts_wapper_three_search"></div>
+              <div
+                class="echarts_wapper_three_search"
+                v-if="popUps != 'yes'"
+              ></div>
+              <div class="echarts_wapper_three_search_copy" v-else></div>
             </div>
             <div class="four_echarts" style="display: none">
               <p class="titleP">图片</p>
-              <div class="echarts_wapper_four_search"></div>
+              <div
+                class="echarts_wapper_four_search"
+                v-if="popUps != 'yes'"
+              ></div>
+              <div class="echarts_wapper_four_search_copy" v-else></div>
             </div>
           </template>
           <template v-else>
             <div class="one_echarts" v-loading="one_echarts_loading">
               <p class="titleP">电流统计图</p>
-              <div class="echarts_wapper_one_search"></div>
+              <div
+                class="echarts_wapper_one_search"
+                v-if="popUps != 'yes'"
+              ></div>
+              <div class="echarts_wapper_one_search_copy" v-else></div>
             </div>
             <div class="two_echarts" v-loading="one_echarts_loading">
               <p class="titleP">温度统计图</p>
-              <div class="echarts_wapper_two_search"></div>
+              <div
+                class="echarts_wapper_two_search"
+                v-if="popUps != 'yes'"
+              ></div>
+              <div class="echarts_wapper_two_search_copy" v-else></div>
             </div>
             <div class="three_echarts" v-loading="one_echarts_loading">
               <p class="titleP">电压统计图</p>
-              <div class="echarts_wapper_three_search"></div>
+              <div
+                class="echarts_wapper_three_search"
+                v-if="popUps != 'yes'"
+              ></div>
+              <div class="echarts_wapper_three_search_copy" v-else></div>
             </div>
             <div class="four_echarts">
               <p class="titleP">图片</p>
-              <div class="echarts_wapper_four_search"></div>
+              <div
+                class="echarts_wapper_four_search"
+                v-if="popUps != 'yes'"
+              ></div>
+              <div class="echarts_wapper_four_search_copy" v-else></div>
             </div>
           </template>
         </div>
@@ -2529,41 +2556,73 @@
       :modal-append-to-body="false"
     >
       <div class="FireAlarmSystemDialog">
-        <div class="one">
-          <p>设备详情</p>
-          <ul
-            v-if="this.$route.path != '/FireInternetOfThings/GasDetector'"
-            v-loading="FireAlarmSystem_loading"
-          >
-            <li>
-              <span> 设备厂商:</span>{{ ElecDataList_type_List_DevInfo.dVName }}
-            </li>
-            <li>
-              <span> 设备类型:</span>{{ ElecDataList_type_List_DevInfo.dSName }}
-            </li>
-            <li>
-              <span> 安装位置:</span
-              >{{ ElecDataList_type_List_DevInfo.installLocation }}
-            </li>
+        <el-row>
+          <el-col :span="8">
+            <div class="one">
+              <p>设备详情</p>
+              <ul
+                v-if="this.$route.path != '/FireInternetOfThings/GasDetector'"
+                v-loading="FireAlarmSystem_loading"
+              >
+                <li>
+                  <span> 设备厂商:</span
+                  >{{ ElecDataList_type_List_DevInfo.dVName }}
+                </li>
+                <li>
+                  <span> 设备类型:</span
+                  >{{ ElecDataList_type_List_DevInfo.dSName }}
+                </li>
+                <li>
+                  <span> 安装位置:</span
+                  >{{ ElecDataList_type_List_DevInfo.installLocation }}
+                </li>
 
-            <li>
-              <span> 产品编号:</span
-              >{{ ElecDataList_type_List_DevInfo.productNumber }}
-            </li>
-          </ul>
-          <ul
-            v-loading="FireAlarmSystem_loading"
-            v-else
-            v-for="(item, index) in ElecDataList_type_List.Data"
-            :key="index"
+                <li>
+                  <span> 产品编号:</span
+                  >{{ ElecDataList_type_List_DevInfo.productNumber }}
+                </li>
+              </ul>
+              <ul
+                v-loading="FireAlarmSystem_loading"
+                v-else
+                v-for="(item, index) in ElecDataList_type_List.Data"
+                :key="index"
+              >
+                <li><span> 所在地址:</span>{{ item.name }}</li>
+                <li><span> 所在位置:</span>{{ item.installLocation }}</li>
+                <li><span> 时间:</span>{{ item.heartbeatTime }}</li>
+                <!-- <li>注册时间</li> -->
+                <li><span>设备编号:</span> {{ item.productNumber }}</li>
+              </ul>
+            </div></el-col
           >
-            <li><span> 所在地址:</span>{{ item.name }}</li>
-            <li><span> 所在位置:</span>{{ item.installLocation }}</li>
-            <li><span> 时间:</span>{{ item.heartbeatTime }}</li>
-            <!-- <li>注册时间</li> -->
-            <li><span>设备编号:</span> {{ item.productNumber }}</li>
-          </ul>
-        </div>
+          <el-col :span="16">
+            <div
+              class="one"
+              style="width: 100%"
+              v-if="this.$route.path == '/FireInternetOfThings/GasDetector'"
+            >
+              <p>实时值</p>
+              <div class="gasDetectorWapper">
+                <div v-for="(item, index) in getGasInfoWapper" :key="index">
+                  <div class="gasDetectorStyle">
+                    <img src="../../../assets/images/gong_hong.png" alt="" />
+                    <div class="fontColor">{{ item.gasvol }}%LEL</div>
+                  </div>
+                  <ul>
+                    <li>{{ item.devNo }}探头状态: {{ item.state }}</li>
+                    <li>{{ item.devNo }}探头值: {{ item.gasvol }}%LEL</li>
+                    <li>
+                      {{ item.devNo }}探头报警时间:
+                      {{ item.sen_date }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+
         <div class="two">
           <p>历史报警</p>
           <el-form
@@ -2610,24 +2669,20 @@
                 style="width: 100%"
                 border
                 :default-sort="{
-                  prop: 'time',
+                  prop: 'date',
                   order: 'descending',
                 }"
               >
                 <el-table-column type="index" width="50"> </el-table-column>
-                <el-table-column
-                  prop="facilitiesType"
-                  label="设备类型"
-                  width="180"
-                >
+                <el-table-column prop="d_type" label="设备类型" width="180">
                 </el-table-column>
-                <el-table-column prop="descr" label="设备详情" width="180">
+                <el-table-column prop="desc" label="设备详情" width="180">
                 </el-table-column>
-                <el-table-column prop="device_name" label="设备标识">
+                <el-table-column prop="dstr" label="设备标识">
                 </el-table-column>
-                <el-table-column prop="valStr" label="报警类型">
+                <el-table-column prop="alarmType" label="报警类型">
                 </el-table-column>
-                <el-table-column prop="time" label="报警时间" sortable>
+                <el-table-column prop="date" label="报警时间" sortable>
                 </el-table-column>
               </el-table>
               <el-table
@@ -2907,11 +2962,12 @@ import {
   getBluebirdevent,
   getNFCInspectionByDevId,
   SetParameterApi,
+  getGasInfo,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
 export default {
-  props: ["pagetype"],
+  props: ["pagetype", "popUps"],
   data() {
     return {
       FireExtinguisherStatus: {
@@ -2922,6 +2978,7 @@ export default {
         typeName: "",
         alarmFaultDate: "",
       },
+      getGasInfoWapper: [],
       SmokeState: {
         date: {
           value1: 1,
@@ -3012,6 +3069,34 @@ export default {
   },
 
   methods: {
+    handleClose(done) {
+      console.log(this.popUps);
+      done();
+      if (
+        this.one_echart_left != null &&
+        this.one_echart_left != "" &&
+        this.one_echart_left != undefined
+      ) {
+        console.log("清空``````````````````````````");
+        this.one_echart_left.dispose();
+      }
+      if (
+        this.two_echart_left != null &&
+        this.two_echart_left != "" &&
+        this.two_echart_left != undefined
+      ) {
+        console.log("清空``````````````````````````");
+        this.two_echart_left.dispose();
+      }
+      if (
+        this.three_echart_left != null &&
+        this.three_echart_left != "" &&
+        this.three_echart_left != undefined
+      ) {
+        this.three_echart_left.dispose();
+        console.log("清空``````````````````````````");
+      }
+    },
     //首页地图点类型识别
     HomePageData(devID, productNumber, dSid) {
       // console.log(devID, productNumber, dSid, 666666);
@@ -3019,6 +3104,7 @@ export default {
     },
     //首页报警信息打开的方法
     openTypeFun(devID, imei, type) {
+      console.log(654);
       switch (type) {
         //烟感
         case "2":
@@ -3676,11 +3762,13 @@ export default {
             if (this.getDeviceByDevIdList.mess5.length >= 1) {
             } else {
             }
-            this.getDeviceByDevIdList.mess5[0].date = this.getDeviceByDevIdList.mess2[0];
+            this.getDeviceByDevIdList.mess5[0].date =
+              this.getDeviceByDevIdList.mess2[0];
             this.FireExtinguisherStatus = this.getDeviceByDevIdList.mess5[0];
 
             if (this.getDeviceByDevIdList.mess5[1] != undefined) {
-              this.getDeviceByDevIdList.mess5[1].date = this.getDeviceByDevIdList.mess2[0];
+              this.getDeviceByDevIdList.mess5[1].date =
+                this.getDeviceByDevIdList.mess2[0];
 
               this.SmokeState = this.getDeviceByDevIdList.mess5[1];
             }
@@ -3725,35 +3813,35 @@ export default {
               return this.$message.error("请稍后重试或联系管理员");
             }
             this.shengyu_loudian = {
-              oneAlarm: this.getDeviceByDevIdList.mess2[0]
-                .noLeakageAlarmACurrentValue,
-              twoAlarm: this.getDeviceByDevIdList.mess2[0]
-                .noLeakageAlarmBCurrentValue,
-              threeAlarm: this.getDeviceByDevIdList.mess2[0]
-                .noLeakageAlarmCCurrentValue,
-              fourAlarm: this.getDeviceByDevIdList.mess2[0]
-                .leakageAlarmCurrentValue,
+              oneAlarm:
+                this.getDeviceByDevIdList.mess2[0].noLeakageAlarmACurrentValue,
+              twoAlarm:
+                this.getDeviceByDevIdList.mess2[0].noLeakageAlarmBCurrentValue,
+              threeAlarm:
+                this.getDeviceByDevIdList.mess2[0].noLeakageAlarmCCurrentValue,
+              fourAlarm:
+                this.getDeviceByDevIdList.mess2[0].leakageAlarmCurrentValue,
               oneDianLiu: res.data.row.ADianLiu,
               twoDianLiu: res.data.row.BDianLiu,
               threeDianLiu: res.data.row.CDianLiu,
               fourDianLiu: res.data.row.SYdianliu,
-              oneVolatage: this.getDeviceByDevIdList.mess2[0]
-                .noVoltageAlarmAValue,
-              twoVolatage: this.getDeviceByDevIdList.mess2[0]
-                .noVoltageAlarmBValue,
-              threeVolatage: this.getDeviceByDevIdList.mess2[0]
-                .noVoltageAlarmCValue,
+              oneVolatage:
+                this.getDeviceByDevIdList.mess2[0].noVoltageAlarmAValue,
+              twoVolatage:
+                this.getDeviceByDevIdList.mess2[0].noVoltageAlarmBValue,
+              threeVolatage:
+                this.getDeviceByDevIdList.mess2[0].noVoltageAlarmCValue,
               oneDianYa: res.data.row.ADianYa,
               twoDianYa: res.data.row.BDianYa,
               threeDianYa: res.data.row.CDianYa,
-              oneTempera: this.getDeviceByDevIdList.mess2[0]
-                .noAlarmATemperatureValue,
-              twoTempera: this.getDeviceByDevIdList.mess2[0]
-                .noAlarmBTemperatureValue,
-              threeTempera: this.getDeviceByDevIdList.mess2[0]
-                .noAlarmCTemperatureValue,
-              fourTempera: this.getDeviceByDevIdList.mess2[0]
-                .noAlarmNTemperatureValue,
+              oneTempera:
+                this.getDeviceByDevIdList.mess2[0].noAlarmATemperatureValue,
+              twoTempera:
+                this.getDeviceByDevIdList.mess2[0].noAlarmBTemperatureValue,
+              threeTempera:
+                this.getDeviceByDevIdList.mess2[0].noAlarmCTemperatureValue,
+              fourTempera:
+                this.getDeviceByDevIdList.mess2[0].noAlarmNTemperatureValue,
               oneWenDu: res.data.row.AWenDu,
               twoWenDu: res.data.row.BWenDu,
               threeWenDu: res.data.row.CWenDu,
@@ -3892,181 +3980,211 @@ export default {
             dianYaC.push(element.uc);
             name.push(element.happenedTime);
           });
-          var one_echart_left;
-          var two_echart_left;
-          var three_echart_left;
+
+          // console.log();
+
+          // console.log(this.one_echart_left, "我是left");
 
           this.$nextTick(() => {
-            one_echart_left = this.$echarts.init(
-              document.querySelector(".echarts_wapper_one_search")
-            );
+            if (this.popUps == "yes") {
+              this.one_echart_left = this.$echarts.init(
+                document.querySelector(".echarts_wapper_one_search_copy")
+              );
+            } else {
+              this.one_echart_left = this.$echarts.init(
+                document.querySelector(".echarts_wapper_one_search")
+              );
+            }
 
+            //  one_echart_left.dispose();
             // 电流统计图
-            one_echart_left.setOption({
-              tooltip: {
-                trigger: "axis",
-              },
-              legend: {
-                data: ["A电流(mA)", "B电流(mA)", "C电流(mA)", "剩余电流(mA)"],
-              },
-              grid: {
-                left: "3%",
-                right: "4%",
-                bottom: "3%",
-                containLabel: true,
-              },
-              toolbox: {
-                feature: {
-                  saveAsImage: {},
+            this.one_echart_left.setOption(
+              {
+                tooltip: {
+                  trigger: "axis",
                 },
-              },
-              xAxis: {
-                type: "category",
-                boundaryGap: false,
-                data: name.reverse(),
-              },
-              yAxis: {
-                type: "value",
-              },
-              series: [
-                {
-                  name: "A电流(mA)",
-                  type: "line",
+                legend: {
+                  data: ["A电流(A)", "B电流(A)", "C电流(A)", "剩余电流(mA)"],
+                },
+                grid: {
+                  left: "3%",
+                  right: "4%",
+                  bottom: "3%",
+                  containLabel: true,
+                },
+                toolbox: {
+                  feature: {
+                    saveAsImage: {},
+                  },
+                },
+                xAxis: {
+                  type: "category",
+                  boundaryGap: false,
+                  data: name.reverse(),
+                },
+                yAxis: {
+                  type: "value",
+                },
+                series: [
+                  {
+                    name: "A电流(A)",
+                    type: "line",
 
-                  data: dianLiuUa.reverse(),
-                },
-                {
-                  name: "B电流(mA)",
-                  type: "line",
+                    data: dianLiuUa.reverse(),
+                  },
+                  {
+                    name: "B电流(A)",
+                    type: "line",
 
-                  data: dianLiuUb.reverse(),
-                },
-                {
-                  name: "C电流(mA)",
-                  type: "line",
+                    data: dianLiuUb.reverse(),
+                  },
+                  {
+                    name: "C电流(A)",
+                    type: "line",
 
-                  data: dianLiuUc.reverse(),
-                },
-                {
-                  name: "剩余电流(mA)",
-                  type: "line",
+                    data: dianLiuUc.reverse(),
+                  },
+                  {
+                    name: "剩余电流(mA)",
+                    type: "line",
 
-                  data: dianLiuUd.reverse(),
-                },
-              ],
-            });
+                    data: dianLiuUd.reverse(),
+                  },
+                ],
+              },
+              true
+            );
 
             // 第二个图表
-            two_echart_left = this.$echarts.init(
-              document.querySelector(".echarts_wapper_two_search")
+            if (this.popUps == "yes") {
+              this.two_echart_left = this.$echarts.init(
+                document.querySelector(".echarts_wapper_two_search_copy")
+              );
+            } else {
+              this.two_echart_left = this.$echarts.init(
+                document.querySelector(".echarts_wapper_two_search")
+              );
+            }
+
+            this.two_echart_left.setOption(
+              {
+                tooltip: {
+                  trigger: "axis",
+                },
+                legend: {
+                  data: ["A温度(℃)", "B温度(℃)", "C温度(℃)", "N温度(℃)"],
+                },
+                grid: {
+                  left: "3%",
+                  right: "4%",
+                  bottom: "3%",
+                  containLabel: true,
+                },
+                toolbox: {
+                  feature: {
+                    saveAsImage: {},
+                  },
+                },
+                xAxis: {
+                  type: "category",
+                  boundaryGap: false,
+                  data: name.reverse(),
+                },
+                yAxis: {
+                  type: "value",
+                },
+                series: [
+                  {
+                    name: "A温度(℃)",
+                    type: "line",
+
+                    data: wenduA.reverse(),
+                  },
+                  {
+                    name: "B温度(℃)",
+                    type: "line",
+
+                    data: wenduB.reverse(),
+                  },
+                  {
+                    name: "C温度(℃)",
+                    type: "line",
+
+                    data: wenduC.reverse(),
+                  },
+                  {
+                    name: "N温度(℃)",
+                    type: "line",
+
+                    data: wenduN.reverse(),
+                  },
+                ],
+              },
+              true
             );
-
-            two_echart_left.setOption({
-              tooltip: {
-                trigger: "axis",
-              },
-              legend: {
-                data: ["A温度(℃)", "B温度(℃)", "C温度(℃)", "N温度(℃)"],
-              },
-              grid: {
-                left: "3%",
-                right: "4%",
-                bottom: "3%",
-                containLabel: true,
-              },
-              toolbox: {
-                feature: {
-                  saveAsImage: {},
-                },
-              },
-              xAxis: {
-                type: "category",
-                boundaryGap: false,
-                data: name.reverse(),
-              },
-              yAxis: {
-                type: "value",
-              },
-              series: [
-                {
-                  name: "A温度(℃)",
-                  type: "line",
-
-                  data: wenduA.reverse(),
-                },
-                {
-                  name: "B温度(℃)",
-                  type: "line",
-
-                  data: wenduB.reverse(),
-                },
-                {
-                  name: "C温度(℃)",
-                  type: "line",
-
-                  data: wenduC.reverse(),
-                },
-                {
-                  name: "N温度(℃)",
-                  type: "line",
-
-                  data: wenduN.reverse(),
-                },
-              ],
-            });
           });
 
           //第三个图表
-          three_echart_left = this.$echarts.init(
-            document.querySelector(".echarts_wapper_three_search")
+          if (this.popUps == "yes") {
+            this.three_echart_left = this.$echarts.init(
+              document.querySelector(".echarts_wapper_three_search_copy")
+            );
+          } else {
+            this.three_echart_left = this.$echarts.init(
+              document.querySelector(".echarts_wapper_three_search")
+            );
+          }
+
+          this.three_echart_left.setOption(
+            {
+              tooltip: {
+                trigger: "axis",
+              },
+              legend: {
+                data: ["A电压(V)", "B电压(V)", "C电压(V)"],
+              },
+              grid: {
+                left: "3%",
+                right: "4%",
+                bottom: "3%",
+                containLabel: true,
+              },
+              toolbox: {
+                feature: {
+                  saveAsImage: {},
+                },
+              },
+              xAxis: {
+                type: "category",
+                boundaryGap: false,
+                data: name.reverse(),
+              },
+              yAxis: {
+                type: "value",
+              },
+              series: [
+                {
+                  name: "A电压(V)",
+                  type: "line",
+                  // stack: "总量",
+                  data: dianYaA.reverse(),
+                },
+                {
+                  name: "B电压(V)",
+                  type: "line",
+                  // stack: "总量",
+                  data: dianYaB.reverse(),
+                },
+                {
+                  name: "C电压(V)",
+                  type: "line",
+                  // stack: "总量",
+                  data: dianYaC.reverse(),
+                },
+              ],
+            },
+            true
           );
-          three_echart_left.setOption({
-            tooltip: {
-              trigger: "axis",
-            },
-            legend: {
-              data: ["A电压(V)", "B电压(V)", "C电压(V)"],
-            },
-            grid: {
-              left: "3%",
-              right: "4%",
-              bottom: "3%",
-              containLabel: true,
-            },
-            toolbox: {
-              feature: {
-                saveAsImage: {},
-              },
-            },
-            xAxis: {
-              type: "category",
-              boundaryGap: false,
-              data: name.reverse(),
-            },
-            yAxis: {
-              type: "value",
-            },
-            series: [
-              {
-                name: "A电压(V)",
-                type: "line",
-                // stack: "总量",
-                data: dianYaA.reverse(),
-              },
-              {
-                name: "B电压(V)",
-                type: "line",
-                // stack: "总量",
-                data: dianYaB.reverse(),
-              },
-              {
-                name: "C电压(V)",
-                type: "line",
-                // stack: "总量",
-                data: dianYaC.reverse(),
-              },
-            ],
-          });
         });
       }
     },
@@ -4421,14 +4539,10 @@ export default {
         }
       });
 
-      // getBluebirdevent(productNumber).then((res) => {
-      //   // this.FireAlarmSystem_loading = false
-
-      //   if (res.data.list == "[]") {
-      //     return;
-      //   }
-      //   this.getBluebirdevent_List = res.data.list;
-      // });
+      getGasInfo(productNumber).then((res) => {
+        console.log(res, "wwwwwwwwwwwwwwww");
+        this.getGasInfoWapper = res.data.data;
+      });
     },
   },
 };
@@ -5015,6 +5129,10 @@ export default {
         width: 100%;
         height: 300px;
       }
+      .echarts_wapper_two_search_copy {
+        width: 100%;
+        height: 300px;
+      }
     }
     .three_echarts {
       height: 340px;
@@ -5028,7 +5146,11 @@ export default {
         // text-align: center;
       }
       .echarts_wapper_three_search {
-        width: 100%;
+        // width: 100%;
+        height: 300px;
+      }
+      .echarts_wapper_three_search_copy {
+        // width: 100%;
         height: 300px;
       }
     }
@@ -5044,6 +5166,10 @@ export default {
         // text-align: center;
       }
       .echarts_wapper_four_search {
+        width: 100%;
+        height: 160px;
+      }
+      .echarts_wapper_four_search_copy {
         width: 100%;
         height: 160px;
       }
@@ -5066,6 +5192,10 @@ export default {
         // text-align: center;
       }
       .echarts_wapper_one_search {
+        width: 100%;
+        height: 300px;
+      }
+      .echarts_wapper_one_search_copy {
         width: 100%;
         height: 300px;
       }
@@ -5329,6 +5459,31 @@ export default {
     }
     .formList {
       padding-left: 20px;
+    }
+  }
+}
+
+.gasDetectorWapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  white-space: nowrap;
+  display: flex;
+  width: 610px;
+  .gasDetectorStyle {
+    background: #1071e2;
+    width: 305px;
+    height: 75px;
+    text-align: center;
+    img {
+      width: 50px;
+      height: 50px;
+    }
+    .fontColor {
+      color: #fff;
+    }
+    ul {
+      border-right: 1px solid #999;
     }
   }
 }
