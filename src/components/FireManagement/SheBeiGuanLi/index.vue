@@ -551,6 +551,14 @@ export default {
           value: "紧急报警",
           label: "19",
         },
+        {
+          value: "工业水压",
+          label: "42",
+        },
+        {
+          value: "工业液位",
+          label: "43",
+        },
       ],
       optionsValue: "",
       getAllDeviceWeb_list: [],
@@ -1049,20 +1057,18 @@ export default {
           }
         )
           .then(() => {
-         
-              deleDevice(devID).then((res) => {
-                if (res.data.list[0].status == "true") {
-                  this.$message({
-                    type: "success",
-                    message: "删除成功!",
-                  });
-                  this.getAllDeviceWebFun(
-                    this.handleSizeChangeValue,
-                    this.handleCurrentChangeValue
-                  );
-                }
-              });
-           
+            deleDevice(devID).then((res) => {
+              if (res.data.list[0].status == "true") {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+                this.getAllDeviceWebFun(
+                  this.handleSizeChangeValue,
+                  this.handleCurrentChangeValue
+                );
+              }
+            });
           })
           .catch(() => {
             this.$message({

@@ -15,7 +15,9 @@
         this.$route.path === '/FireInternetOfThings/GasDetector' ||
         this.$route.path === '/FireInternetOfThings/IntelligentFireAlarm' ||
         this.$route.path === '/FireInternetOfThings/FireExtinguisher' ||
-        this.$route.path === '/FireInternetOfThings/PowerDetection'
+        this.$route.path === '/FireInternetOfThings/PowerDetection' ||
+        this.$route.path === '/FireInternetOfThings/IndustrialWaterPressure' ||
+        this.$route.path === '/FireInternetOfThings/IndustrialLiquidLevel'
       "
     >
       <li
@@ -203,7 +205,12 @@
           <el-table-column prop="address" label="操作">
             <template slot-scope="scope">
               <span
-                @click="see(scope.row.devId, scope.row.productNumber)"
+                @click="
+                  see(
+                    scope.row.devId,
+                    scope.row.productNumber || scope.row.devno
+                  )
+                "
                 class="chakan"
                 >查看</span
               >
@@ -775,6 +782,14 @@ export default {
           this.btnInfo = "设备定位全景图";
           type = "3";
           break;
+        case "/FireInternetOfThings/IndustrialWaterPressure":
+          this.btnInfo = "工业水压";
+          type = "42";
+          break;
+        case "/FireInternetOfThings/IndustrialLiquidLevel":
+          this.btnInfo = "工业液位";
+          type = "43";
+          break;
       }
       const region = sessionStorage.getItem("region");
       DeviceNum(this.utils.userName, type, region).then((res) => {
@@ -794,7 +809,7 @@ export default {
             this.$route.path === "/FireInternetOfThings/electricalFire" ||
             this.$route.path === "/FireInternetOfThings/Panorama"
           ) {
-            subNum ="000000"+ (20000 + this.DeviceNumList.deviceNum * 1);
+            subNum = "000000" + (20000 + this.DeviceNumList.deviceNum * 1);
             this.DeviceNumList.online = "20" + this.DeviceNumList.online;
             // subNum.toString();
             console.log(subNum.toString());
@@ -867,6 +882,7 @@ export default {
     see(devId, productNumber) {
       console.log(this.$refs.publicPopUps);
       this.$refs.publicPopUps.see(devId, productNumber);
+      console.log(productNumber, "woshwis");
       //清空处置情况
       // this.innerVisible = true;
       // this.managementInput = "";
@@ -1243,10 +1259,10 @@ export default {
 /deep/.el-dialog__header {
   background: #1071e2;
 
-  /deep/.el-dialog__title {
+  .el-dialog__title {
     color: #fff;
   }
-  /deep/.el-dialog__headerbtn .el-dialog__close {
+  .el-dialog__headerbtn .el-dialog__close {
     color: #fff;
   }
 }

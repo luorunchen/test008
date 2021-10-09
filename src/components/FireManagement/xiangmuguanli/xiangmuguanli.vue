@@ -555,6 +555,14 @@ export default {
           value: "紧急报警",
           label: "19",
         },
+        {
+          value: "工业水压",
+          label: "42",
+        },
+        {
+          value: "工业液位",
+          label: "43",
+        },
       ],
       newType: "",
     };

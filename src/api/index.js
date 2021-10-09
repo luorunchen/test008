@@ -851,4 +851,14 @@ export function getGasInfo(device) {
   })
 }
 
+export function getvideoBydevno(devno) {
+  return service({
+    url: `getvideoBydevno.action`,
+    method: 'GET',
+    params: {
+      devno
+    }
+  })
+}
+
 

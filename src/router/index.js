@@ -111,6 +111,18 @@ const routes = [
         name: 'Panorama',
         component: () => import('@/components/FireInternetOfThings/shebeidingwei'),
       },
+      // 工业水压
+      {
+        path: 'IndustrialWaterPressure',
+        name: 'IndustrialWaterPressure',
+        component: () => import('@/components/FireInternetOfThings/gongYeShuiYa'),
+      },
+      // 工业水压
+      {
+        path: 'IndustrialLiquidLevel',
+        name: 'IndustrialLiquidLevel',
+        component: () => import('@/components/FireInternetOfThings/gongYeYeWei'),
+      },
 
     ],
 

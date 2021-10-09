@@ -15,7 +15,14 @@
         <p>报警地址:{{ arlme.address }}</p>
         <p>设备号:{{ arlme.imei }}</p>
         <el-button type="danger" size="mini" style="width: 100%" @click="handle"
-          >查看</el-button
+          >查看详情</el-button
+        >
+        <el-button
+          type="danger"
+          size="mini"
+          style="width: 100%; margin: 5px 0 0 0"
+          @click="handleVideo"
+          >查看视频</el-button
         >
         <!-- <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -34,6 +41,7 @@
 <script>
 import Home from "@/components/FireInternetOfThings";
 import PublicPopUps from "@/components/FireInternetOfThings/translate/publicPopUps";
+import { getvideoBydevno } from "@/api/index.js";
 export default {
   data() {
     return {
@@ -70,8 +78,20 @@ export default {
     },
   },
   methods: {
+    handleVideo() {
+      getvideoBydevno(this.arlme.imei).then((res) => {
+        if (res.data.mess == "0") {
+          return this.$message({
+            showClose: true,
+            message: "该设备的项目中没有摄像设备",
+            type: "warning",
+          });
+        } else {
+          this.$refs.publicPopUps.getvideoFun(res.data.mess[0]);
+        }
+      });
+    },
     handle() {
-      console.log(123);
       this.$refs.publicPopUps.openTypeFun(
         this.arlme.did,
         this.arlme.imei,

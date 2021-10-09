@@ -150,6 +150,7 @@ export default {
   mounted() {
     // console.log(this.SElec_DetailElecDevice_List, 4564565);
     // undefined;
+    console.log("dadasd");
   },
   components: {
     PublicPopUps,

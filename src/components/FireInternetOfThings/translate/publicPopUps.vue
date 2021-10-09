@@ -176,6 +176,110 @@
                   </div> -->
                 </div>
               </template>
+              <!--工业水压液压展示数据 -->
+              <template
+                v-if="
+                  this.$route.name == 'IndustrialWaterPressure' ||
+                  this.$route.name == 'IndustrialLiquidLevel'
+                "
+              >
+                <div class="scroll_wapper">
+                  <!-- 液压表 -->
+                  <div
+                    class="left_one"
+                    v-for="(item, index) in getDeviceByPidList['mess']"
+                    :key="index"
+                  >
+                    <el-row :gutter="10">
+                      <el-col :span="6">
+                        <img
+                          v-if="item.device_name == '消防水位'"
+                          src="../../../assets/images/水位@2x.png"
+                          alt=""
+                        />
+                        <img
+                          v-else-if="item.typeName == '正常'"
+                          src="../../../assets/images/shuiya_zhengchang.png"
+                          alt=""
+                        />
+                        <img
+                          v-else-if="item.typeName.indexOf('报警') > 0"
+                          src="../../../assets/images/shuiya_baojing.png"
+                          alt=""
+                        />
+                        <img
+                          v-else
+                          src="../../../assets/images/shuiya_lixian.png"
+                          alt=""
+                        />
+                      </el-col>
+                      <el-col :span="18">
+                        <ul
+                          v-if="$route.name == 'IndustrialLiquidLevel'"
+                          @click="
+                            (FireWaterSystemDialog = true),
+                              shuiyaSee(
+                                'shuiya',
+                                item.devId,
+                                item.productNumber
+                              )
+                          "
+                        >
+                          <li>{{ item.device_name }}</li>
+                          <li>设备号:{{ item.productNumber }}</li>
+                          <li>电池:V</li>
+                          <li>
+                            报警类型:
+                            <span
+                              style="color: #f830af"
+                              v-if="item.typeName != '正常'"
+                            >
+                              {{ item.typeName }}</span
+                            ><span style="color: #6dff64" v-else>
+                              {{ item.typeName }}</span
+                            >
+                          </li>
+                          <li>位置:{{ item.installLocation }}</li>
+                        </ul>
+                        <ul
+                          v-else
+                          @click="
+                            (FireWaterSystemDialog = true),
+                              shuiyaSee('yeya', item.devId, item.productNumber)
+                          "
+                        >
+                          <!-- <li>消防水位</li> -->
+                          <li>{{ item.device_name }}</li>
+                          <li>设备号:{{ item.productNumber }}</li>
+                          <li>电池:V</li>
+                          <li>
+                            报警类型:
+                            <span
+                              style="color: #f830af"
+                              v-if="item.typeName != '正常'"
+                            >
+                              {{ item.typeName }}</span
+                            ><span style="color: #6dff64" v-else>
+                              {{ item.typeName }}</span
+                            >
+                          </li>
+                          <li>位置:{{ item.installLocation }}</li>
+                        </ul></el-col
+                      >
+                    </el-row>
+                  </div>
+                  <!-- 水压表 -->
+                  <!-- <div
+                    class="left_one"
+                   
+                    v-for="(item, index) in getDeviceByPidList['mess']"
+                    :key="index"
+                    v-show="item.device_name != '消防水位'"
+                  >
+                  
+                  </div> -->
+                </div>
+              </template>
               <!-- 火灾报警与燃气探测展示数据 -->
               <template
                 v-if="
@@ -246,10 +350,15 @@
                             alt=""
                           />
                           <img
-                            v-else-if="item.typeName.indexOf('报警') > 0"
+                            v-else-if="item.typeName.indexOf('低报') > 0"
                             src="../../../assets/images/ranqi_baojing.png"
                             alt=""
                           />
+                          <!-- <img
+                            v-else-if="item.typeName.indexOf('可燃气体') > 0"
+                            src="../../../assets/images/ranqi_zhengchang.png"
+                            alt=""
+                          /> -->
                           <img
                             v-else
                             src="../../../assets/images/ranqi_lixian.png"
@@ -959,18 +1068,26 @@
             <p class="titleP">设备信息</p>
             <ul v-for="(item, index) in ElecDataList.DevData" :key="index">
               <div
-                v-if="item.typeName == '正常'"
-                style="background: #13d61c"
                 class="ulInfo"
+                style="background: #13d61c"
+                v-if="item.typeName == '正常' && item.status == '在线'"
               >
-                设备正常/{{ item.status }}
+                <p>设备正常/{{ item.status }}</p>
               </div>
               <div
-                v-if="item.typeName.indexOf('故障') >= 0"
-                style="background: #eb8814"
                 class="ulInfo"
+                style="background: #999"
+                v-else-if="item.typeName == '正常' && item.status == '离线'"
               >
-                设备故障/{{ item.status }}
+                <p>设备正常/{{ item.status }}</p>
+              </div>
+
+              <div
+                class="ulInfo"
+                style="background: #eb8814"
+                v-else-if="item.typeName.indexOf('故障') > 0"
+              >
+                <p>设备故障/{{ item.status }}</p>
               </div>
               <div
                 v-if="item.typeName.indexOf('报警') >= 0"
@@ -2498,50 +2615,95 @@
       width="50%"
       :modal-append-to-body="false"
     >
-      <div class="FireWaterSystemDialogWapper">
-        <p class="title">{{ msg }}</p>
-        <p class="title">{{ time }}</p>
-        <!-- 图表容器 -->
-        <div class="shuiya_echarts"></div>
+      <template v-if="this.$route.name == 'FireWaterSystem'">
+        <div class="FireWaterSystemDialogWapper">
+          <p class="title">{{ msg }}</p>
+          <p class="title">{{ time }}</p>
+          <!-- 图表容器 -->
+          <div class="shuiya_echarts"></div>
+          <!-- <div class="shuiya_echarts"></div> -->
 
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-button type="primary" size="small">自诊断查询</el-button>
+            </el-col>
+            <el-col :span="6"
+              ><el-button type="warning" size="small"
+                >远程参数更新</el-button
+              ></el-col
+            >
+            <el-col :span="6"
+              ><el-button type="danger" size="small"
+                >自主布撤防</el-button
+              ></el-col
+            >
+            <el-col :span="6"
+              ><el-button type="success" size="small"
+                >固件升级</el-button
+              ></el-col
+            >
+          </el-row>
+          <el-row type="flex" class="row-bg" justify="space-between">
+            <el-col :span="6">
+              <img
+                src="../../../assets/images/four.png"
+                height="100%"
+                width="100%"
+                alt=""
+              />
+            </el-col>
+
+            <el-col :span="6">
+              <img
+                src="../../../assets/images/battery4.png"
+                width="100%"
+                height="100%"
+                alt=""
+              />
+            </el-col>
+          </el-row>
+        </div>
+      </template>
+      <template v-else>
+        <!-- <div class="gongYe"> -->
         <el-row :gutter="20">
-          <el-col :span="6">
-            <el-button type="primary" size="small">自诊断查询</el-button>
-          </el-col>
-          <el-col :span="6"
-            ><el-button type="warning" size="small"
-              >远程参数更新</el-button
-            ></el-col
+          <el-col
+            :span="6"
+            v-for="(item, index) in getGasInfoWapper"
+            :key="index"
           >
-          <el-col :span="6"
-            ><el-button type="danger" size="small"
-              >自主布撤防</el-button
-            ></el-col
-          >
-          <el-col :span="6"
-            ><el-button type="success" size="small">固件升级</el-button></el-col
-          >
-        </el-row>
-        <el-row type="flex" class="row-bg" justify="space-between">
-          <el-col :span="6">
-            <img
-              src="../../../assets/images/four.png"
-              height="100%"
-              width="100%"
-              alt=""
-            />
-          </el-col>
+            <div style="text-align: center">
+              <h3>{{ item.devNo }}号探头</h3>
+              <h5>
+                探头状态:
+                <span
+                  :style="{
+                    color: item.state.indexOf('报') > 0 ? 'red' : 'green',
+                  }"
+                  >{{ item.state }}</span
+                >
+              </h5>
+              <h5 v-if="item.state.indexOf('报') > 0">
+                报警时间:
+                <span
+                  :style="{
+                    color: item.state.indexOf('报') > 0 ? 'red' : 'green',
+                  }"
+                  >{{ item.sen_date }}</span
+                >
+              </h5>
+              <h5 v-else>报警时间:无</h5>
+            </div>
 
-          <el-col :span="6">
-            <img
-              src="../../../assets/images/battery4.png"
-              width="100%"
-              height="100%"
-              alt=""
-            />
-          </el-col>
+            <div
+              :id="'item' + index"
+              class="grid-content bg-purple"
+              style="height: 200px"
+            ></div
+          ></el-col>
         </el-row>
-      </div>
+        <!-- </div> -->
+      </template>
       <div class="shuju_echarts">
         <p>设备最近数据分析</p>
         <div class="shuju_echarts_wapper"></div>
@@ -2596,33 +2758,31 @@
               </ul>
             </div></el-col
           >
-          <el-col :span="16">
-            <div
-              class="one"
-              style="width: 100%"
-              v-if="this.$route.path == '/FireInternetOfThings/GasDetector'"
-            >
-              <p>实时值</p>
-              <div class="gasDetectorWapper">
-                <div v-for="(item, index) in getGasInfoWapper" :key="index">
-                  <div class="gasDetectorStyle">
-                    <img src="../../../assets/images/gong_hong.png" alt="" />
-                    <div class="fontColor">{{ item.gasvol }}%LEL</div>
-                  </div>
-                  <ul>
-                    <li>{{ item.devNo }}探头状态: {{ item.state }}</li>
-                    <li>{{ item.devNo }}探头值: {{ item.gasvol }}%LEL</li>
-                    <li>
-                      {{ item.devNo }}探头报警时间:
-                      {{ item.sen_date }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </el-col>
+          <el-col :span="16"> </el-col>
         </el-row>
-
+        <div
+          class="two"
+          style="width: 100%"
+          v-if="this.$route.path == '/FireInternetOfThings/GasDetector'"
+        >
+          <p>实时值</p>
+          <div class="gasDetectorWapper">
+            <div v-for="(item, index) in getGasInfoWapper" :key="index">
+              <div class="gasDetectorStyle">
+                <img src="../../../assets/images/gong_hong.png" alt="" />
+                <div class="fontColor">{{ item.gasvol }}%LEL</div>
+              </div>
+              <ul>
+                <li>{{ item.devNo }}探头状态: {{ item.state }}</li>
+                <li>{{ item.devNo }}探头气体类型: {{ item.gastype }}</li>
+                <li>
+                  {{ item.devNo }}探头报警时间:
+                  {{ item.sen_date }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="two">
           <p>历史报警</p>
           <el-form
@@ -2750,8 +2910,10 @@
       :visible.sync="KeyPartsDialog"
       width="50%"
       :modal-append-to-body="false"
+      :before-close="videoHandleClose"
     >
-      <div id="ezuikitTalkData"></div>
+      <div id="ezuikitTalkData" v-if="this.popUps !== 'yes'"></div>
+      <div id="ezuikitTalkData2" v-else></div>
 
       <template v-if="this.getNFCInspectionByDevIdList.length > 0">
         <el-table :data="getNFCInspectionByDevIdList[0].mess">
@@ -3066,18 +3228,18 @@ export default {
   mounted() {
     // //console.log(this.SElec_DetailElecDevice_List, 4564565);
     // undefined;
+    console.log(this.popUps);
   },
 
   methods: {
     handleClose(done) {
-      console.log(this.popUps);
       done();
       if (
         this.one_echart_left != null &&
         this.one_echart_left != "" &&
         this.one_echart_left != undefined
       ) {
-        console.log("清空``````````````````````````");
+        // console.log("清空``````````````````````````");
         this.one_echart_left.dispose();
       }
       if (
@@ -3085,7 +3247,7 @@ export default {
         this.two_echart_left != "" &&
         this.two_echart_left != undefined
       ) {
-        console.log("清空``````````````````````````");
+        // console.log("清空``````````````````````````");
         this.two_echart_left.dispose();
       }
       if (
@@ -3094,7 +3256,7 @@ export default {
         this.three_echart_left != undefined
       ) {
         this.three_echart_left.dispose();
-        console.log("清空``````````````````````````");
+        // console.log("清空``````````````````````````");
       }
     },
     //首页地图点类型识别
@@ -3170,12 +3332,36 @@ export default {
     initOff() {
       this.dialogVisible = true;
     },
+    videoHandleClose() {
+      this.KeyPartsDialog = false;
+      let item;
+      if (this.popUps != "yes") {
+        item = document.getElementById("ezuikitTalkData");
+        console.log("pppppp6", item);
+      } else {
+        item = document.getElementById("ezuikitTalkData2");
+        console.log("pppppp7", item);
+      }
+
+      //动态删除多出的子元素
+      while (item.firstChild) {
+        item.removeChild(item.firstChild);
+      }
+    },
     //萤石云视频
     getvideoFun(productNumber) {
       //这是视频展示数据
-
+      this.KeyPartsDialog = true;
       this.$nextTick(() => {
-        const item = document.getElementById("ezuikitTalkData");
+        var item;
+        // console.log(this.popUps, "9jhhguj");
+        if (this.popUps !== "yes") {
+          item = document.getElementById("ezuikitTalkData");
+          console.log("pppppp6", item);
+        } else {
+          item = document.getElementById("ezuikitTalkData2");
+          console.log("pppppp7", item);
+        }
 
         //动态删除多出的子元素
         while (item.firstChild) {
@@ -3184,7 +3370,7 @@ export default {
       });
       if (productNumber.toString().indexOf("_") != -1) {
         this.getNFCInspectionByDevIdList = [];
-
+        console.log("ooooo");
         getvideo().then((res) => {
           const deviceSerial = productNumber.split("_")[0];
           const deviceSerial2 = productNumber.split("_")[1];
@@ -3201,7 +3387,7 @@ export default {
           };
           new EZUIKit.EZUIKitPlayer({
             autoplay: true,
-            id: "ezuikitTalkData",
+            id: this.popUps != "yes" ? "ezuikitTalkData" : "ezuikitTalkData2",
             accessToken: res.data.accessToken,
             url: ezuikitTalkData.ezopen, // 这里的url可以是直播地址.live  ，也可以是回放地址.rec 或 .cloud.rec
             template: "simple", // simple - 极简版;standard-标准版;security - 安防版(预览回放);voice-语音版；
@@ -3429,114 +3615,131 @@ export default {
       });
     },
     // 水压表
-    shuiyaSee(data, devId) {
+    shuiyaSee(data, devId, productNumber) {
       this.FireWaterSystemDialog = true;
       // this.seeInfo = data;
       let max;
       let name;
 
-      ElecData_type(devId, this.pagetype).then((res) => {
-        this.msg = res.data.DevData[0].typeName;
-        this.time = res.data.DevData[0].alarmFaultDate;
-        this.$nextTick(() => {
-          let shui_echart = this.$echarts.init(
-            document.querySelector(".shuiya_echarts")
-          );
-          if (data == "yeya") {
-            max = 1000;
-            name = "kpa";
+      if (this.$route.name == "FireWaterSystem" || this.$route.name == "home") {
+        ElecData_type(devId, this.pagetype).then((res) => {
+          this.msg = res.data.DevData[0].typeName;
+          this.time = res.data.DevData[0].alarmFaultDate;
+          this.$nextTick(() => {
+            let shui_echart = this.$echarts.init(
+              document.querySelector(".shuiya_echarts")
+            );
+            if (data == "yeya") {
+              max = 1000;
+              name = "kpa";
 
-            shui_echart.setOption({
-              // tooltip: {
-              //   formatter: "{a} <br/>{b} : {c}m",
-              // },
+              shui_echart.setOption({
+                // tooltip: {
+                //   formatter: "{a} <br/>{b} : {c}m",
+                // },
 
-              series: [
-                {
-                  // name: "业务指标",
-                  type: "gauge",
-                  min: 0,
-                  max: max,
-                  detail: { formatter: `{value}${name}` },
-                  axisLine: {
-                    // 坐标轴线
-                    lineStyle: {
-                      // 属性lineStyle控制线条样式
-                      color: [
-                        [0.2, "#91c7ae"],
-                        [0.8, "#63869e"],
-                        [1, "#c23531"],
-                      ],
-                    },
-                  },
-                  pointer: {
-                    itemStyle: {
-                      color: "auto",
-                    },
-                  },
-                  data: [{ value: res.data.DevData[0].latitude }],
-                },
-              ],
-            });
-          } else {
-            shui_echart.setOption({
-              series: [
-                {
-                  type: "liquidFill",
-                  radius: "200px",
-                  data: [res.data.DevData[0].latitude * 0.01 * 1],
-                  label: {
-                    normal: {
-                      color: "#fff",
-                      // insideColor: "transparent",
-                      textStyle: {
-                        fontSize: 30,
-                        fontWeight: "bold",
+                series: [
+                  {
+                    // name: "业务指标",
+                    type: "gauge",
+                    min: 0,
+                    max: max,
+                    detail: { formatter: `{value}${name}` },
+                    axisLine: {
+                      // 坐标轴线
+                      lineStyle: {
+                        // 属性lineStyle控制线条样式
+                        color: [
+                          [0.2, "#91c7ae"],
+                          [0.8, "#63869e"],
+                          [1, "#c23531"],
+                        ],
                       },
-                      formatter: `${res.data.DevData[0].latitude * 1}m`,
+                    },
+                    pointer: {
+                      itemStyle: {
+                        color: "auto",
+                      },
+                    },
+                    data: [{ value: res.data.DevData[0].latitude }],
+                  },
+                ],
+              });
+            } else {
+              shui_echart.setOption({
+                series: [
+                  {
+                    type: "liquidFill",
+                    radius: "200px",
+                    data: [res.data.DevData[0].latitude * 0.01 * 1],
+                    label: {
+                      normal: {
+                        color: "#fff",
+                        // insideColor: "transparent",
+                        textStyle: {
+                          fontSize: 30,
+                          fontWeight: "bold",
+                        },
+                        formatter: `${res.data.DevData[0].latitude * 1}m`,
+                      },
+                    },
+                    color: [
+                      {
+                        type: "linear",
+                        x: 0,
+                        y: 1,
+                        x2: 0,
+                        y2: 0,
+                        colorStops: [
+                          {
+                            offset: 1,
+                            color: ["#6a7feb"], // 0% 处的颜色
+                          },
+                          {
+                            offset: 0,
+                            color: ["#27e5f1"], // 100% 处的颜色
+                          },
+                        ],
+                        global: false, // 缺省为 false
+                      },
+                    ],
+                    outline: {
+                      show: true,
+                      borderDistance: 5,
+                      itemStyle: {
+                        borderColor: "rgba(67,209,100,1)",
+                        borderWidth: 0,
+                      },
                     },
                   },
-                  color: [
-                    {
-                      type: "linear",
-                      x: 0,
-                      y: 1,
-                      x2: 0,
-                      y2: 0,
-                      colorStops: [
-                        {
-                          offset: 1,
-                          color: ["#6a7feb"], // 0% 处的颜色
-                        },
-                        {
-                          offset: 0,
-                          color: ["#27e5f1"], // 100% 处的颜色
-                        },
-                      ],
-                      global: false, // 缺省为 false
-                    },
-                  ],
-                  outline: {
-                    show: true,
-                    borderDistance: 5,
-                    itemStyle: {
-                      borderColor: "rgba(67,209,100,1)",
-                      borderWidth: 0,
-                    },
-                  },
-                },
-              ],
-            });
-          }
+                ],
+              });
+            }
+          });
+
+          // //console.log(option2);
+
+          // var option2 = (Math.random() * 1000).toFixed(2) - 0;
+          // option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+          // //console.log((Math.random() * 100).toFixed(2) - 0);
+          // shui_echart.setOption(option, true);
         });
+      } else {
+        getGasInfo(productNumber).then((res) => {
+          console.log(res, "wwwwwwwwwwwwwwww");
+          this.getGasInfoWapper = res.data.data;
+          this.getGasInfoWapper.sort((a, b) => {
+            return a.devNo * 1 - b.devNo * 1;
+          });
 
-        // //console.log(option2);
-
-        // var option2 = (Math.random() * 1000).toFixed(2) - 0;
-        // option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-        // //console.log((Math.random() * 100).toFixed(2) - 0);
-        // shui_echart.setOption(option, true);
-      });
+          this.$nextTick(() => {
+            this.getGasInfoWapper.forEach((item, index) => {
+              this.IndustrialWaterPressureEchats(`#item${index}`, data, item);
+            });
+          });
+          // console.log(this.getGasInfoWapper);
+        });
+      }
       this.$nextTick(() => {
         let one_echart_left = this.$echarts.init(
           document.querySelector(".shuju_echarts_wapper")
@@ -3591,6 +3794,109 @@ export default {
             },
           ],
         });
+      });
+    },
+
+    //工业水压 液压 图标渲染
+    IndustrialWaterPressureEchats(id, data, item) {
+      let max;
+      let name;
+
+      // console.log(id, "我是name");
+      this.$nextTick(() => {
+        let shui_echart = this.$echarts.init(document.querySelector(id));
+        if (data == "yeya") {
+          max = 100;
+          name = "kpa";
+
+          shui_echart.setOption({
+            // tooltip: {
+            //   formatter: "{a} <br/>{b} : {c}m",
+            // },
+
+            series: [
+              {
+                // name: "业务指标",
+                type: "gauge",
+                min: 0,
+                max: max,
+                detail: {
+                  formatter: `{value}${name}`,
+                  fontSize: 15,
+                  offsetCenter: [0, "75%"],
+                },
+                axisLine: {
+                  // 坐标轴线
+                  lineStyle: {
+                    // 属性lineStyle控制线条样式
+                    color: [
+                      [0.2, "#91c7ae"],
+                      [0.8, "#63869e"],
+                      [1, "#c23531"],
+                    ],
+                  },
+                },
+
+                pointer: {
+                  itemStyle: {
+                    color: "auto",
+                  },
+                },
+                data: [{ value: item.gasvol }],
+              },
+            ],
+          });
+        } else {
+          shui_echart.setOption({
+            series: [
+              {
+                type: "liquidFill",
+                radius: "200px",
+
+                data: [item.gasvol * 0.01 * 1],
+                label: {
+                  normal: {
+                    color: "#000",
+                    // insideColor: "transparent",
+                    textStyle: {
+                      fontSize: 30,
+                      fontWeight: "bold",
+                    },
+                    formatter: `${item.gasvol * 1}m`,
+                  },
+                },
+                color: [
+                  {
+                    type: "linear",
+                    x: 0,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [
+                      {
+                        offset: 1,
+                        color: ["#6a7feb"], // 0% 处的颜色
+                      },
+                      {
+                        offset: 0,
+                        color: ["#27e5f1"], // 100% 处的颜色
+                      },
+                    ],
+                    global: false, // 缺省为 false
+                  },
+                ],
+                outline: {
+                  show: true,
+                  borderDistance: 5,
+                  itemStyle: {
+                    borderColor: "rgba(67,209,100,1)",
+                    borderWidth: 0,
+                  },
+                },
+              },
+            ],
+          });
+        }
       });
     },
     equipment(data, num) {
@@ -3721,6 +4027,8 @@ export default {
       this.one_echarts_loading = true;
       this.innerVisible = true;
       this.productNumber = productNumber;
+
+      console.log(productNumber, 789789);
       await getDeviceByDevId(devId).then(
         (res) => {
           if (res.data == null || res.data == undefined) {
@@ -4542,6 +4850,10 @@ export default {
       getGasInfo(productNumber).then((res) => {
         console.log(res, "wwwwwwwwwwwwwwww");
         this.getGasInfoWapper = res.data.data;
+        this.getGasInfoWapper.sort((a, b) => {
+          return a.devNo * 1 - b.devNo * 1;
+        });
+        // console.log(this.getGasInfoWapper);
       });
     },
   },
@@ -4555,6 +4867,11 @@ export default {
   // background-color: #f5f5f5;
 }
 #ezuikitTalkData {
+  width: 95%;
+  margin: 0 auto;
+  // height: 600px;
+}
+#ezuikitTalkData2 {
   width: 95%;
   margin: 0 auto;
   // height: 600px;
@@ -4916,10 +5233,10 @@ export default {
 /deep/.el-dialog__header {
   background: #1071e2;
 
-  /deep/.el-dialog__title {
+  .el-dialog__title {
     color: #fff;
   }
-  /deep/.el-dialog__headerbtn .el-dialog__close {
+  .el-dialog__headerbtn .el-dialog__close {
     color: #fff;
   }
 }
@@ -5294,6 +5611,10 @@ export default {
     width: 120px;
   }
 }
+// .gongYe {
+//   display: flex;
+//   flex-wrap: wrap;
+// }
 .shuju_echarts {
   width: 95%;
   height: 450px;
@@ -5464,12 +5785,15 @@ export default {
 }
 
 .gasDetectorWapper {
-  overflow-x: auto;
-  overflow-y: hidden;
+  // overflow-x: auto;
+  // overflow-y: hidden;
 
-  white-space: nowrap;
+  // white-space: nowrap;
+  flex-wrap: wrap;
+
+  // word-break: normal;
   display: flex;
-  width: 610px;
+  // width: 610px;
   .gasDetectorStyle {
     background: #1071e2;
     width: 305px;

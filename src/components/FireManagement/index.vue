@@ -245,10 +245,10 @@ export default {
 /deep/.el-dialog__header {
   background: #1071e2;
 
-  /deep/.el-dialog__title {
+  .el-dialog__title {
     color: #fff;
   }
-  /deep/.el-dialog__headerbtn .el-dialog__close {
+  .el-dialog__headerbtn .el-dialog__close {
     color: #fff;
   }
 }

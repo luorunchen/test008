@@ -114,6 +114,20 @@
             <p textInfo="设备定位全景图" @click="getText()">设备定位全景图</p>
           </router-link>
         </div>
+        <div
+          :class="btnInfo == '工业水压' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+        >
+          <router-link :to="{ name: 'IndustrialWaterPressure' }">
+            <p textInfo="工业水压" @click="getText()">工业水压</p>
+          </router-link>
+        </div>
+        <div
+          :class="btnInfo == '工业液位' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+        >
+          <router-link :to="{ name: 'IndustrialLiquidLevel' }">
+            <p textInfo="工业液位" @click="getText()">工业液位</p>
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="title2"></div>
@@ -277,6 +291,16 @@ export default {
         this.pagetype = "12";
         this.DeviceProjectNewFun("3");
         break;
+      case "/FireInternetOfThings/IndustrialWaterPressure":
+        this.btnInfo = "工业水压";
+        this.pagetype = "42";
+        this.DeviceProjectNewFun("42");
+        break;
+      case "/FireInternetOfThings/IndustrialLiquidLevel":
+        this.btnInfo = "工业液位";
+        this.pagetype = "43";
+        this.DeviceProjectNewFun("43");
+        break;
     }
 
     this.init();
@@ -350,6 +374,16 @@ export default {
           this.DeviceProjectNewFun("3");
           // this.mass.setMap(null);
           this.pagetype = "2";
+          break;
+        case "工业水压":
+          this.DeviceProjectNewFun("42");
+          // this.mass.setMap(null);
+          this.pagetype = "42";
+          break;
+        case "工业液位":
+          this.DeviceProjectNewFun("43");
+          // this.mass.setMap(null);
+          this.pagetype = "43";
           break;
       }
     },
