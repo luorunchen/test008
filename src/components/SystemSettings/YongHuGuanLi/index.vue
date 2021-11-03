@@ -64,12 +64,30 @@
     <el-dialog title="新增" :visible.sync="dialogVisible" width="50%">
       <template>
         <el-form label-width="200px" class="demo-ruleForm" :inline="true">
-          <el-form-item label="账号(必填)">
-            <el-input v-model="addPrope.username"></el-input>
+          <el-form-item label="账号(必填)" label-width="200px">
+            <el-input
+              v-model="addPrope.username"
+              placeholder="请使用手机号码注册"
+            ></el-input>
           </el-form-item>
 
+          <el-form-item label="账号短信验证码">
+            <el-form class="demo-ruleForm" :inline="true">
+              <el-form-item
+                ><el-input size="mini" v-model="addPrope.code"
+              /></el-form-item>
+              <el-form-item>
+                <el-button
+                  size="mini"
+                  @click="getMessage"
+                  :disabled="disabled"
+                  >{{ VerificationCode }}</el-button
+                ></el-form-item
+              >
+            </el-form>
+          </el-form-item>
           <el-form-item label="密码(必填)">
-            <el-input v-model="addPrope.password"></el-input>
+            <el-input v-model="addPrope.password" type="password"></el-input>
           </el-form-item>
 
           <el-form-item label="手机号码">
@@ -88,6 +106,9 @@
           <el-form-item label="固定电话">
             <el-input v-model="addPrope.gudingphone"></el-input>
           </el-form-item>
+          <el-form-item label="邮箱" prop="region">
+            <el-input v-model="addPrope.mobile"></el-input>
+          </el-form-item>
           <el-form-item label="选择角色">
             <el-select v-model="addPrope.type" placeholder="请选择">
               <el-option
@@ -100,9 +121,6 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="邮箱" prop="region">
-            <el-input v-model="addPrope.mobile"></el-input>
-          </el-form-item>
           <el-form-item label="下级单位可选择使用角色" prop="type_down">
             <el-select v-model="addPrope.type_down" placeholder="请选择">
               <el-option
@@ -198,11 +216,14 @@ import {
   getPowerOther,
   updateUser,
   addUserRole,
+  getMessageChec,
 } from "@/api/index.js";
 export default {
   props: ["size", "current"],
   data() {
     return {
+      disabled: false,
+      VerificationCode: "获取验证码",
       formInline: {
         name: "",
         user: "",
@@ -231,6 +252,7 @@ export default {
         danwei: "",
         type_down: "",
         mobile: "",
+        code: "",
       },
       powerList: [],
       dialogVisible_bianji: false,
@@ -238,7 +260,24 @@ export default {
       gridSource_list: [],
     };
   },
+  watch: {
+    VerificationCode(val) {
+      if (val == 0) {
+        clearInterval(this.begin);
+        this.disabled = false;
+        this.VerificationCode = "获取验证码";
+      }
+    },
+  },
   methods: {
+    getMessage() {
+      let num = 300;
+      this.disabled = true;
+      this.begin = setInterval(() => {
+        this.VerificationCode = --num;
+      }, 1000);
+      getMessageChec(this.addPrope.username).then((res) => {});
+    },
     addNew() {
       if (
         this.utils.powerId == 1000 ||
@@ -298,7 +337,8 @@ export default {
         this.addPrope.mobile,
         role,
         this.addPrope.type,
-        this.addPrope.type_down
+        this.addPrope.type_down,
+        this.addPrope.code
       ).then(
         (res) => {
           if (res.data.list[0].status == true) {

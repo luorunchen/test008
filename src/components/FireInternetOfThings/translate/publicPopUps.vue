@@ -2693,6 +2693,7 @@
                 >
               </h5>
               <h5 v-else>报警时间:无</h5>
+              <h5>探头地址:{{ item.address }}</h5>
             </div>
 
             <div
@@ -2779,6 +2780,7 @@
                   {{ item.devNo }}探头报警时间:
                   {{ item.sen_date }}
                 </li>
+                <li>探头地址:{{ item.address }}</li>
               </ul>
             </div>
           </div>
@@ -2935,6 +2937,41 @@
     >
       <el-row :gutter="20">
         <el-col :span="6">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-button
+                type="primary"
+                style="width: 100%"
+                @click="devState('1')"
+                >远程消音</el-button
+              >
+            </el-col>
+            <el-col :span="12">
+              <el-button
+                type="primary"
+                style="width: 100%; margin-bottom: 10px"
+                @click="devState('2')"
+                >远程复位</el-button
+              >
+            </el-col>
+            <el-col :span="12">
+              <el-button
+                type="primary"
+                style="width: 100%"
+                @click="devState('3')"
+                >正常模式</el-button
+              >
+            </el-col>
+            <el-col :span="12">
+              <el-button
+                type="primary"
+                style="width: 100%"
+                @click="devState('4')"
+                >防误报模式</el-button
+              >
+            </el-col>
+          </el-row>
+
           <div class="SmartIndependentSmoke">
             <div class="two">
               <p class="titleP">填写处置情况</p>
@@ -3125,6 +3162,8 @@ import {
   getNFCInspectionByDevId,
   SetParameterApi,
   getGasInfo,
+  closeVoice,
+  setDepoly,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
@@ -3232,6 +3271,96 @@ export default {
   },
 
   methods: {
+    devState(state) {
+      switch (state) {
+        case "1":
+          closeVoice(
+            this.utils.userName,
+            this.ElecDataList_noIndexOf.DevData[0].productNumber,
+            1,
+            ""
+          ).then((res) => {
+            if (res.data.code == 200) {
+              this.$message({
+                showClose: true,
+                message: "请求成功",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: "这是一条消息提示",
+                type: "error",
+              });
+            }
+          });
+          break;
+        case "2":
+          closeVoice(
+            this.utils.userName,
+            this.ElecDataList_noIndexOf.DevData[0].productNumber,
+            2,
+            ""
+          ).then((res) => {
+            if (res.data.code == 200) {
+              this.$message({
+                showClose: true,
+                message: "请求成功",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: "这是一条消息提示",
+                type: "error",
+              });
+            }
+          });
+          break;
+        case "3":
+          setDepoly(
+            this.utils.userName,
+            1,
+            this.ElecDataList_noIndexOf.DevData[0].productNumber
+          ).then((res) => {
+            if (res.data.code == 200) {
+              this.$message({
+                showClose: true,
+                message: "请求成功",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: "这是一条消息提示",
+                type: "error",
+              });
+            }
+          });
+          break;
+        case "4":
+          setDepoly(
+            this.utils.userName,
+            0,
+            this.ElecDataList_noIndexOf.DevData[0].productNumber
+          ).then((res) => {
+            if (res.data.code == 200) {
+              this.$message({
+                showClose: true,
+                message: "请求成功",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: "这是一条消息提示",
+                type: "error",
+              });
+            }
+          });
+          break;
+      }
+    },
     handleClose(done) {
       done();
       if (
@@ -3747,7 +3876,15 @@ export default {
         one_echart_left.setOption({
           xAxis: {
             type: "category",
-            data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            data: [
+              "2021-10-4",
+              "2021-10-5",
+              "2021-10-6",
+              "2021-10-7",
+              "2021-10-8",
+              "2021-10-9",
+              "2021-10-10",
+            ],
             axisLabel: {
               show: true,
               textStyle: {
@@ -3781,7 +3918,7 @@ export default {
           },
           series: [
             {
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
+              data: [40, 36, 45, 35, 42, 41, 39],
               type: "line",
               smooth: true,
               itemStyle: {

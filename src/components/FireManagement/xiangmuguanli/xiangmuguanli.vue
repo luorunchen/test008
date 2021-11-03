@@ -563,6 +563,14 @@ export default {
           value: "工业液位",
           label: "43",
         },
+        {
+          value: "智慧用电安全卫士",
+          label: "44",
+        },
+        {
+          value: "智慧用电断路器",
+          label: "47",
+        },
       ],
       newType: "",
     };

@@ -624,12 +624,12 @@ export function updateUser(user_name, realName, address, phone, company_phone, c
   })
 }
 //添加用户
-export function addUserRole(user_name, password, realName, phone, address, company_phone, company, mobile, role, power, powerOther) {
+export function addUserRole(user_name, password, realName, phone, address, company_phone, company, mobile, role, power, powerOther, code) {
   return service({
     url: `admin/device/addUserRole.action`,
     method: 'GET',
     params: {
-      user_name, password, realName, address, phone, company_phone, company, mobile, role, power, powerOther
+      user_name, password, realName, address, phone, company_phone, company, mobile, role, power, powerOther, code
     }
   })
 }
@@ -860,5 +860,31 @@ export function getvideoBydevno(devno) {
     }
   })
 }
+export function getMessageChec(username) {
+  return service({
+    url: `/admin/device/getMessageCheck.action`,
+    method: 'GET',
+    params: {
+      username
+    }
+  })
+}
 
-
+export function closeVoice(username, imei, style, time) {
+  return service({
+    url: `/WebProject/closeVoice.action`,
+    method: 'GET',
+    params: {
+      username, imei, style, time
+    }
+  })
+}
+export function setDepoly(username, deploy, imei) {
+  return service({
+    url: `/WebProject/setDepoly.action`,
+    method: 'GET',
+    params: {
+      username, deploy, imei
+    }
+  })
+}
