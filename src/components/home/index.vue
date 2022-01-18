@@ -290,7 +290,7 @@ import PublicPopUps from "../FireInternetOfThings/translate/publicPopUps";
 export default {
   data() {
     return {
-      pagetype: 6,
+      pagetype: "99",
       fullscreenLoading: false,
       pageSize: 1,
       AlarmInfo: "",
@@ -370,6 +370,15 @@ export default {
       // console.log(event.target.data, 5);
       console.log(event.target.attributes.type.value, 4);
       console.log(event.target.attributes.imei.value, 4);
+      // this.pagetype = type;
+      switch (type) {
+        case "45":
+          this.pagetype = 6;
+          break;
+        case "2":
+          this.pagetype = 6;
+          break;
+      }
       // console.log(this.$refs.itemInfo.attr('data-id'));
       this.alarmInfoClick(devID, imei, type);
     },
@@ -458,7 +467,7 @@ export default {
       const region = sessionStorage.getItem("region");
       DeviceProjectNew(
         this.utils.userName,
-        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,30,40,42,43,44,45",
         region
       ).then((res) => {
         if (res.data.length <= 0) {
@@ -602,7 +611,7 @@ export default {
         document.querySelector(".threeEchart")
       );
 
-      check_device_type().then((res) => {
+      check_device_type(this.utils.userName).then((res) => {
         let arr = [];
 
         const data2 = res.data.list[0].values.split(",");
@@ -612,6 +621,11 @@ export default {
           const data2 = res.data.list[0].values.split(",");
           arr.push({ name: data[i], value: data2[i] });
         }
+
+        arr = arr.filter((item, index) => {
+          // console.log(item.value, 2);
+          return item.value * 1 > 0;
+        });
         myChart_three.setOption({
           tooltip: {
             trigger: "item",

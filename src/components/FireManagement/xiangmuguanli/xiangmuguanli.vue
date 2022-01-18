@@ -354,9 +354,9 @@
           <el-select v-model="shebeiListValue" placeholder="请选择">
             <el-option
               v-for="item in shebeiList"
-              :key="item.value"
-              :label="item.value"
-              :value="item.label"
+              :key="item.dsid"
+              :label="item.dSName"
+              :value="item.dsid"
             >
             </el-option>
           </el-select>
@@ -430,6 +430,7 @@
 
 <script>
 import {
+  getDsid,
   getAllProjecForState,
   getLegalFireMan,
   addLegalFireMan,
@@ -1255,6 +1256,11 @@ export default {
         this.mapFun();
         this.addPid = pid;
         this.mapInfo = {};
+
+        getDsid(this.utils.userName).then((res) => {
+          this.shebeiList = res.data.data;
+          // this.shebeiList.unshift({ disd: "", dSName: "所有" });
+        });
       } else {
         return this.$message({
           showClose: true,

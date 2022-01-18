@@ -83,9 +83,9 @@
         </el-form>
         <template>
           <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="date" label="序号"> </el-table-column>
-            <el-table-column prop="name" label="运行情况"> </el-table-column>
-            <el-table-column prop="address" label="服务开启时间">
+            <el-table-column type="index" width="50"> </el-table-column>
+            <el-table-column prop="mess" label="运行情况"> </el-table-column>
+            <el-table-column prop="status" label="服务开启时间">
             </el-table-column>
           </el-table>
         </template>
@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import { getSyslog } from "@/api/index.js";
 import YongHuGuanLi from "../SystemSettings/YongHuGuanLi";
 import QuanXianGuanLi from "../SystemSettings/QuanXianGuanLi";
 import ZaiXianQingKuang from "../SystemSettings/ZaiXianQingKuang";
@@ -143,6 +144,11 @@ export default {
     total(data) {
       console.log(data);
       this.totals = data;
+    },
+    getSyslogFun() {
+      getSyslog().then((res) => {
+        this.tableData = res.data;
+      });
     },
     // gridSource(data) {
     //   console.log(data, 46456);
@@ -181,6 +187,7 @@ export default {
     } else if (window.name != "") {
       this.btnInfo = window.name;
     }
+    this.getSyslogFun();
   },
   destroyed() {
     window.name = "";

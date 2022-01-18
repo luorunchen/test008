@@ -69,6 +69,13 @@
           </router-link>
         </div>
         <div
+          :class="btnInfo == '红外线烟感' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+        >
+          <router-link :to="{ name: 'InfraredSmoke' }">
+            <p textInfo="红外线烟感" @click="getText()">红外线烟感</p>
+          </router-link>
+        </div>
+        <div
           :class="btnInfo == '燃气探测器' ? 'infoBtn infoBtnClick' : 'infoBtn'"
         >
           <router-link :to="{ name: 'GasDetector' }">
@@ -128,6 +135,20 @@
             <p textInfo="工业液位" @click="getText()">工业液位</p>
           </router-link>
         </div>
+        <div
+          :class="btnInfo == '智能重合闸' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+        >
+          <router-link :to="{ name: 'IntelligentReclosing' }">
+            <p textInfo="智能重合闸" @click="getText()">智能重合闸</p>
+          </router-link>
+        </div>
+        <!-- <div
+          :class="btnInfo == '消防主机' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+        >
+          <router-link :to="{ name: 'IntelligentReclosing' }">
+            <p textInfo="消防主机" @click="getText()">消防主机</p>
+          </router-link>
+        </div> -->
       </div>
     </div>
     <div class="title2"></div>
@@ -301,6 +322,21 @@ export default {
         this.pagetype = "43";
         this.DeviceProjectNewFun("43");
         break;
+      case "/FireInternetOfThings/IntelligentReclosing":
+        this.btnInfo = "智能重合闸";
+        this.pagetype = "22,23,25,26";
+        this.DeviceProjectNewFun("22,23,25,26");
+        break;
+      case "/FireInternetOfThings/InfraredSmoke":
+        this.btnInfo = "红外线烟感";
+        this.pagetype = "45";
+        this.DeviceProjectNewFun("45");
+        break;
+      case "/FireInternetOfThings/InfraredSmoke":
+        this.btnInfo = "消防主机";
+        this.pagetype = "46";
+        this.DeviceProjectNewFun("46");
+        break;
     }
 
     this.init();
@@ -384,6 +420,16 @@ export default {
           this.DeviceProjectNewFun("43");
           // this.mass.setMap(null);
           this.pagetype = "43";
+          break;
+        case "智能重合闸":
+          this.DeviceProjectNewFun("22,23,25,26");
+          // this.mass.setMap(null);
+          this.pagetype = "22,23,25,26";
+          break;
+        case "红外线烟感":
+          this.DeviceProjectNewFun("45");
+          // this.mass.setMap(null);
+          this.pagetype = "45";
           break;
       }
     },

@@ -32,7 +32,8 @@
         </span> -->
       </el-dialog>
     </div>
-    <PublicPopUps ref="publicPopUps" />
+    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
+    <IntelligentReclosing ref="intelligentReclosing" :pagetype="pagetype" />
     <!-- <p @click="www">12321</p> -->
     <router-view></router-view>
   </div>
@@ -41,18 +42,21 @@
 <script>
 import Home from "@/components/FireInternetOfThings";
 import PublicPopUps from "@/components/FireInternetOfThings/translate/publicPopUps";
+import IntelligentReclosing from "@/components/FireInternetOfThings/translate/intelligentReclosing";
 import { getvideoBydevno } from "@/api/index.js";
 export default {
   data() {
     return {
       dialogVisible: false,
       username: "",
-      arlme: { name: "", type: "", address: "", imei: "" },
+      arlme: { name: "", type: "", address: "", imei: "", pid: "25" },
+      pagetype: "",
     };
   },
   components: {
     Home,
     PublicPopUps,
+    IntelligentReclosing,
   },
   watch: {
     username(val) {
@@ -92,11 +96,21 @@ export default {
       });
     },
     handle() {
-      this.$refs.publicPopUps.openTypeFun(
-        this.arlme.did,
-        this.arlme.imei,
-        this.arlme.pid
-      );
+      // console.log(this.arlme.pid == (23 || 22 || "25" || 26), 666);
+      if (
+        this.arlme.pid == 23 ||
+        this.arlme.pid == 22 ||
+        this.arlme.pid == 25 ||
+        this.arlme.pid == 26
+      ) {
+        this.$refs.intelligentReclosing.see("370475", "0460049685308384");
+      } else {
+        this.$refs.publicPopUps.openTypeFun(
+          this.arlme.did,
+          this.arlme.imei,
+          this.arlme.pid
+        );
+      }
     },
     handleClose(done) {
       if (this.listData == "开") {
@@ -108,7 +122,7 @@ export default {
     goEasyFun() {
       let goEasy = GoEasy.getInstance({
         host: "hangzhou.goeasy.io", //应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
-        appkey: "BC-e7642099b1ac4eedbabd867f4eff1330", //替换为您的应用appkey
+        appkey: "BC-aebaac37879b427184e50cf002f8f531", //替换为您的应用appkey
       });
 
       goEasy.connect({
@@ -145,6 +159,15 @@ export default {
           _that.arlme.pid = arr[5];
           _that.arlme.did = arr[1];
           _that.dialogVisible = true;
+
+          switch (_that.arlme.pid) {
+            case "45":
+              _that.pagetype = 6;
+              break;
+            case "2":
+              _that.pagetype = 6;
+              break;
+          }
         },
         onSuccess: function (message) {
           console.log("Channel订阅成功。");
@@ -162,9 +185,9 @@ export default {
     },
   },
   mounted() {
-    // setInterval(() => {
-    //   this.dialogVisible = true;
-    // }, 5000);
+    setInterval(() => {
+      this.dialogVisible = true;
+    }, 5000);
     this.goEasyFun();
   },
   updated() {

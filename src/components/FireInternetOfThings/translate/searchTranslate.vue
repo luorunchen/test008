@@ -72,13 +72,24 @@
         </template>
       </div>
     </div>
-    <PublicPopUps ref="publicPopUps" :pagetype="pagetype" :popUps="yes" />
+    <div v-if="this.$route.name == 'IntelligentReclosing'">
+      <IntelligentReclosing
+        ref="publicPopUps"
+        :pagetype="pagetype"
+        :popUps="yes"
+      />
+    </div>
+    <div v-else>
+      <PublicPopUps ref="publicPopUps" :pagetype="pagetype" :popUps="yes" />
+    </div>
+
     <!-- 搜索内容弹窗 -->
   </div>
 </template>
 
 <script>
 import PublicPopUps from "../translate/publicPopUps.vue";
+import IntelligentReclosing from "../translate/intelligentReclosing.vue";
 import { selectDeviceByNumber } from "@/api/index.js";
 export default {
   props: ["SElec_DetailElecDevice_List", "pagetype"],
@@ -154,6 +165,7 @@ export default {
   },
   components: {
     PublicPopUps,
+    IntelligentReclosing,
   },
   watch: {
     SElec_DetailElecDevice_List(val) {

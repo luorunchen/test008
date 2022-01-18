@@ -17,6 +17,8 @@
         this.$route.path === '/FireInternetOfThings/FireExtinguisher' ||
         this.$route.path === '/FireInternetOfThings/PowerDetection' ||
         this.$route.path === '/FireInternetOfThings/IndustrialWaterPressure' ||
+        this.$route.path === '/FireInternetOfThings/IntelligentReclosing' ||
+        this.$route.path === '/FireInternetOfThings/InfraredSmoke' ||
         this.$route.path === '/FireInternetOfThings/IndustrialLiquidLevel'
       "
     >
@@ -701,6 +703,14 @@ export default {
           this.btnInfo = "设备定位全景图";
           type = "3";
           break;
+        case "/FireInternetOfThings/IntelligentReclosing":
+          this.btnInfo = "智能重合闸";
+          type = "22,23,25,26";
+          break;
+        case "/FireInternetOfThings/InfraredSmoke":
+          this.btnInfo = "红外线烟感";
+          type = "45";
+          break;
       }
       getDeviceStatus(
         this.utils.userName,
@@ -789,6 +799,14 @@ export default {
         case "/FireInternetOfThings/IndustrialLiquidLevel":
           this.btnInfo = "工业液位";
           type = "43";
+          break;
+        case "/FireInternetOfThings/IntelligentReclosing":
+          this.btnInfo = "智能重合闸";
+          type = "22,23,25,26";
+          break;
+        case "/FireInternetOfThings/InfraredSmoke":
+          this.btnInfo = "红外线烟感";
+          type = "45";
           break;
       }
       const region = sessionStorage.getItem("region");

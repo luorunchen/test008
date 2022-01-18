@@ -1,4 +1,4 @@
-import { service, service_ycy } from '../utils/request.js'
+import { service } from '../utils/request.js'
 
 //登录接口
 export function login(username, password) {
@@ -59,12 +59,12 @@ export function push_DeviceData(username, time_zone) {
   })
 }
 //首页设备类型接口
-export function check_device_type(username) {
+export function check_device_type(user_name) {
   return service({
     url: `/check_device_type.action`,
     method: 'GET',
     params: {
-      username,
+      user_name,
 
     }
   })
@@ -298,33 +298,42 @@ export function putMessToDevice(imei, content) {
   })
 }
 //接入设备->报警=>设备设置(远程断电/消音)接口
-export function resetclose(imei, states) {
+export function resetclose(username,
+  imei,
+  states) {
   return service({
     url: `/resetclose.action`,
     method: 'GET',
     params: {
+      username,
       imei,
       states
     }
   })
 }
 //接入设备->报警=>设备设置(远程复位)接口
-export function resetclosefuwei(imei, states) {
+export function resetclosefuwei(username,
+  imei,
+  states) {
   return service({
     url: `/resetclose.action`,
     method: 'GET',
     params: {
+      username,
       imei,
       states
     }
   })
 }
 //接入设备->报警=>设备设置(远程开/关机)接口
-export function putMessToDeviceOn(imei, content) {
+export function putMessToDeviceOn(username,
+  imei,
+  content) {
   return service({
     url: `/admin/project/putMessToDevice.action`,
     method: 'GET',
     params: {
+      username,
       imei,
       content
     }
@@ -697,12 +706,12 @@ export function RegisterOnline(my_username) {
   })
 }
 //系统日志
-export function getSyslog(my_username) {
+export function getSyslog() {
   return service({
     url: `/WebProject/getSyslog`,
     method: 'GET',
     params: {
-      my_username
+
     }
   })
 }
@@ -888,3 +897,129 @@ export function setDepoly(username, deploy, imei) {
     }
   })
 }
+export function getDsid(username) {
+  return service({
+    url: `WebProject/getDsid`,
+    method: 'GET',
+    params: {
+      username
+    }
+  })
+}
+// export function getSyslog(username) {
+//   return service({
+//     url: `/WebProject/getSyslog`,
+//     method: 'GET',
+//     params: {
+//       username
+//     }
+//   })
+// }
+export function statisticsAlarm(username, startTime, endTime, productNumber, responsible, Dsid, typeName, type, pageNumber, pageSize, distinct) {
+  return service({
+    url: `/statisticsAlarm`,
+    method: 'GET',
+    params: {
+      username, startTime, endTime, productNumber, responsible, Dsid, typeName, type, pageNumber, pageSize, distinct
+    }
+  })
+}
+// 三项设备
+export function SetParameterApi_three(devSignature, parNine, parTen, parEleven,
+  parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen) {
+  return service({
+    url: `/SetParameterApi.action`,
+    method: 'GET',
+    params: {
+      devSignature, parNine, parTen, parEleven,
+      parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen
+    }
+  })
+}
+//推送方式回显
+export function getDevicePower(username, device) {
+  return service({
+    url: `/getDevicePower.action`,
+    method: 'GET',
+    params: {
+      username, device
+    }
+  })
+}
+//推送方式回显
+export function getDevicePush(username, device) {
+  return service({
+    url: `/WebProject/getDevicePush.action`,
+    method: 'GET',
+    params: {
+      username, device
+    }
+  })
+}
+//功率因素
+export function getNonphasekw(imei) {
+  return service({
+    url: `/getReclosing.action`,
+    method: 'GET',
+    params: {
+      imei
+    }
+  })
+}
+//获取设备状态
+export function getParaState(username, imei) {
+  return service({
+    url: `/WebProject/getParaState.action`,
+    method: 'GET',
+    params: {
+      username, imei
+    }
+  })
+}
+export function upSwitch(imei, state, content) {
+  return service({
+    url: `/upSwitch.action`,
+    method: 'GET',
+    params: {
+      imei, state, content
+    }
+  })
+}
+export function setTime(username, productNumbers, startTime, endTime) {
+  return service({
+    url: `/WebProject/setTime.action`,
+    method: 'GET',
+    params: {
+      username, productNumbers, startTime, endTime
+    }
+  })
+}
+export function getHongWaiYG(username) {
+  return service({
+    url: `/WebProject/getHongWaiYG.action`,
+    method: 'GET',
+    params: {
+      username
+    }
+  })
+}
+export function getHistoryPress_value(imei) {
+  return service({
+    url: `/admin/device/getHistoryPress_value.action`,
+    method: 'GET',
+    params: {
+      imei
+    }
+  })
+}
+export function getDeviceState(username, online, alarmType, productNumber, device_name, dSid, pageNumber, pageSize, type, startTime, endTime, expiration) {
+  return service({
+    url: `/getDeviceOnline`,
+    method: 'GET',
+    params: {
+      username, online, alarmType, productNumber, device_name, dSid, pageNumber, pageSize, type, startTime, endTime, expiration
+    }
+  })
+}
+// username,online,alarmType,productNumber,device_name,dSid,pageNumber,pageSize,
+// startTime,endTime,expiration

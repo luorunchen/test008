@@ -1138,7 +1138,7 @@ export default {
     width: 100%;
   }
   /deep/.el-card__body {
-    /deep/.el-button {
+    .el-button {
       width: 100%;
     }
   }

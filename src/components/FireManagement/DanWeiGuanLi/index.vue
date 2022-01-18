@@ -272,7 +272,7 @@ export default {
   }
   .block {
     position: absolute;
-    bottom: 30px;
+    bottom: 50px;
     right: 10px;
   }
 }

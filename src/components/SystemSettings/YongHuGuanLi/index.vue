@@ -71,7 +71,7 @@
             ></el-input>
           </el-form-item>
 
-          <el-form-item label="账号短信验证码">
+          <!-- <el-form-item label="账号短信验证码">
             <el-form class="demo-ruleForm" :inline="true">
               <el-form-item
                 ><el-input size="mini" v-model="addPrope.code"
@@ -85,7 +85,7 @@
                 ></el-form-item
               >
             </el-form>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="密码(必填)">
             <el-input v-model="addPrope.password" type="password"></el-input>
           </el-form-item>

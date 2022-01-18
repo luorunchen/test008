@@ -123,6 +123,18 @@ const routes = [
         name: 'IndustrialLiquidLevel',
         component: () => import('@/components/FireInternetOfThings/gongYeYeWei'),
       },
+      // 智能重合闸
+      {
+        path: 'IntelligentReclosing',
+        name: 'IntelligentReclosing',
+        component: () => import('@/components/FireInternetOfThings/zhinengchonghezha'),
+      },
+      // 红外线烟感
+      {
+        path: 'InfraredSmoke',
+        name: 'InfraredSmoke',
+        component: () => import('@/components/FireInternetOfThings/InfraredSmoke'),
+      },
 
     ],
 

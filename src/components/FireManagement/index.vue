@@ -40,6 +40,20 @@
         >
           <p>单位管理</p>
         </div>
+        <div
+          :class="btnInfo == '报警统计' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          @click="getInfo('报警统计')"
+        >
+          <p>报警统计</p>
+        </div>
+        <div
+          :class="
+            btnInfo == '设备状态统计' ? 'infoBtn infoBtnClick' : 'infoBtn'
+          "
+          @click="getInfo('设备状态统计')"
+        >
+          <p>设备状态统计</p>
+        </div>
         <!-- <div
           :class="btnInfo == '系统管理' ? 'infoBtn infoBtnClick' : 'infoBtn'"
           @click="getInfo('系统管理')"
@@ -120,6 +134,12 @@
       <template v-if="this.btnInfo == '项目管理'">
         <XiangMuGuanLi />
       </template>
+      <template v-if="this.btnInfo == '报警统计'">
+        <BaoJingTongJi />
+      </template>
+      <template v-if="this.btnInfo == '设备状态统计'">
+        <SheBeiZhuangTai />
+      </template>
       <template v-if="this.btnInfo == '设备管理'">
         <SheBeiGuanLi />
       </template>
@@ -167,6 +187,8 @@ import YanWuHuoZaiYuJing from "./YanWuHuoZaiYuJing";
 import DuanLvYuJing from "./DuanLvYuJing";
 import LouDianYuJing from "./LouDianYuJing";
 import DianQiHuoZhai from "./DianQiHuoZhai";
+import BaoJingTongJi from "./BaoJingTongJi";
+import SheBeiZhuangTai from "./SheBeiZhuangTai";
 export default {
   data() {
     return {
@@ -207,6 +229,7 @@ export default {
     },
   },
   components: {
+    SheBeiZhuangTai,
     XiangMuGuanLi,
     SheBeiGuanLi,
     BaoJingGuZhang,
@@ -219,6 +242,7 @@ export default {
     DuanLvYuJing,
     LouDianYuJing,
     DianQiHuoZhai,
+    BaoJingTongJi,
   },
   mounted() {
     if (window.name == "") {

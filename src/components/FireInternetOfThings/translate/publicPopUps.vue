@@ -93,7 +93,7 @@
                     <el-row :gutter="10">
                       <el-col :span="6">
                         <img
-                          v-if="item.device_name == '消防水位'"
+                          v-if="item.dSid == 8"
                           src="../../../assets/images/水位@2x.png"
                           alt=""
                         />
@@ -115,10 +115,14 @@
                       </el-col>
                       <el-col :span="18">
                         <ul
-                          v-if="item.device_name == '消防水位'"
+                          v-if="item.dSid == '8'"
                           @click="
                             (FireWaterSystemDialog = true),
-                              shuiyaSee('shuiya', item.devId)
+                              shuiyaSee(
+                                'shuiya',
+                                item.devId,
+                                item.productNumber
+                              )
                           "
                         >
                           <li>{{ item.device_name }}</li>
@@ -141,7 +145,7 @@
                           v-else
                           @click="
                             (FireWaterSystemDialog = true),
-                              shuiyaSee('yeya', item.devId)
+                              shuiyaSee('yeya', item.devId, item.productNumber)
                           "
                         >
                           <!-- <li>消防水位</li> -->
@@ -455,7 +459,8 @@
                 v-if="
                   this.$route.name == 'SmartIndependentSmoke' ||
                   this.$route.name == 'IntelligentFireAlarm' ||
-                  this.$route.name == 'FireExtinguisher'
+                  this.$route.name == 'FireExtinguisher' ||
+                  this.$route.name == 'InfraredSmoke'
                 "
               >
                 <div class="scroll_wapper">
@@ -469,7 +474,8 @@
                         <!-- 烟感正常设备 -->
                         <img
                           v-if="
-                            $route.name == 'SmartIndependentSmoke' &&
+                            ($route.name == 'SmartIndependentSmoke' ||
+                              $route.name == 'InfraredSmoke') &&
                             item.typeName == '正常'
                           "
                           src="../../../assets/images/yangan_zhengchang.png"
@@ -619,7 +625,8 @@
                         <img
                           v-else-if="
                             item.typeName.indexOf('报警') > 0 &&
-                            $route.name == 'SmartIndependentSmoke'
+                            ($route.name == 'SmartIndependentSmoke' ||
+                              $route.name == 'InfraredSmoke')
                           "
                           src="../../../assets/images/yangan_baojing.png"
                           alt=""
@@ -629,7 +636,8 @@
                         <!-- 烟感离线设备 -->
                         <img
                           v-else-if="
-                            $route.name == 'SmartIndependentSmoke' &&
+                            ($route.name == 'SmartIndependentSmoke' ||
+                              $route.name == 'InfraredSmoke') &&
                             item.typeName == ''
                           "
                           src="../../../assets/images/yangan_lixian.png"
@@ -685,7 +693,17 @@
                     :key="index"
                   >
                     <!-- 烟感展示数据 -->
-                    <template v-if="item.dSid == 2">
+                    <template
+                      v-if="
+                        item.dSid == 2 ||
+                        item.dSid == 10 ||
+                        item.dSid == 18 ||
+                        item.dSid == 15 ||
+                        item.dSid == 16 ||
+                        item.dSid == 19 ||
+                        item.dSid == 45
+                      "
+                    >
                       <el-row :gutter="10">
                         <el-col :span="6">
                           <!-- 烟感正常设备 -->
@@ -696,6 +714,7 @@
                             width="84px"
                             height="84px"
                           />
+
                           <!-- 门磁正常设备 -->
                           <img
                             v-if="item.dSid == 10 && item.typeName == '正常'"
@@ -882,49 +901,233 @@
                     </template>
 
                     <!-- 电气火灾展示数据 -->
-                    <template v-if="item.dSid == 3 || item.dSid == 24">
-                      <div class="scroll_wapper">
-                        <el-row :gutter="10">
-                          <el-col :span="6">
+                    <template
+                      v-if="
+                        item.dSid == 3 || item.dSid == 24 || item.dSid == 12
+                      "
+                    >
+                      <el-row :gutter="10">
+                        <el-col :span="6">
+                          <img
+                            v-if="
+                              item.typeName != '正常' && item.typeName != ''
+                            "
+                            src="../../../assets/images/yongdianlian_baojing@2x.png"
+                            alt=""
+                          />
+                          <img
+                            v-else-if="item.typeName == '正常'"
+                            src="../../../assets/images/用电量@2x.png"
+                            alt=""
+                          />
+                          <img
+                            v-else-if="item.typeName == ''"
+                            src="../../../assets/images/yongdianlian_lixian.png"
+                            alt=""
+                          />
+                        </el-col>
+                        <el-col :span="18"
+                          ><ul>
+                            <li>在线监测:{{ item.productNumber }}</li>
+                            <li>更新时间:{{ item.heartbeatTime }}</li>
+                            <li>
+                              报警类型:
+                              <span
+                                style="color: #f830af"
+                                v-if="item.typeName != '正常'"
+                              >
+                                {{ item.typeName }}</span
+                              ><span style="color: #6dff64" v-else>
+                                {{ item.typeName }}</span
+                              >
+                            </li>
+
+                            <li>位置:{{ item.installLocation }}</li>
+                          </ul></el-col
+                        >
+                      </el-row>
+                    </template>
+
+                    <!-- 消防水展示数据 -->
+                    <template v-if="item.dSid == 4 || item.dSid == 8">
+                      <!-- 液压表 -->
+
+                      <el-row :gutter="10">
+                        <el-col :span="6">
+                          <img
+                            v-if="item.dSid == 8"
+                            src="../../../assets/images/水位@2x.png"
+                            alt=""
+                          />
+                          <img
+                            v-else-if="item.typeName == '正常'"
+                            src="../../../assets/images/shuiya_zhengchang.png"
+                            alt=""
+                          />
+                          <img
+                            v-else-if="item.typeName.indexOf('报警') > 0"
+                            src="../../../assets/images/shuiya_baojing.png"
+                            alt=""
+                          />
+                          <img
+                            v-else
+                            src="../../../assets/images/shuiya_lixian.png"
+                            alt=""
+                          />
+                        </el-col>
+                        <el-col :span="18">
+                          <ul
+                            v-if="item.dSid == '8'"
+                            @click="
+                              (FireWaterSystemDialog = true),
+                                shuiyaSee(
+                                  'shuiya',
+                                  item.devId,
+                                  item.productNumber
+                                )
+                            "
+                          >
+                            <li>{{ item.device_name }}</li>
+                            <li>设备号:{{ item.productNumber }}</li>
+                            <li>电池:V</li>
+                            <li>
+                              报警类型:
+                              <span
+                                style="color: #f830af"
+                                v-if="item.typeName != '正常'"
+                              >
+                                {{ item.typeName }}</span
+                              ><span style="color: #6dff64" v-else>
+                                {{ item.typeName }}</span
+                              >
+                            </li>
+                            <li>位置:{{ item.installLocation }}</li>
+                          </ul>
+                          <ul
+                            v-else
+                            @click="
+                              (FireWaterSystemDialog = true),
+                                shuiyaSee(
+                                  'yeya',
+                                  item.devId,
+                                  item.productNumber
+                                )
+                            "
+                          >
+                            <!-- <li>消防水位</li> -->
+                            <li>{{ item.device_name }}</li>
+                            <li>设备号:{{ item.productNumber }}</li>
+                            <li>电池:V</li>
+                            <li>
+                              报警类型:
+                              <span
+                                style="color: #f830af"
+                                v-if="item.typeName != '正常'"
+                              >
+                                {{ item.typeName }}</span
+                              ><span style="color: #6dff64" v-else>
+                                {{ item.typeName }}</span
+                              >
+                            </li>
+                            <li>位置:{{ item.installLocation }}</li>
+                          </ul></el-col
+                        >
+                      </el-row>
+                    </template>
+                    <!-- 火灾报警 -->
+                    <template
+                      v-if="item.dSid == 5 || item.dSid == 6 || item.dSid == 11"
+                    >
+                      <el-row :gutter="10">
+                        <el-col :span="6">
+                          <div v-if="$route.name == 'FireAlarmSystem'">
                             <img
-                              v-if="
-                                item.typeName != '正常' && item.typeName != ''
-                              "
-                              src="../../../assets/images/yongdianlian_baojing@2x.png"
+                              v-if="item.typeName == '门磁低电量报警'"
+                              src="../../../assets/images/menchi_baojing.png"
                               alt=""
                             />
                             <img
                               v-else-if="item.typeName == '正常'"
-                              src="../../../assets/images/用电量@2x.png"
+                              src="../../../assets/images/huo_zhangchang.png"
                               alt=""
                             />
                             <img
-                              v-else-if="item.typeName == ''"
-                              src="../../../assets/images/yongdianlian_lixian.png"
+                              v-else-if="item.typeName.indexOf('火警') > 0"
+                              src="../../../assets/images/huo_baojing.png"
                               alt=""
                             />
-                          </el-col>
-                          <el-col :span="18"
-                            ><ul>
-                              <li>在线监测:{{ item.productNumber }}</li>
-                              <li>更新时间:{{ item.heartbeatTime }}</li>
-                              <li>
-                                报警类型:
-                                <span
-                                  style="color: #f830af"
-                                  v-if="item.typeName != '正常'"
-                                >
-                                  {{ item.typeName }}</span
-                                ><span style="color: #6dff64" v-else>
-                                  {{ item.typeName }}</span
-                                >
-                              </li>
-
-                              <li>位置:{{ item.installLocation }}</li>
-                            </ul></el-col
-                          >
-                        </el-row>
-                      </div>
+                            <img
+                              v-else-if="item.typeName.indexOf('故障') > 0"
+                              src="../../../assets/images/huo_baojing.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName.indexOf('报警') > 0"
+                              src="../../../assets/images/huo_baojing.png"
+                              alt=""
+                            />
+                            <img
+                              v-else
+                              src="../../../assets/images/huo_lixian.png"
+                              alt=""
+                            />
+                          </div>
+                          <div v-else>
+                            <img
+                              v-if="item.typeName == '门磁低电量报警'"
+                              src="../../../assets/images/menchi_baojing.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName == '正常'"
+                              src="../../../assets/images/ranqi_zhengchang.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName.indexOf('火警') > 0"
+                              src="../../../assets/images/ranqi_baojing.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName.indexOf('故障') > 0"
+                              src="../../../assets/images/ranqi_baojing.png"
+                              alt=""
+                            />
+                            <img
+                              v-else-if="item.typeName.indexOf('低报') > 0"
+                              src="../../../assets/images/ranqi_baojing.png"
+                              alt=""
+                            />
+                            <!-- <img
+                            v-else-if="item.typeName.indexOf('可燃气体') > 0"
+                            src="../../../assets/images/ranqi_zhengchang.png"
+                            alt=""
+                          /> -->
+                            <img
+                              v-else
+                              src="../../../assets/images/ranqi_lixian.png"
+                              alt=""
+                            />
+                          </div>
+                        </el-col>
+                        <el-col :span="18">
+                          <ul>
+                            <li>设备号:{{ item.productNumber }}</li>
+                            <li>更新:{{ item.heartbeatTime }}</li>
+                            <li>
+                              报警类型:
+                              <span
+                                :class="
+                                  item.typeName == '正常' ? 'green' : 'red'
+                                "
+                              >
+                                {{ item.typeName }}</span
+                              >
+                            </li>
+                            <li>位置:{{ item.installLocation }}</li>
+                          </ul>
+                        </el-col>
+                      </el-row>
                     </template>
                   </div>
                 </div>
@@ -995,9 +1198,9 @@
                         >位于
                         <span style="color: #28d9ff">{{ item.areaMC }}</span
                         >详细位置
-                        <span style="color: #28d9ff">{{ item.address }}</span
-                        >单位类型为
-                        <span style="color: #28d9ff">其他</span>
+                        <span style="color: #28d9ff">{{ item.address }}</span>
+                        <!-- 单位类型为
+                        <span style="color: #28d9ff">其他</span> -->
                       </p>
                       <p>
                         单位消防安全负责人是<span style="color: #28d9ff">{{
@@ -1037,6 +1240,29 @@
                     </div>
                   </el-col>
                 </el-row>
+              </div>
+            </el-col>
+          </el-row>
+
+          <el-row
+            :gutter="20"
+            v-if="GetMapDataListImage.length > 0"
+            style="margin-top: 20px"
+          >
+            <!-- <el-col>{{ GetMapDataListName.image }}</el-col> -->
+            <el-col
+              :span="8"
+              v-for="(item, index) in GetMapDataListImage"
+              :key="index"
+            >
+              <!-- {{ item }},1 -->
+              <div>
+                <el-image
+                  style="width: 100%; height: 330px"
+                  :src="item"
+                  :preview-src-list="GetMapDataListImage"
+                >
+                </el-image>
               </div>
             </el-col>
           </el-row>
@@ -2168,11 +2394,26 @@
             </div>
             <div class="four_echarts" style="display: none">
               <p class="titleP">图片</p>
-              <div
-                class="echarts_wapper_four_search"
-                v-if="popUps != 'yes'"
-              ></div>
-              <div class="echarts_wapper_four_search_copy" v-else></div>
+              <div class="echarts_wapper_four_search">
+                <el-row :gutter="50">
+                  <!-- {{ item }} -->
+                  <el-col
+                    :span="8"
+                    v-for="(item, index) in ElecDataList_images"
+                    :key="index"
+                  >
+                    <div>
+                      <el-image
+                        style="width: 100%; height: 150px"
+                        :src="item"
+                        :preview-src-list="ElecDataList_images"
+                        :fit="fit"
+                      >
+                      </el-image>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
             </div>
           </template>
           <template v-else>
@@ -2202,11 +2443,26 @@
             </div>
             <div class="four_echarts">
               <p class="titleP">图片</p>
-              <div
-                class="echarts_wapper_four_search"
-                v-if="popUps != 'yes'"
-              ></div>
-              <div class="echarts_wapper_four_search_copy" v-else></div>
+              <div class="echarts_wapper_four_search">
+                <el-row :gutter="50">
+                  <!-- {{ item }} -->
+                  <el-col
+                    :span="8"
+                    v-for="(item, index) in ElecDataList_images"
+                    :key="index"
+                  >
+                    <div>
+                      <el-image
+                        style="width: 100%; height: 150px"
+                        :src="item"
+                        :preview-src-list="ElecDataList_images"
+                        :fit="fit"
+                      >
+                      </el-image>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
             </div>
           </template>
         </div>
@@ -2615,7 +2871,11 @@
       width="50%"
       :modal-append-to-body="false"
     >
-      <template v-if="this.$route.name == 'FireWaterSystem'">
+      <template
+        v-if="
+          this.$route.name == 'FireWaterSystem' || this.$route.name == 'home'
+        "
+      >
         <div class="FireWaterSystemDialogWapper">
           <p class="title">{{ msg }}</p>
           <p class="title">{{ time }}</p>
@@ -2643,25 +2903,79 @@
               ></el-col
             >
           </el-row>
-          <el-row type="flex" class="row-bg" justify="space-between">
-            <el-col :span="6">
-              <img
-                src="../../../assets/images/four.png"
-                height="100%"
-                width="100%"
-                alt=""
-              />
-            </el-col>
 
-            <el-col :span="6">
-              <img
-                src="../../../assets/images/battery4.png"
-                width="100%"
-                height="100%"
-                alt=""
-              />
-            </el-col>
-          </el-row>
+          <div
+            class="right_two"
+            v-for="(item, index) in liquidFilList.mess6"
+            :key="index"
+          >
+            <el-row>
+              <el-col :span="12" style="text-align: center">
+                <img
+                  v-if="item.rssi == 1"
+                  src="../../../assets/images/one.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else-if="item.rssi == 2"
+                  src="../../../assets/images/two.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else-if="item.rssi == 3"
+                  src="../../../assets/images/three.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else-if="item.rssi == 4"
+                  src="../../../assets/images/four.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else
+                  src="../../../assets/images/ling.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+              </el-col>
+              <el-col :span="12" style="text-align: center">
+                <img
+                  v-if="item.voltage == 1"
+                  src="../../../assets/images/battery1.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else-if="item.voltage == 2"
+                  src="../../../assets/images/battery2.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else-if="item.voltage == 3"
+                  src="../../../assets/images/battery3.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else-if="item.voltage == 4"
+                  src="../../../assets/images/battery4.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+                <img
+                  v-else
+                  src="../../../assets/images/battery0.png"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+              </el-col>
+            </el-row>
+          </div>
         </div>
       </template>
       <template v-else>
@@ -2724,7 +3038,10 @@
             <div class="one">
               <p>设备详情</p>
               <ul
-                v-if="this.$route.path != '/FireInternetOfThings/GasDetector'"
+                v-if="
+                  this.$route.path != '/FireInternetOfThings/GasDetector' &&
+                  this.$route.path != '/'
+                "
                 v-loading="FireAlarmSystem_loading"
               >
                 <li>
@@ -2764,7 +3081,10 @@
         <div
           class="two"
           style="width: 100%"
-          v-if="this.$route.path == '/FireInternetOfThings/GasDetector'"
+          v-if="
+            this.$route.path == '/FireInternetOfThings/GasDetector' &&
+            this.$route.path != '/'
+          "
         >
           <p>实时值</p>
           <div class="gasDetectorWapper">
@@ -2824,7 +3144,10 @@
             </el-form-item>
             <template>
               <el-table
-                v-if="this.$route.path != '/FireInternetOfThings/GasDetector'"
+                v-if="
+                  this.$route.path != '/FireInternetOfThings/GasDetector' &&
+                  this.$route.path != '/'
+                "
                 v-loading="FireAlarmSystem_loading"
                 height="300"
                 :data="ElecDataList_type_List.mess12"
@@ -2938,7 +3261,7 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <el-row :gutter="20">
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-button
                 type="primary"
                 style="width: 100%"
@@ -2961,13 +3284,13 @@
                 @click="devState('3')"
                 >正常模式</el-button
               >
-            </el-col>
-            <el-col :span="12">
+            </el-col> -->
+            <el-col :span="12" v-if="this.$route.name == 'InfraredSmoke'">
               <el-button
                 type="primary"
-                style="width: 100%"
-                @click="devState('4')"
-                >防误报模式</el-button
+                style="width: 100%；"
+                @click="infraredVisible = true"
+                >红外模式时间设置</el-button
               >
             </el-col>
           </el-row>
@@ -3129,14 +3452,61 @@
               </template>
             </el-form>
           </div>
+
+          <div class="lishibaojing" style="height: 200px">
+            <p class="titleP">图片</p>
+            <el-row :gutter="50">
+              <!-- {{ item }} -->
+              <el-col
+                :span="8"
+                v-for="(item, index) in ElecDataList_images"
+                :key="index"
+              >
+                <div>
+                  <el-image
+                    style="width: 100%; height: 150px"
+                    :src="item"
+                    :preview-src-list="ElecDataList_images"
+                    :fit="fit"
+                  >
+                  </el-image>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
         </el-col>
       </el-row>
+    </el-dialog>
+
+    <el-dialog
+      title="时间设置"
+      :visible.sync="infraredVisible"
+      width="20%"
+      :modal="false"
+      top="12%"
+    >
+      <el-time-picker
+        is-range
+        v-model="infraredTime"
+        range-separator="至"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+        placeholder="选择时间范围"
+        value-format="HH:mm"
+      >
+      </el-time-picker>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="infraredVisible = false">取 消</el-button>
+        <el-button type="primary" @click="infrared">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import {
+  getHistoryPress_value,
+  setTime,
   GetMapData,
   getDeviceByPid,
   ElecData,
@@ -3179,6 +3549,7 @@ export default {
         typeName: "",
         alarmFaultDate: "",
       },
+      infraredTime: "",
       getGasInfoWapper: [],
       SmokeState: {
         date: {
@@ -3190,6 +3561,7 @@ export default {
       },
       getNFCInspectionByDevIdList: [],
       FireAlarmSystem_loading: false,
+      infraredVisible: false,
       getBluebirdevent_List: [],
       caozuojilv: [],
       Historical_alarm_list: [],
@@ -3225,6 +3597,7 @@ export default {
         onLine: "",
         offLine: "",
       },
+      GetMapDataListImage: [],
       managementInput: "",
       //独立烟感
       SmartIndependentSmokeDialog: false,
@@ -3239,7 +3612,7 @@ export default {
         date2: "",
         date1: "",
       },
-
+      liquidFilList: [],
       innerVisible_lishi: false,
       checkList: [],
       activeName: "second",
@@ -3361,6 +3734,44 @@ export default {
           break;
       }
     },
+    //红外线模式
+    infrared() {
+      this.infraredVisible = false;
+      console.log(
+        this.ElecDataList_noIndexOf.DevData[0].productNumber,
+        this.infraredTime
+      );
+      setTime(
+        this.utils.userName,
+        this.ElecDataList_noIndexOf.DevData[0].productNumber,
+        this.infraredTime[0],
+        this.infraredTime[1]
+      ).then(
+        (res) => {
+          //
+          if (res.data.code == 200) {
+            this.$message({
+              showClose: true,
+              type: "success",
+              message: "设置成功",
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              type: "error",
+              message: "请稍后重试或联系管理员",
+            });
+          }
+        },
+        (rej) => {
+          this.$message({
+            showClose: true,
+            type: "error",
+            message: "请稍后重试或联系管理员",
+          });
+        }
+      );
+    },
     handleClose(done) {
       done();
       if (
@@ -3401,9 +3812,23 @@ export default {
         case "2":
           this.SmartIndependentSmokeSee(devID, imei);
           break;
+        //烟感
+        case "45":
+          this.SmartIndependentSmokeSee(devID, imei);
+          break;
         // 消防水
         case "4":
-          this.shuiyaSee("yeya", devID);
+          this.shuiyaSee("yeya", devID, imei);
+          break;
+        case "8":
+          this.shuiyaSee("shuiya", devID, imei);
+          break;
+        // 燃气
+        case "6":
+          this.FireAlarmSystem(devID, imei);
+          break;
+        case "11":
+          this.FireAlarmSystem(devID, imei);
           break;
         //电气火灾
         case "3":
@@ -3412,12 +3837,27 @@ export default {
         case "24":
           this.see(devID, imei);
           break;
+        case "12":
+          this.see(devID, imei);
+          break;
         case "10":
           this.SmartIndependentSmokeSee(devID, imei);
           break;
         case "5":
           this.FireAlarmSystem(devID, imei);
           break;
+        // case "25":
+        //   this.FireAlarmSystem(devID, imei);
+        //   break;
+        // case "26":
+        //   this.FireAlarmSystem(devID, imei);
+        //   break;
+        // case "22":
+        //   this.FireAlarmSystem(devID, imei);
+        //   break;
+        // case "23":
+        //   this.FireAlarmSystem(devID, imei);
+        //   break;
       }
       //独立烟感
       // this.SmartIndependentSmokeSee();
@@ -3675,10 +4115,56 @@ export default {
         ElecData_type(devId, 6).then((res) => {
           this.ElecDataList_noIndexOf = res.data;
           // this.ElecDataList = res.data;
+          //重置照片
+          // console.log(res, "---------------------------------");
+          this.ElecDataList_images = [];
+          // this.ElecDataList = res.data;
+
+          // console.log(res.data=='',9999);
+          //判断接口里面是否有数据
+          if (res.data != "") {
+            if (res.data.DevData.length > 0) {
+              if (res.data.DevData[0].image != "") {
+                const list = res.data.DevData[0].image.split(",");
+                list.forEach((Element) => {
+                  // Element =
+                  let a = "http://edog-online.com/ctx/devPic/" + Element;
+                  this.ElecDataList_images.push(a);
+                });
+              }
+            }
+            console.log(this.ElecDataList_images, "sssssssssssss");
+            this.ElecDataList_typeName = res.data.DevData[0].typeName;
+          } else {
+            return this.$message.error("请稍后重试或联系管理员");
+          }
         });
       } else {
         ElecData_type(devId, this.pagetype).then((res) => {
           this.ElecDataList_noIndexOf = res.data;
+          //重置照片
+          console.log(res, "---------------------------------");
+          this.ElecDataList_images = [];
+          // this.ElecDataList = res.data;
+
+          // console.log(res.data=='',9999);
+          //判断接口里面是否有数据
+          if (res.data != "") {
+            if (res.data.DevData.length > 0) {
+              if (res.data.DevData[0].image != "") {
+                const list = res.data.DevData[0].image.split(",");
+                list.forEach((Element) => {
+                  // Element =
+                  let a = "http://edog-online.com/ctx/devPic/" + Element;
+                  this.ElecDataList_images.push(a);
+                });
+              }
+            }
+            console.log(this.ElecDataList_images, "sssssssssssss");
+            this.ElecDataList_typeName = res.data.DevData[0].typeName;
+          } else {
+            return this.$message.error("请稍后重试或联系管理员");
+          }
           // this.ElecDataList = res.data;
         });
       }
@@ -3745,6 +4231,7 @@ export default {
     },
     // 水压表
     shuiyaSee(data, devId, productNumber) {
+      console.log(data, devId, productNumber);
       this.FireWaterSystemDialog = true;
       // this.seeInfo = data;
       let max;
@@ -3754,6 +4241,8 @@ export default {
         ElecData_type(devId, this.pagetype).then((res) => {
           this.msg = res.data.DevData[0].typeName;
           this.time = res.data.DevData[0].alarmFaultDate;
+
+          this.liquidFilList = res.data;
           this.$nextTick(() => {
             let shui_echart = this.$echarts.init(
               document.querySelector(".shuiya_echarts")
@@ -3790,28 +4279,37 @@ export default {
                         color: "auto",
                       },
                     },
-                    data: [{ value: res.data.DevData[0].latitude }],
+                    data: [{ value: res.data.mess6[0].Press_Value }],
                   },
                 ],
               });
             } else {
+              console.log(res.data.mess6[0].Press_Value, 8888);
               shui_echart.setOption({
                 series: [
                   {
                     type: "liquidFill",
                     radius: "200px",
-                    data: [res.data.DevData[0].latitude * 0.01 * 1],
+                    data: [res.data.mess6[0].Press_Value * 0.01 * 10],
                     label: {
                       normal: {
-                        color: "#fff",
+                        color: "#000",
                         // insideColor: "transparent",
                         textStyle: {
                           fontSize: 30,
                           fontWeight: "bold",
                         },
-                        formatter: `${res.data.DevData[0].latitude * 1}m`,
+                        formatter: `${res.data.mess6[0].Press_Value * 1}m`,
                       },
                     },
+                    // backgroundStyle: {
+                    //   borderWidth: 5, //内边框宽度
+                    //   borderColor: "yellow", //背景内边框
+                    //   color: "white", //背景颜色
+                    //   shadowColor: "red", //阴影
+                    //   shadowBlur: 10, //阴影模糊
+                    // },
+
                     color: [
                       {
                         type: "linear",
@@ -3836,9 +4334,15 @@ export default {
                       show: true,
                       borderDistance: 5,
                       itemStyle: {
-                        borderColor: "rgba(67,209,100,1)",
-                        borderWidth: 0,
+                        borderColor: "rgb(101,143,236)",
+                        // borderWidth: 0,
                       },
+                      // itemStyle: {
+                      //   borderWidth: 5,
+                      //   borderColor: "yellow",
+                      //   shadowBlur: 10,
+                      //   shadowColor: "red",
+                      // },
                     },
                   },
                 ],
@@ -3869,67 +4373,71 @@ export default {
           // console.log(this.getGasInfoWapper);
         });
       }
+      console.log(productNumber, 789789789);
       this.$nextTick(() => {
         let one_echart_left = this.$echarts.init(
           document.querySelector(".shuju_echarts_wapper")
         );
-        one_echart_left.setOption({
-          xAxis: {
-            type: "category",
-            data: [
-              "2021-10-4",
-              "2021-10-5",
-              "2021-10-6",
-              "2021-10-7",
-              "2021-10-8",
-              "2021-10-9",
-              "2021-10-10",
-            ],
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#000",
-              },
-            },
-          },
-          grid: {
-            left: "3%",
-            right: "4%",
-            bottom: "3%",
-            containLabel: true,
-          },
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "cross",
-              label: {
-                backgroundColor: "#6a7985",
-              },
-            },
-          },
-          yAxis: {
-            type: "value",
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#000",
-              },
-            },
-          },
-          series: [
-            {
-              data: [40, 36, 45, 35, 42, 41, 39],
-              type: "line",
-              smooth: true,
-              itemStyle: {
-                normal: {
-                  lineStyle: {
-                    color: "red",
+        let data = [];
+        let value = [];
+        getHistoryPress_value(productNumber).then((res) => {
+          console.log(res, 2222);
+          res.data.data.forEach((el, index) => {
+            data.push(el.create_time);
+            value.push(el.press_Value);
+
+            one_echart_left.setOption({
+              xAxis: {
+                type: "category",
+                data,
+                axisLabel: {
+                  show: true,
+                  textStyle: {
+                    color: "#000",
                   },
                 },
               },
-            },
-          ],
+              grid: {
+                left: "3%",
+                right: "4%",
+                bottom: "3%",
+                containLabel: true,
+              },
+              tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                  type: "cross",
+                  label: {
+                    backgroundColor: "#6a7985",
+                  },
+                },
+              },
+              yAxis: {
+                type: "value",
+                axisLabel: {
+                  show: true,
+                  textStyle: {
+                    color: "#000",
+                  },
+                  formatter: data == "yeya" ? "{value}kpa" : "{value}m",
+                },
+              },
+              series: [
+                {
+                  data: value,
+                  type: "line",
+                  smooth: true,
+                  itemStyle: {
+                    normal: {
+                      lineStyle: {
+                        color: "red",
+                      },
+                    },
+                  },
+                },
+              ],
+            });
+          });
         });
       });
     },
@@ -4080,6 +4588,20 @@ export default {
           // this.GetMapDataListName.offLine = this.GetMapDataList.Company[0].;
         } else {
           this.GetMapDataListName.name = this.GetMapDataList.Company[0].MC;
+          // this.GetMapDataListName.image = this.GetMapDataList.Company[0].image;
+          if (this.GetMapDataList.Company[0].image != "") {
+            this.GetMapDataListImage = [];
+            this.GetMapDataList.Company[0].image.split(",").forEach((item) => {
+              this.GetMapDataListImage.push(
+                `http://112.74.126.51/ctx/devPic/${item}`
+              );
+            });
+          } else {
+            this.GetMapDataListImage = [];
+            console.log(this.GetMapDataListImage.length, "qqqq");
+          }
+
+          // console.log(this.GetMapDataListName.image, "qweqewq");
           this.GetMapDataListName.callPolice = this.GetMapDataList.devMess[0];
           this.GetMapDataListName.onLine = this.GetMapDataList.devMess[1];
           this.GetMapDataListName.offLine = this.GetMapDataList.devMess[2];
@@ -4229,6 +4751,7 @@ export default {
         console.log(res, "---------------------------------");
         this.ElecDataList_images = [];
         this.ElecDataList = res.data;
+
         // console.log(res.data=='',9999);
         //判断接口里面是否有数据
         if (res.data != "") {
@@ -4242,6 +4765,7 @@ export default {
               });
             }
           }
+          console.log(this.ElecDataList_images, "sssssssssssss");
           this.ElecDataList_typeName = res.data.DevData[0].typeName;
         } else {
           return this.$message.error("请稍后重试或联系管理员");
@@ -4533,7 +5057,7 @@ export default {
                 xAxis: {
                   type: "category",
                   boundaryGap: false,
-                  data: name.reverse(),
+                  data: name,
                 },
                 yAxis: {
                   type: "value",
@@ -4543,25 +5067,25 @@ export default {
                     name: "A温度(℃)",
                     type: "line",
 
-                    data: wenduA.reverse(),
+                    data: wenduA,
                   },
                   {
                     name: "B温度(℃)",
                     type: "line",
 
-                    data: wenduB.reverse(),
+                    data: wenduB,
                   },
                   {
                     name: "C温度(℃)",
                     type: "line",
 
-                    data: wenduC.reverse(),
+                    data: wenduC,
                   },
                   {
                     name: "N温度(℃)",
                     type: "line",
 
-                    data: wenduN.reverse(),
+                    data: wenduN,
                   },
                 ],
               },
@@ -5832,7 +6356,7 @@ export default {
 //独立烟感样式
 .SmartIndependentSmoke {
   .two {
-    // margin-top: 20px;
+    margin-top: 20px;
     // width: 300px;
     height: 250px;
     box-shadow: 0px 0px 10px 0px rgba(3, 27, 29, 0.11);
