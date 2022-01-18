@@ -185,9 +185,9 @@ export default {
     },
   },
   mounted() {
-    setInterval(() => {
-      this.dialogVisible = true;
-    }, 5000);
+    // setInterval(() => {
+    //   this.dialogVisible = true;
+    // }, 5000);
     this.goEasyFun();
   },
   updated() {

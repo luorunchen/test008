@@ -539,6 +539,7 @@
                 v-for="(item, index) in getDeviceByDevIdList.mess5"
                 :key="index"
               >
+                <!-- 321321321{{ item }} -->
                 <!-- 漏电-剩余 -->
                 <template
                   v-if="
@@ -674,7 +675,7 @@
                 </template>
                 <!-- 温度-A,B,C,N -->
                 <template
-                  v-if="
+                  v-else-if="
                     item.info == '16' ||
                     item.info == '21' ||
                     item.info == '40' ||
@@ -832,7 +833,7 @@
                 </template>
                 <!-- A电流-B电流-C电流 -->
                 <template
-                  v-if="
+                  v-else-if="
                     item.info == '3' ||
                     item.info == '28' ||
                     item.info == '29' ||
@@ -980,7 +981,7 @@
                 </template>
                 <!-- 电压-A,B,C -->
                 <template
-                  v-if="
+                  v-else-if="
                     item.info == '5' ||
                     item.info == '8' ||
                     item.info == '11' ||
@@ -1133,7 +1134,7 @@
 
                 <!-- 门磁报警 -->
                 <template
-                  v-if="
+                  v-else-if="
                     item.type.indexOf('烟雾') != -1 ||
                     item.type.indexOf('门磁') != -1 ||
                     item.type.indexOf('红外') != -1 ||
@@ -1272,6 +1273,7 @@
             </template>
 
             <!-- 正常设备 -->
+
             <template
               v-else-if="
                 this.ElecDataList_typeName == '正常' &&
@@ -3651,6 +3653,9 @@ export default {
               //重新加载外部的展示数据
               ReadParameterApi(this.ElecDataList.DevData[0].productNumber).then(
                 (res) => {
+                  if (res.data == "") {
+                    return;
+                  }
                   // console.log(res, "ldjakjdla");
                   // this.getDeviceByDevIdList.row = res.data.row;
                   // console.log(this.getDeviceByDevIdList, 7899987978);

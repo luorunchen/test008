@@ -362,14 +362,14 @@ export function updateShutdown(devices, my_username) {
   })
 }
 //接入设备->报警=>设备设置(阀值设置)接口
-export function SetParameterApi(devSignature, parNine, parTen, parEleven,
-  parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen) {
+export function SetParameterApi(devSignature, parNine, parFourteen, parSeventeen, parTen, parThirteen, U_voltage, parEleven, parTwelve) {
   return service({
     url: `/SetParameterApi.action`,
     method: 'GET',
     params: {
-      devSignature, parNine, parTen, parEleven,
-      parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen
+      // devSignature, parNine, parTen, parEleven,
+      // parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen
+      devSignature, parNine, parFourteen, parSeventeen, parTen, parThirteen, U_voltage, parEleven, parTwelve
     }
   })
 }
@@ -933,6 +933,8 @@ export function SetParameterApi_three(devSignature, parNine, parTen, parEleven,
     params: {
       devSignature, parNine, parTen, parEleven,
       parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen
+
+
     }
   })
 }
