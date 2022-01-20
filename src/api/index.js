@@ -1023,5 +1023,23 @@ export function getDeviceState(username, online, alarmType, productNumber, devic
     }
   })
 }
+export function getHeartBea(productNumber) {
+  return service({
+    url: `/WebProject/getHeartBeat`,
+    method: 'GET',
+    params: {
+      productNumber
+    }
+  })
+}
+export function getYGTemp(productNumber) {
+  return service({
+    url: `/WebProject/getYGTemp`,
+    method: 'GET',
+    params: {
+      productNumber
+    }
+  })
+}
 // username,online,alarmType,productNumber,device_name,dSid,pageNumber,pageSize,
 // startTime,endTime,expiration

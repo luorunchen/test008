@@ -103,7 +103,7 @@ export default {
         this.arlme.pid == 25 ||
         this.arlme.pid == 26
       ) {
-        this.$refs.intelligentReclosing.see("370475", "0460049685308384");
+        this.$refs.intelligentReclosing.see(this.arlme.did, this.arlme.imei);
       } else {
         this.$refs.publicPopUps.openTypeFun(
           this.arlme.did,

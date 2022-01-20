@@ -414,9 +414,8 @@
             <ul v-for="(item, index) in ElecDataList.DevData" :key="index">
               <div
                 v-if="
-                  (ParaState.devstatus == 1 && ParaState.dSid == '26') ||
                   (ParaState.devstatus == 1 && ParaState.dSid == '25') ||
-                  (ParaState.start == 0 && ParaState.dSid == '22')
+                  (ParaState.start == 0 && ParaState.dSid == '26')
                 "
                 style="
                   position: absolute;
@@ -527,7 +526,7 @@
 
         <div class="shebeiEcharts">
           <!-- 单项设备 -->
-          <template v-if="ParaState.dSid == 25 || this.ParaState.dSid == 26">
+          <template v-if="ParaState.dSid == 25">
             <template
               v-if="
                 this.ElecDataList_typeName != '正常' &&
@@ -2351,10 +2350,31 @@
                 无功功率： {{ getNonphasekwList.nonphasekw || 0 }}W
               </el-col>
               <el-col :span="8">
-                功率因素： {{ getNonphasekwList.powerParam || 0 }}</el-col
+                功率因素： {{ getNonphasekwList.powerParam || 0 }}W</el-col
               >
               <el-col :span="8">
                 电量：{{ getNonphasekwList.phasepowerkw || 0 }}kW·h
+              </el-col>
+              <el-col :span="8">
+                漏电：{{ getNonphasekwList.electric_num || 0 }}次
+              </el-col>
+              <el-col :span="8">
+                过流：{{ getNonphasekwList.o_current_num || 0 }}次
+              </el-col>
+              <el-col :span="8">
+                过压：{{ getNonphasekwList.o_voltage_num || 0 }}次
+              </el-col>
+              <el-col :span="8">
+                欠压：{{ getNonphasekwList.u_voltage_num || 0 }}次
+              </el-col>
+              <el-col :span="8">
+                断电：{{ getNonphasekwList.p_failure_num || 0 }}次
+              </el-col>
+              <el-col :span="8">
+                短路：{{ getNonphasekwList.SCCount || 0 }}次
+              </el-col>
+              <el-col :span="8">
+                老化：{{ getNonphasekwList.ageingCount || 0 }}次
               </el-col>
             </el-row>
           </div>
@@ -2543,33 +2563,56 @@
                 >
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <!-- <el-col :span="8">
+                <el-col :span="8">
                   <el-button @click="shebeiBtn('7')"
-                    >开启流量</el-button
+                    >灭火器启动</el-button
                   ></el-col
-                > -->
+                >
 
-                <!-- <el-col :span="8">
-                  <el-button @click="shebeiBtn('9')">授权</el-button></el-col
-                > -->
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('9')"
+                    >灭火器输出关闭</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('12')"
+                    >烟雾报警自动分闸开启</el-button
+                  ></el-col
+                >
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <!-- <el-col :span="8">
+                <el-col :span="8">
                   <el-button @click="shebeiBtn('10')"
-                    >开启屏蔽器</el-button
+                    >灭火器自动启动打开</el-button
                   ></el-col
-                > -->
-                <!-- <el-col :span="8">
-                  <el-button @click="shebeiBtn('11')">下发保险单</el-button>
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('11')"
+                    >灭火器自动启动关闭</el-button
+                  >
                 </el-col>
                 <el-col :span="8">
-                  <el-input
-                    placeholder="请输入保险单号"
-                    v-model="baoxiandanhao"
-                  ></el-input>
-                </el-col> -->
-
-                <!-- <el-col :span="8"> <el-button>远程关机</el-button></el-col> -->
+                  <el-button @click="shebeiBtn('13')"
+                    >烟雾报警自动分闸关闭</el-button
+                  ></el-col
+                >
+              </el-row>
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('14')"
+                    >火焰报警自动分闸开启</el-button
+                  ></el-col
+                >
+                <el-col :span="8">
+                  <el-button @click="shebeiBtn('15')"
+                    >火焰报警自动分闸关闭</el-button
+                  >
+                </el-col>
+                <!-- <el-col :span="8">
+                  <el-button @click="shebeiBtn('16')"
+                    >烟雾报警自动分闸关闭</el-button
+                  ></el-col
+                > -->
               </el-row>
             </div>
             <div class="right_two">
@@ -2579,9 +2622,8 @@
                 <el-col :span="8">
                   <div
                     v-if="
-                      (ParaState.devstatus == 1 && ParaState.dSid == '25') ||
                       (ParaState.devstatus == 1 && ParaState.dSid == '26') ||
-                      (ParaState.start == 0 && ParaState.dSid == '22')
+                      (ParaState.start == 0 && ParaState.dSid == '26')
                     "
                     style="
                       background: #5f5b5b;
@@ -2648,7 +2690,7 @@
               <p class="titleP">设置</p>
               <div class="tabs">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <template v-if="ParaState.dSid == 26 || ParaState.dSid == 25">
+                  <template v-if="ParaState.dSid == 25">
                     <el-tab-pane label="阀值设置" class="tabs_one" name="first">
                       <el-row :gutter="20">
                         <el-col :span="12">
@@ -3633,7 +3675,7 @@ export default {
       });
     },
     SetParameterApiFun() {
-      if (this.ParaState.dSid == "26" || this.ParaState.dSid == "25") {
+      if (this.ParaState.dSid == "25") {
         console.log(111, this.ParaState.dSid);
         SetParameterApi(
           this.ElecDataList.DevData[0].productNumber,
@@ -4107,6 +4149,7 @@ export default {
       this.getDevicePowerFun(productNumber);
       await getDeviceByDevId(devId).then(
         (res) => {
+          console.log(res.data, res);
           if (res.data == null || res.data == undefined) {
             return this.$message.error("请稍后重试或联系管理员");
           }
@@ -4132,6 +4175,16 @@ export default {
       if (this.getDeviceByDevIdList == "") {
         return "";
       }
+      getParaState(this.utils.userName, productNumber).then((res) => {
+        // if (res.data.data.dSid == 44) {
+        //   res.data.data.dSid = 3;
+        // }
+
+        this.ParaState = res.data.data;
+
+        // this.ParaState==44?this.ParaState=3:this.ParaState=44
+        // console.log(this.ParaState, "==============");
+      });
       this.interval = setInterval(() => {
         getParaState(this.utils.userName, productNumber).then((res) => {
           // if (res.data.data.dSid == 44) {
@@ -4143,7 +4196,7 @@ export default {
           // this.ParaState==44?this.ParaState=3:this.ParaState=44
           // console.log(this.ParaState, "==============");
         });
-      }, 5000);
+      }, 10000);
       //功率因素
       getNonphasekw(productNumber).then((res) => {
         console.log(res, "woshjres1321321esada");
@@ -4324,6 +4377,14 @@ export default {
         });
       } else {
         ElectricDeviceDate(devId, now).then((res) => {
+          this.echarts_loading = false;
+
+          let resolve = res.data.DevData || res.data.Data;
+
+          // console.log(res.data.DevData || res.data.Data);
+          if (resolve.length == 0) {
+            return;
+          }
           let dianLiuUa = [];
           let dianLiuUb = [];
           let dianLiuUc = [];
@@ -4336,9 +4397,10 @@ export default {
           let wenduC = [];
           let wenduN = [];
           let name = [];
-          this.echarts_loading = false;
+
+          // this.echarts_loading = false;
           //图标数据赋值
-          res.data.Data.forEach((element) => {
+          resolve.forEach((element) => {
             dianLiuUa.push(element.ia);
             dianLiuUb.push(element.ib);
             dianLiuUc.push(element.ic);
@@ -4549,6 +4611,9 @@ export default {
     devicesSetting() {
       // if (this.powerState == "1") {
       this.innerVisible_shebei = true;
+      if (this.ElecDataList == "" || this.ElecDataList.length == 0) {
+        return;
+      }
       ReadParameterApi(this.ElecDataList.DevData[0].productNumber).then(
         (res) => {
           if (res.data == "") {
@@ -4799,13 +4864,13 @@ export default {
           }
 
           break;
-        //开启流量
+        //灭火器启动
         case "7":
           if (role == "1000" || power.indexOf("10003004") != -1) {
             putMessToDeviceOn(
               this.utils.userName,
               this.ElecDataList.DevData[0].productNumber,
-              "openflow"
+              "firepoweron"
             ).then(
               (res) => {
                 if (res.data.message == "请求成功") {
@@ -4846,74 +4911,173 @@ export default {
             this.$message.error("暂无权限");
           }
           break;
-        //授权
+        //灭火器输出关闭
         case "9":
           if (role == "1000" || power.indexOf("10003004") != -1) {
-            insertClouddog(this.ElecDataList.DevData[0].productNumber).then(
-              (res) => {
-                if (res.data.list[0].status == "true") {
-                  this.$message.success(
-                    "授权成功.工作日一天后将授权生效,非工作日将延期"
-                  );
-                } else {
-                  this.$message.error("授权失败");
-                }
-              },
-              () => {
-                this.$message.error("请稍后重试或联系管理员");
-              }
-            );
-          }
-          break;
-        //开启屏蔽器
-        case "10":
-          if (role == "1000" || power.indexOf("10003013") != -1) {
-            updateShutdown(
-              this.ElecDataList.DevData[0].productNumber,
-              this.utils,
-              userName
-            ).then(
-              (res) => {
-                if (res.data.status == "true") {
-                  layer.open({
-                    content: res.mess,
-                  });
-                  this.$message.success(res.data.mess);
-                } else {
-                  this.$message.error(res.data.mess);
-                }
-              },
-              () => {
-                this.$message.error("请稍后重试或联系管理员");
-              }
-            );
-          }
-          break;
-        //下发保险单
-        case "11":
-          // console.log(6554654);
-          // console.log(this.ElecDataList.DevData[0].productNumber, 789789);
-          if (role == "1000" || power.indexOf("10003004") != -1) {
-            putMessToDevice(
+            putMessToDeviceOn(
               this.utils.userName,
               this.ElecDataList.DevData[0].productNumber,
-              this.baoxiandanhao
+              "firepoweroff"
             ).then(
               (res) => {
                 if (res.data.message == "请求成功") {
-                  alert("下发保险单号成功");
+                  this.$message.success(res.data.message);
                 } else {
-                  this.$message.error("请稍后重试");
+                  this.$message.error(res.data.message);
                 }
               },
               () => {
                 this.$message.error("请稍后重试或联系管理员");
               }
             );
+            break;
+          } else {
+            this.$message.error("暂无权限");
           }
-          // var res = JSON.parse(result);
-          // console.log(res);
-
+          break;
+        //灭火器自动启动打开
+        case "10":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.utils.userName,
+              this.ElecDataList.DevData[0].productNumber,
+              "fireon"
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //灭火器自动启动关闭
+        case "11":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.utils.userName,
+              this.ElecDataList.DevData[0].productNumber,
+              "fireoff"
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //烟雾报警自动分闸开启
+        case "12":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.utils.userName,
+              this.ElecDataList.DevData[0].productNumber,
+              "smokeon"
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //烟雾报警自动分闸关闭
+        case "13":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.utils.userName,
+              this.ElecDataList.DevData[0].productNumber,
+              "smokeoff"
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //火焰报警自动分闸开启
+        case "14":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.utils.userName,
+              this.ElecDataList.DevData[0].productNumber,
+              "flameon"
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
+          break;
+        //火焰报警自动分闸关闭
+        case "15":
+          if (role == "1000" || power.indexOf("10003004") != -1) {
+            putMessToDeviceOn(
+              this.utils.userName,
+              this.ElecDataList.DevData[0].productNumber,
+              "flameoff"
+            ).then(
+              (res) => {
+                if (res.data.message == "请求成功") {
+                  this.$message.success(res.data.message);
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              },
+              () => {
+                this.$message.error("请稍后重试或联系管理员");
+              }
+            );
+            break;
+          } else {
+            this.$message.error("暂无权限");
+          }
           break;
       }
     },

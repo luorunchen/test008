@@ -212,6 +212,9 @@
     </div>
 
     <PublicPopUps ref="publicPopUps" :pagetype="pagetype" />
+    <div v-if="this.$route.name == 'IntelligentReclosing'">
+      <IntelligentReclosing ref="publicPopUps" :pagetype="pagetype" />
+    </div>
     <router-view></router-view>
   </div>
 </template>
@@ -219,6 +222,7 @@
 <script>
 import { getIndexReport, DeviceProjectNew } from "@/api/index.js";
 import PublicPopUps from "../FireInternetOfThings/translate/publicPopUps.vue";
+import IntelligentReclosing from "../FireInternetOfThings/translate/intelligentReclosing.vue";
 export default {
   data() {
     return {
@@ -324,7 +328,7 @@ export default {
         break;
       case "/FireInternetOfThings/IntelligentReclosing":
         this.btnInfo = "智能重合闸";
-        this.pagetype = "22,23,25,26";
+        this.pagetype = "44";
         this.DeviceProjectNewFun("22,23,25,26");
         break;
       case "/FireInternetOfThings/InfraredSmoke":
@@ -424,7 +428,7 @@ export default {
         case "智能重合闸":
           this.DeviceProjectNewFun("22,23,25,26");
           // this.mass.setMap(null);
-          this.pagetype = "22,23,25,26";
+          this.pagetype = "44";
           break;
         case "红外线烟感":
           this.DeviceProjectNewFun("45");
@@ -727,6 +731,7 @@ export default {
   },
   components: {
     PublicPopUps,
+    IntelligentReclosing,
   },
 
   computed: {

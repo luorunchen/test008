@@ -3019,6 +3019,30 @@
         </el-row>
         <!-- </div> -->
       </template>
+      <div class="shuju_echarts" style="height: 350px">
+        <p>心跳时间</p>
+        <template>
+          <el-table
+            :data="HeartBeatList"
+            style="width: 100%"
+            height="300px"
+            :default-sort="{
+              prop: 'heartBeat',
+              order: 'descending',
+            }"
+          >
+            <el-table-column type="index" label="序号" align="center">
+            </el-table-column>
+            <el-table-column
+              prop="heartBeat"
+              sortable
+              label="时间"
+              align="center"
+            >
+            </el-table-column>
+          </el-table>
+        </template>
+      </div>
       <div class="shuju_echarts">
         <p>设备最近数据分析</p>
         <div class="shuju_echarts_wapper"></div>
@@ -3104,6 +3128,31 @@
               </ul>
             </div>
           </div>
+        </div>
+
+        <div class="two">
+          <p>心跳时间</p>
+          <template>
+            <el-table
+              :data="HeartBeatList"
+              style="width: 100%"
+              height="300px"
+              :default-sort="{
+                prop: 'heartBeat',
+                order: 'descending',
+              }"
+            >
+              <el-table-column type="index" label="序号" align="center">
+              </el-table-column>
+              <el-table-column
+                prop="heartBeat"
+                sortable
+                label="时间"
+                align="center"
+              >
+              </el-table-column>
+            </el-table>
+          </template>
         </div>
         <div class="two">
           <p>历史报警</p>
@@ -3394,9 +3443,37 @@
               </div>
             </el-col>
           </el-row>
-          <div class="SmartIndependentSmoke_echars_one" v-show="false">
-            <p class="titleP">设备心跳/温度统计图</p>
+          <div
+            class="SmartIndependentSmoke_echars_one"
+            v-if="getYGTempList.length > 0"
+          >
+            <p class="titleP">信号强度/温度统计图</p>
             <div class="SmartIndependentSmoke_echars_one_wapper"></div>
+          </div>
+          <div class="SmartIndependentSmoke_echars_one">
+            <p class="titleP">心跳时间</p>
+            <!-- <div class="SmartIndependentSmoke_echars_one_wapper"></div> -->
+            <template>
+              <el-table
+                :data="HeartBeatList"
+                style="width: 100%"
+                height="300px"
+                :default-sort="{
+                  prop: 'heartBeat',
+                  order: 'descending',
+                }"
+              >
+                <el-table-column type="index" label="序号" align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="heartBeat"
+                  sortable
+                  label="时间"
+                  align="center"
+                >
+                </el-table-column>
+              </el-table>
+            </template>
           </div>
           <div class="lishibaojing">
             <p class="titleP">历史报警</p>
@@ -3534,6 +3611,8 @@ import {
   getGasInfo,
   closeVoice,
   setDepoly,
+  getHeartBea,
+  getYGTemp,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
@@ -3541,6 +3620,8 @@ export default {
   props: ["pagetype", "popUps"],
   data() {
     return {
+      getYGTempList: [],
+      HeartBeatList: [],
       FireExtinguisherStatus: {
         date: {
           value1: 1,
@@ -4169,8 +4250,13 @@ export default {
         });
       }
 
-      getHisDeviceData(imei).then((res) => {
-        let rouselt = res.data.list[0].mess;
+      getHeartBea(imei).then((res) => {
+        this.HeartBeatList = res.data.data;
+      });
+
+      getYGTemp(imei).then((res) => {
+        this.getYGTempList = res.data.data;
+        let rouselt = res.data.data;
         let rssi = [];
         let create_time = [];
         let temperature = [];
@@ -4236,6 +4322,10 @@ export default {
       // this.seeInfo = data;
       let max;
       let name;
+
+      getHeartBea(productNumber).then((res) => {
+        this.HeartBeatList = res.data.data;
+      });
 
       if (this.$route.name == "FireWaterSystem" || this.$route.name == "home") {
         ElecData_type(devId, this.pagetype).then((res) => {
@@ -4496,7 +4586,7 @@ export default {
             series: [
               {
                 type: "liquidFill",
-                radius: "200px",
+                radius: "150px",
 
                 data: [item.gasvol * 0.01 * 1],
                 label: {
@@ -4534,8 +4624,8 @@ export default {
                   show: true,
                   borderDistance: 5,
                   itemStyle: {
-                    borderColor: "rgba(67,209,100,1)",
-                    borderWidth: 0,
+                    borderColor: "rgb(101,143,236)",
+                    // borderWidth: 0,
                   },
                 },
               },
@@ -4921,6 +5011,10 @@ export default {
       } else {
         ElectricDeviceDate(devId, now).then((res) => {
           this.one_echarts_loading = false;
+
+          if (res.data.DevData.length == 0) {
+            return;
+          }
           let dianLiuUa = [];
           let dianLiuUb = [];
           let dianLiuUc = [];
@@ -5515,6 +5609,9 @@ export default {
           return a.devNo * 1 - b.devNo * 1;
         });
         // console.log(this.getGasInfoWapper);
+      });
+      getHeartBea(productNumber).then((res) => {
+        this.HeartBeatList = res.data.data;
       });
     },
   },
