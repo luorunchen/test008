@@ -395,8 +395,8 @@
       width="60%"
       title="查看"
       :visible.sync="innerVisible"
-      :modal-append-to-body="false"
       :before-close="handleCloseInnerVisible"
+      :modal-append-to-body="false"
     >
       <el-row
         ><el-button type="primary " @click="devicesSetting">设备设置</el-button>
@@ -404,6 +404,12 @@
           type="primary"
           @click="(innerVisible_lishi = true), Historical_alarm()"
           >历史报警</el-button
+        >
+        <el-button
+          type="primary"
+          @click="(innerVisible_lishi = true), getAlarmAndFaultFun()"
+          :disabled="ElecDataList.DevData[0].typeName == '正常' ? true : false"
+          >当前报警</el-button
         >
       </el-row>
       <div class="shebeiWapper">
@@ -444,14 +450,14 @@
                 style="background: #13d61c"
                 v-if="item.typeName == '正常' && item.status == '在线'"
               >
-                <p>设备正常/{{ item.status }}</p>
+                <p style="margin-top: 60px">设备正常/{{ item.status }}</p>
               </div>
               <div
                 class="status"
                 style="background: #999"
                 v-else-if="item.typeName == '正常' && item.status == '离线'"
               >
-                <p>设备正常/{{ item.status }}</p>
+                <p style="margin-top: 60px">设备正常/{{ item.status }}</p>
               </div>
 
               <div
@@ -459,10 +465,12 @@
                 style="background: #eb8814"
                 v-else-if="item.typeName.indexOf('故障') > 0"
               >
-                <p>设备故障/{{ item.status }}</p>
+                <p style="margin-top: 50px">设备故障/{{ item.status }}</p>
+                <p>{{ item.level == "0" ? "" : item.level }}</p>
               </div>
               <div class="status" v-else style="background: red">
-                <p>设备报警/{{ item.status }}</p>
+                <p style="margin-top: 50px">设备报警/{{ item.status }}</p>
+                <p>{{ item.level == "0" ? "" : item.level }}</p>
               </div>
               <li>
                 设备编号: <span>{{ item.productNumber }}</span>
@@ -506,7 +514,7 @@
               </li>
             </ul>
           </div>
-          <div class="two">
+          <!-- <div class="two">
             <p class="titleP">填写处置情况</p>
             <el-input
               v-model="managementInput"
@@ -521,7 +529,7 @@
               @click="management"
               >提交</el-button
             >
-          </div>
+          </div> -->
         </div>
 
         <div class="shebeiEcharts">
@@ -2343,6 +2351,9 @@
               </el-row>
             </template>
           </template>
+          <div class="stateDate" style="text-align: center; font-weight: 800">
+            灭火器状态：{{ getFireStateList == "0" ? "未启动" : "已启动" }}
+          </div>
           <div class="stateDate">
             <el-row>
               <el-col :span="8">
@@ -2350,7 +2361,7 @@
                 无功功率： {{ getNonphasekwList.nonphasekw || 0 }}W
               </el-col>
               <el-col :span="8">
-                功率因素： {{ getNonphasekwList.powerParam || 0 }}W</el-col
+                功率因素： {{ getNonphasekwList.powerParam || 0 }}</el-col
               >
               <el-col :span="8">
                 电量：{{ getNonphasekwList.phasepowerkw || 0 }}kW·h
@@ -2489,8 +2500,8 @@
       width="50%"
       title="设备设置"
       :visible.sync="innerVisible_shebei"
-      :modal-append-to-body="false"
       :before-close="handleClose"
+      :modal-append-to-body="false"
     >
       <el-row>
         <el-col :span="6"
@@ -2563,24 +2574,57 @@
                 >
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="8">
-                  <el-button @click="shebeiBtn('7')"
+                <el-col :span="8" style="text-align: center">
+                  <!-- <el-button @click="shebeiBtn('7')"
                     >灭火器启动</el-button
-                  ></el-col
-                >
+                  > -->
 
-                <el-col :span="8">
-                  <el-button @click="shebeiBtn('9')"
+                  烟雾报警自动分闸:
+                  <el-switch
+                    v-model="fireExtinguisher1"
+                    active-color="#13ce66"
+                    inactive-color="#999"
+                    @change="fireExtinguisherStateChange($event, 1)"
+                  >
+                  </el-switch>
+                </el-col>
+                <el-col :span="8" style="text-align: center">
+                  <!-- <el-button @click="shebeiBtn('7')"
+                    >灭火器启动</el-button
+                  > -->
+
+                  灭火器启动:
+                  <el-switch
+                    v-model="fireExtinguisher2"
+                    active-color="#13ce66"
+                    inactive-color="#999"
+                    @change="fireExtinguisherStateChange($event, 2)"
+                  >
+                  </el-switch>
+                </el-col>
+
+                <el-col :span="8" style="text-align: center">
+                  <!-- <el-button @click="shebeiBtn('9')"
                     >灭火器输出关闭</el-button
-                  ></el-col
-                >
-                <el-col :span="8">
+                  > -->
+
+                  灭火器自动启动:
+                  <el-switch
+                    v-model="fireExtinguisher3"
+                    active-color="#13ce66"
+                    inactive-color="#999"
+                    @change="fireExtinguisherStateChange($event, 3)"
+                  >
+                  </el-switch>
+                </el-col>
+
+                <!-- <el-col :span="8">
                   <el-button @click="shebeiBtn('12')"
                     >烟雾报警自动分闸开启</el-button
                   ></el-col
-                >
+                > -->
               </el-row>
-              <el-row :gutter="20" class="row-bg">
+              <!-- <el-row :gutter="20" class="row-bg">
                 <el-col :span="8">
                   <el-button @click="shebeiBtn('10')"
                     >灭火器自动启动打开</el-button
@@ -2591,23 +2635,28 @@
                     >灭火器自动启动关闭</el-button
                   >
                 </el-col>
-                <el-col :span="8">
-                  <el-button @click="shebeiBtn('13')"
-                    >烟雾报警自动分闸关闭</el-button
-                  ></el-col
-                >
-              </el-row>
+             
+              </el-row> -->
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="8">
-                  <el-button @click="shebeiBtn('14')"
+                <el-col :span="8" style="text-align: center">
+                  <!-- <el-button @click="shebeiBtn('14')"
                     >火焰报警自动分闸开启</el-button
-                  ></el-col
-                >
-                <el-col :span="8">
+                  > -->
+
+                  火焰报警自动分闸:
+                  <el-switch
+                    v-model="fireExtinguisher4"
+                    active-color="#13ce66"
+                    inactive-color="#999"
+                    @change="fireExtinguisherStateChange($event, 4)"
+                  >
+                  </el-switch>
+                </el-col>
+                <!-- <el-col :span="8">
                   <el-button @click="shebeiBtn('15')"
                     >火焰报警自动分闸关闭</el-button
                   >
-                </el-col>
+                </el-col> -->
                 <!-- <el-col :span="8">
                   <el-button @click="shebeiBtn('16')"
                     >烟雾报警自动分闸关闭</el-button
@@ -2684,13 +2733,29 @@
                     </div>
                   </div>
                 </el-col>
+                <el-col :span="8">
+                  <div
+                    style="
+                      background: #3694e4;
+                      height: 30px;
+                      margin: 10px;
+                      line-height: 30px;
+                      text-align: center;
+                      color: #fff;
+                    "
+                  >
+                    灭火器状态：{{
+                      getFireStateList == "0" ? "未启动" : "已启动"
+                    }}
+                  </div>
+                </el-col>
               </el-row>
             </div>
             <div class="right_two">
               <p class="titleP">设置</p>
               <div class="tabs">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <template v-if="ParaState.dSid == 25">
+                  <template v-if="ParaState.dSid == 25 || ParaState.dSid == 26">
                     <el-tab-pane label="阀值设置" class="tabs_one" name="first">
                       <el-row :gutter="20">
                         <el-col :span="12">
@@ -2722,7 +2787,7 @@
                         <el-col :span="12">
                           <p>
                             {{
-                              ParaState.dSid == "22" ? "A温度/℃  " : "L温度/℃  "
+                              ParaState.dSid == "26" ? "A温度/℃  " : "L温度/℃  "
                             }}
                           </p>
                           <el-input
@@ -2740,7 +2805,7 @@
                           ></el-input
                         ></el-col>
                       </el-row>
-                      <el-row :gutter="20" v-if="ParaState.dSid == '22'">
+                      <el-row :gutter="20" v-if="ParaState.dSid == '26'">
                         <el-col :span="12">
                           <p>B温度/℃</p>
                           <el-input
@@ -3055,53 +3120,82 @@
     <!-- 内部弹窗->历史报警 -->
     <el-dialog
       :close-on-click-modal="false"
-      title="历史报警"
+      :title="faultState ? '历史报警' : '当前报警'"
       :modal-append-to-body="false"
       :visible.sync="innerVisible_lishi"
       width="50%"
     >
-      <el-form
-        size="mini"
-        :inline="true"
-        :model="formInline"
-        class="demo-form-inline"
-      >
-        <el-form-item label="日期:">
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="开始时间"
-              v-model="sizeForm.date1"
-              style="width: 100%"
-            ></el-date-picker>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="结束时间"
-              v-model="sizeForm.date2"
-              style="width: 100%"
-            ></el-date-picker>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-        </el-form-item>
-      </el-form>
-      <template>
-        <el-table
-          v-loading="Historical_alarm_list_loading"
-          :data="Historical_alarm_list"
-          style="width: 100%"
+      <div v-if="faultState">
+        <el-form
+          size="mini"
+          :inline="true"
+          :model="formInline"
+          class="demo-form-inline"
         >
-          <el-table-column prop="type" label="报警名称"> </el-table-column>
-          <el-table-column prop="regdate" label="报警时间"> </el-table-column>
-          <el-table-column prop="leakageAlarmCurrentValue" label="报警值">
+          <el-form-item label="日期:">
+            <el-col :span="11">
+              <el-date-picker
+                type="date"
+                placeholder="开始时间"
+                v-model="sizeForm.date1"
+                style="width: 100%"
+              ></el-date-picker>
+            </el-col>
+            <el-col class="line" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-date-picker
+                type="date"
+                placeholder="结束时间"
+                v-model="sizeForm.date2"
+                style="width: 100%"
+              ></el-date-picker>
+            </el-col>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-form>
+        <template>
+          <el-table
+            v-loading="Historical_alarm_list_loading"
+            :data="Historical_alarm_list"
+            style="width: 100%"
+          >
+            <el-table-column prop="type" label="报警名称"> </el-table-column>
+            <el-table-column prop="regdate" label="报警时间"> </el-table-column>
+            <el-table-column prop="leakageAlarmCurrentValue" label="报警值">
+            </el-table-column>
+          </el-table>
+        </template>
+      </div>
+      <div v-else>
+        <el-table
+          height="400px"
+          v-loading="Historical_alarm_list_loading"
+          :data="AlarmAndFaultList"
+          style="width: 100%"
+          :default-sort="{
+            prop: 'regdate',
+            order: 'descending',
+          }"
+        >
+          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column prop="typeName" label="报警名称"> </el-table-column>
+          <el-table-column prop="alarmFaultDate" label="报警时间" sortable>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                @click="FaultHandleClick(scope.row.aFid)"
+                type="text"
+                size="small"
+                >解除</el-button
+              >
+            </template>
           </el-table-column>
         </el-table>
-      </template>
+      </div>
     </el-dialog>
 
     <!-- 消防水液体弹窗 -->
@@ -3395,6 +3489,49 @@
         </el-col>
       </el-row>
     </el-dialog>
+
+    <el-dialog
+      title="用户密码验证"
+      :visible.sync="passWordVisible"
+      width="20%"
+      :modal-append-to-body="false"
+      :show-close="false"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+    >
+      <el-input type="password" v-model="passWord" show-password></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="(passWordVisible = false), passWordFalse()"
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="passWordTrue">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="解除"
+      :visible.sync="FaultVisible"
+      width="20%"
+      :modal="false"
+      top="12%"
+    >
+      <div class="managementYes">
+        <p class="titleP">填写处置情况</p>
+        <el-input
+          v-model="managementInput"
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 3 }"
+          placeholder="请输入内容"
+        ></el-input>
+        <el-button
+          type="primary"
+          size="mini"
+          style="margintop: 20px"
+          @click="management"
+          >提交</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -3428,6 +3565,8 @@ import {
   getDevicePush,
   getDevicePower,
   getNonphasekw,
+  getFireState,
+  getAlarmAndFault,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
@@ -3435,6 +3574,12 @@ export default {
   props: ["pagetype", "popUps"],
   data() {
     return {
+      aFid: "",
+      AlarmAndFaultList: [],
+      faultState: true,
+      FaultVisible: false,
+      passWord: "",
+      getFireStateList: "",
       getNonphasekwList: {},
       caozuojilv: [],
       DeviceHistory: "",
@@ -3457,10 +3602,11 @@ export default {
       },
       Historical_alarm_list: [],
       Historical_alarm_list_loading: false,
+      passWordVisible: false,
       ElecDataList_type_List_DevInfo: {},
       baoxiandanhao: "",
       ElecDataList_images: [],
-      ElecDataList: "",
+      ElecDataList: { DevData: [{ typeName: "" }] },
       getDeviceByPidList: "",
       loading: true,
       GetMapDataList: "",
@@ -3505,6 +3651,10 @@ export default {
       tableData: [],
       ParaState: "",
       time: "",
+      fireExtinguisher1: true,
+      fireExtinguisher2: true,
+      fireExtinguisher3: true,
+      fireExtinguisher4: true,
     };
   },
   mounted() {
@@ -3513,6 +3663,140 @@ export default {
   },
 
   methods: {
+    passWordFalse() {
+      this.fireExtinguisher2 = !this.fireExtinguisher2;
+      this.passWord = "";
+    },
+    getAlarmAndFaultFun() {
+      this.faultState = false;
+      getAlarmAndFault(this.productNumber).then((res) => {
+        this.AlarmAndFaultList = res.data.data;
+      });
+    },
+    FaultHandleClick(aFid) {
+      this.FaultVisible = true;
+      this.aFid = aFid;
+    },
+    passWordTrue() {
+      if (this.passWord === sessionStorage.getItem("passWord")) {
+        console.log(this.fireExtinguisher2, 3123);
+        if (this.fireExtinguisher2) {
+          this.shebeiBtn("7");
+        } else {
+          this.shebeiBtn("9");
+        }
+      } else {
+        this.$message({
+          type: "error",
+          message: "用户密码错误",
+          showClose: true,
+        });
+
+        this.fireExtinguisher2 = !this.fireExtinguisher2;
+        console.log("没有输入密码或密码错误");
+      }
+      this.passWord = "";
+      this.passWordVisible = false;
+
+      //重新启动定时器
+      this.interval = setInterval(() => {
+        // console.log("这里启动了");
+        // getFireState(productNumber).then((res) => {
+        //   console.log(res, 9999);
+        //   this.getFireStateList = res.data.data;
+        // });
+        getParaState(this.utils.userName, productNumber).then((res) => {
+          // if (res.data.data.dSid == 44) {
+          //   res.data.data.dSid = 3;
+          // }
+
+          this.ParaState = res.data.data;
+          if (this.ParaState.fire == "fireon") {
+            this.fireExtinguisher3 = true;
+          } else {
+            this.fireExtinguisher3 = false;
+          }
+          if (this.ParaState.firepower == "firepoweron") {
+            this.fireExtinguisher2 = true;
+          } else {
+            this.fireExtinguisher2 = false;
+          }
+          if (this.ParaState.flame == "flameon") {
+            this.fireExtinguisher4 = true;
+          } else {
+            this.fireExtinguisher4 = false;
+          }
+          if (this.ParaState.smoke == "smokeon") {
+            this.fireExtinguisher1 = true;
+          } else {
+            this.fireExtinguisher1 = false;
+          }
+
+          // this.ParaState==44?this.ParaState=3:this.ParaState=44
+          // console.log(this.ParaState, "==============");
+        });
+      }, 20000);
+    },
+    fireExtinguisherStateChange(a, b) {
+      console.log(a, b);
+      switch (b) {
+        case 1:
+          if (a) {
+            // console.log("私有制");
+            this.shebeiBtn("12");
+          } else {
+            this.shebeiBtn("13");
+          }
+          break;
+        case 2:
+          if (a) {
+            this.fireExtinguisher2 = true;
+          } else {
+            this.fireExtinguisher2 = false;
+          }
+          // this.$prompt("请验证用户密码", "提示", {
+          //   confirmButtonText: "确定",
+          //   cancelButtonText: "取消",
+          // })
+          //   .then(({ value }) => {
+          //     this.$message({
+          //       type: "success",
+          //       message: "你的邮箱是: " + value,
+          //     });
+          //   })
+          //   .catch(() => {
+          //     this.$message({
+          //       type: "info",
+          //       message: "取消输入",
+          //     });
+          //   });
+          this.passWordVisible = true;
+          //清除定时器
+          while (this.interval > 0) {
+            clearInterval(this.interval);
+            this.interval--;
+            // console.log(this.interval, "关闭定时器");
+          }
+
+          // this.passWordTrue(a);
+
+          break;
+        case 3:
+          if (a) {
+            this.shebeiBtn("10");
+          } else {
+            this.shebeiBtn("11");
+          }
+          break;
+        case 4:
+          if (a) {
+            this.shebeiBtn("14");
+          } else {
+            this.shebeiBtn("15");
+          }
+          break;
+      }
+    },
     //首页报警信息打开的方法
     openTypeFun(devID, imei, type) {
       console.log(654);
@@ -3675,7 +3959,7 @@ export default {
       });
     },
     SetParameterApiFun() {
-      if (this.ParaState.dSid == "25") {
+      if (this.ParaState.dSid == "25" || this.ParaState.dSid == "26") {
         console.log(111, this.ParaState.dSid);
         SetParameterApi(
           this.ElecDataList.DevData[0].productNumber,
@@ -3795,15 +4079,15 @@ export default {
     },
     //提交处置情况
     management() {
-      if (this.ElecDataList.DevData[0].aFid == "") {
-        return this.$message.warning("设备正常,无需解除");
-      }
-      if (this.managementInput == "") {
-        return this.$message.error("请填写处置信息");
-      }
-      console.log(this.ElecDataList.DevData[0]);
+      // if (this.ElecDataList.DevData[0].aFid == "") {
+      //   return this.$message.warning("设备正常,无需解除");
+      // }
+      // if (this.managementInput == "") {
+      //   return this.$message.error("请填写处置信息");
+      // }
+      // console.log(this.ElecDataList.DevData[0]);
       WebeditFileimageServlet(
-        this.utils.userName + "," + this.ElecDataList.DevData[0].aFid,
+        this.utils.userName + "," + this.aFid,
         this.managementInput
       ).then((res) => {
         if (res.data.list[0].status == true) {
@@ -4125,7 +4409,11 @@ export default {
       );
     },
     handleCloseInnerVisible() {
-      clearInterval(this.interval);
+      while (this.interval > 0) {
+        clearInterval(this.interval);
+        this.interval--;
+        // console.log(this.interval, "关闭定时器");
+      }
       this.innerVisible = false;
     },
     //历史报警
@@ -4182,21 +4470,68 @@ export default {
 
         this.ParaState = res.data.data;
 
+        console.log(this.ParaState, "加载是");
+        if (this.ParaState.fire == "fireon") {
+          this.fireExtinguisher3 = true;
+        } else {
+          this.fireExtinguisher3 = false;
+        }
+        if (this.ParaState.firepower == "firepoweron") {
+          this.fireExtinguisher2 = true;
+        } else {
+          this.fireExtinguisher2 = false;
+        }
+        if (this.ParaState.flame == "flameon") {
+          this.fireExtinguisher4 = true;
+        } else {
+          this.fireExtinguisher4 = false;
+        }
+        if (this.ParaState.smoke == "smokeon") {
+          this.fireExtinguisher1 = true;
+        } else {
+          this.fireExtinguisher1 = false;
+        }
+
         // this.ParaState==44?this.ParaState=3:this.ParaState=44
         // console.log(this.ParaState, "==============");
       });
       this.interval = setInterval(() => {
+        console.log("这里启动了");
+        // getFireState(productNumber).then((res) => {
+        //   console.log(res, 9999);
+        //   this.getFireStateList = res.data.data;
+        // });
         getParaState(this.utils.userName, productNumber).then((res) => {
           // if (res.data.data.dSid == 44) {
           //   res.data.data.dSid = 3;
           // }
 
           this.ParaState = res.data.data;
+          if (this.ParaState.fire == "fireon") {
+            this.fireExtinguisher3 = true;
+          } else {
+            this.fireExtinguisher3 = false;
+          }
+          if (this.ParaState.firepower == "firepoweron") {
+            this.fireExtinguisher2 = true;
+          } else {
+            this.fireExtinguisher2 = false;
+          }
+          if (this.ParaState.flame == "flameon") {
+            this.fireExtinguisher4 = true;
+          } else {
+            this.fireExtinguisher4 = false;
+          }
+          if (this.ParaState.smoke == "smokeon") {
+            this.fireExtinguisher1 = true;
+          } else {
+            this.fireExtinguisher1 = false;
+          }
 
           // this.ParaState==44?this.ParaState=3:this.ParaState=44
           // console.log(this.ParaState, "==============");
         });
-      }, 10000);
+      }, 20000);
       //功率因素
       getNonphasekw(productNumber).then((res) => {
         console.log(res, "woshjres1321321esada");
@@ -4381,8 +4716,9 @@ export default {
 
           let resolve = res.data.DevData || res.data.Data;
 
-          // console.log(res.data.DevData || res.data.Data);
-          if (resolve.length == 0) {
+          console.log(resolve instanceof Array, "判断是否是数组");
+          if (!resolve instanceof Array) {
+            // one_echart_left.dispose();
             return;
           }
           let dianLiuUa = [];
@@ -4414,10 +4750,10 @@ export default {
             dianYaC.push(element.uc);
             name.push(element.happenedTime);
           });
-          var one_echart_left;
+
           var two_echart_left;
           var three_echart_left;
-
+          var one_echart_left;
           this.$nextTick(() => {
             if (this.popUps == "yes") {
               one_echart_left = this.$echarts.init(
@@ -4607,6 +4943,11 @@ export default {
           });
         });
       }
+
+      getFireState(productNumber).then((res) => {
+        console.log(res, 9999);
+        this.getFireStateList = res.data.data;
+      });
     },
     devicesSetting() {
       // if (this.powerState == "1") {
@@ -4883,6 +5224,15 @@ export default {
                 this.$message.error("请稍后重试或联系管理员");
               }
             );
+
+            setTimeout(() => {
+              getFireState(this.ElecDataList.DevData[0].productNumber).then(
+                (res) => {
+                  console.log(res, 9999);
+                  this.getFireStateList = res.data.data;
+                }
+              );
+            }, 3000);
             break;
           } else {
             this.$message.error("暂无权限");
@@ -4930,6 +5280,16 @@ export default {
                 this.$message.error("请稍后重试或联系管理员");
               }
             );
+
+            setTimeout(() => {
+              getFireState(this.ElecDataList.DevData[0].productNumber).then(
+                (res) => {
+                  console.log(res, 9999);
+                  this.getFireStateList = res.data.data;
+                }
+              );
+            }, 3000);
+
             break;
           } else {
             this.$message.error("暂无权限");
@@ -5649,6 +6009,20 @@ export default {
     }
   }
 }
+
+.managementYes {
+  // margin-top: 20px;
+  width: 90%;
+  padding-bottom: 20px;
+  // height: 200px;
+  box-shadow: 0px 0px 10px 0px rgba(3, 27, 29, 0.11);
+  p {
+    padding-left: 20px;
+    line-height: 40px;
+    // text-align: center;
+    border-bottom: 1px solid #f3f6fa;
+  }
+}
 .shizhi_right {
   .right_one {
     margin-left: 20px;
@@ -5714,9 +6088,10 @@ export default {
         border-radius: 50%;
         text-align: center;
         margin: 0 auto;
-        line-height: 147px;
+        // line-height: 147px;
         color: #fff;
         font-size: 20px;
+        padding: 1px;
       }
       ul {
         border-top: 1px solid #f3f6fa;
@@ -6133,6 +6508,9 @@ export default {
     .formList {
       padding-left: 20px;
     }
+  }
+  .mzindex {
+    z-index: 3000 !important;
   }
 }
 </style>

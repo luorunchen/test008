@@ -194,6 +194,9 @@ export default {
           case "/FireInternetOfThings/SmartIndependentSmoke":
             dSid = "2";
             break;
+          case "/FireInternetOfThings/InfraredSmoke":
+            dSid = "2";
+            break;
           //火灾报警
           case "/FireInternetOfThings/FireAlarmSystem":
             dSid = "5";

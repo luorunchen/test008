@@ -161,8 +161,20 @@ export default {
     },
     exportFun() {
       // this.statisticsAlarmFun(1);
+      if (this.formInline.time[0] == undefined) {
+      }
       window.open(
-        `http://psy119.cn/earlyWarn/statisticsAlarm?username=${this.utils.userName}&startTime=${this.formInline.time[0]}&endTime=${this.formInline.time[1]}&productNumber=${this.formInline.productNumber}&responsible=${this.formInline.responsible}&Dsid=${this.formInline.dSid}&typeName=${this.formInline.typeName}&type=1&pageNumber=${this.current}&pageSize=${this.size}`
+        `http://psy119.cn/earlyWarn/statisticsAlarm?username=${
+          this.utils.userName
+        }&startTime=${
+          this.formInline.time[0] == undefined ? "" : this.formInline.time[0]
+        }&endTime=${
+          this.formInline.time[1] == undefined ? "" : this.formInline.time[1]
+        }&productNumber=${this.formInline.productNumber}&responsible=${
+          this.formInline.responsible
+        }&Dsid=${this.formInline.dSid}&typeName=${
+          this.formInline.typeName
+        }&type=1&pageNumber=${this.current}&pageSize=${this.size}`
       );
     },
   },

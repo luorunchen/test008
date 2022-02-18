@@ -123,7 +123,7 @@ const routes = [
         name: 'IndustrialLiquidLevel',
         component: () => import('@/components/FireInternetOfThings/gongYeYeWei'),
       },
-      // 智能重合闸
+      // 智慧用电防灭卫士
       {
         path: 'IntelligentReclosing',
         name: 'IntelligentReclosing',

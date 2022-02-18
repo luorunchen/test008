@@ -136,10 +136,14 @@
           </router-link>
         </div>
         <div
-          :class="btnInfo == '智能重合闸' ? 'infoBtn infoBtnClick' : 'infoBtn'"
+          :class="
+            btnInfo == '智慧用电防灭卫士' ? 'infoBtn infoBtnClick' : 'infoBtn'
+          "
         >
           <router-link :to="{ name: 'IntelligentReclosing' }">
-            <p textInfo="智能重合闸" @click="getText()">智能重合闸</p>
+            <p textInfo="智慧用电防灭卫士" @click="getText()">
+              智慧用电防灭卫士
+            </p>
           </router-link>
         </div>
         <!-- <div
@@ -327,7 +331,7 @@ export default {
         this.DeviceProjectNewFun("43");
         break;
       case "/FireInternetOfThings/IntelligentReclosing":
-        this.btnInfo = "智能重合闸";
+        this.btnInfo = "智慧用电防灭卫士";
         this.pagetype = "44";
         this.DeviceProjectNewFun("22,23,25,26");
         break;
@@ -425,7 +429,7 @@ export default {
           // this.mass.setMap(null);
           this.pagetype = "43";
           break;
-        case "智能重合闸":
+        case "智慧用电防灭卫士":
           this.DeviceProjectNewFun("22,23,25,26");
           // this.mass.setMap(null);
           this.pagetype = "44";
@@ -678,26 +682,34 @@ export default {
 
         let a = [];
         let b = [];
+        let d = [];
         for (let i = 0; i < res.data.Company.length; i++) {
           if (res.data.Company[i].style == 1) {
             b.push(res.data.Company[i]);
-          } else {
+          } else if (res.data.Company[i].style == 0) {
             a.push(res.data.Company[i]);
+          } else {
+            d.push(res.data.Company[i]);
           }
         }
 
-        this.DeviceProjectNewData = [...a, ...b];
+        this.DeviceProjectNewData = [...a, ...b, ...d];
         this.$store.commit("DeviceProject", this.DeviceProjectNewData);
         // console.log(c, "我是aa,b");
         this.$nextTick(() => {
           const style = [
             {
-              url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
+              url: "http://124.71.11.195/image/点4.png",
               anchor: new AMap.Pixel(4, 4),
-              size: new AMap.Size(20, 20),
+              size: new AMap.Size(35, 35),
             },
             {
               url: "https://a.amap.com/jsapi_demos/static/images/mass0.png",
+              anchor: new AMap.Pixel(6, 6),
+              size: new AMap.Size(23, 23),
+            },
+            {
+              url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
               anchor: new AMap.Pixel(6, 6),
               size: new AMap.Size(23, 23),
             },

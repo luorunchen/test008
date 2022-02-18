@@ -476,27 +476,35 @@ export default {
         //console.log(res);
         const style = [
           {
-            url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
+            url: "http://124.71.11.195/image/点4.png",
             anchor: new AMap.Pixel(4, 4),
-            size: new AMap.Size(20, 20),
+            size: new AMap.Size(35, 35),
           },
           {
             url: "https://a.amap.com/jsapi_demos/static/images/mass0.png",
             anchor: new AMap.Pixel(6, 6),
             size: new AMap.Size(23, 23),
           },
+          {
+            url: "https://a.amap.com/jsapi_demos/static/images/mass2.png",
+            anchor: new AMap.Pixel(6, 6),
+            size: new AMap.Size(23, 23),
+          },
         ];
         let a = [];
         let b = [];
+        let d = [];
         // console.log(res.data.Company.length);
         for (let i = 0; i < res.data.Company.length; i++) {
           if (res.data.Company[i].style == 1) {
             b.push(res.data.Company[i]);
-          } else {
+          } else if (res.data.Company[i].style == 0) {
             a.push(res.data.Company[i]);
+          } else {
+            d.push(res.data.Company[i]);
           }
         }
-        let c = [...a, ...b];
+        let c = [...a, ...b, ...d];
         const mass = new AMap.MassMarks(c, {
           opacity: 0.8,
           zIndex: 111,

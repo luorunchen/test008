@@ -704,7 +704,7 @@ export default {
           type = "3";
           break;
         case "/FireInternetOfThings/IntelligentReclosing":
-          this.btnInfo = "智能重合闸";
+          this.btnInfo = "智慧用电防灭卫士";
           type = "22,23,25,26";
           break;
         case "/FireInternetOfThings/InfraredSmoke":
@@ -801,7 +801,7 @@ export default {
           type = "43";
           break;
         case "/FireInternetOfThings/IntelligentReclosing":
-          this.btnInfo = "智能重合闸";
+          this.btnInfo = "智慧用电防灭卫士";
           type = "22,23,25,26";
           break;
         case "/FireInternetOfThings/InfraredSmoke":

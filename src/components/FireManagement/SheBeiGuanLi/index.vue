@@ -41,7 +41,9 @@
         </el-table-column>
         <el-table-column prop="installLocation" label="项目位置">
           <template slot-scope="scope">
-            <p v-if="scope.row.dSName == '智能重合闸'">智能重合闸</p>
+            <p v-if="scope.row.dSName == '智慧用电防灭卫士'">
+              智慧用电防灭卫士
+            </p>
             <p v-else>{{ scope.row.installLocation }}</p>
           </template>
         </el-table-column>

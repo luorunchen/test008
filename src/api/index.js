@@ -987,12 +987,12 @@ export function upSwitch(imei, state, content) {
     }
   })
 }
-export function setTime(username, productNumbers, startTime, endTime) {
+export function setTime(username, productNumbers, type, startTime, endTime) {
   return service({
     url: `/WebProject/setTime.action`,
     method: 'GET',
     params: {
-      username, productNumbers, startTime, endTime
+      username, productNumbers, type, startTime, endTime
     }
   })
 }
@@ -1026,6 +1026,24 @@ export function getDeviceState(username, online, alarmType, productNumber, devic
 export function getHeartBea(productNumber) {
   return service({
     url: `/WebProject/getHeartBeat`,
+    method: 'GET',
+    params: {
+      productNumber
+    }
+  })
+}
+export function getAlarmAndFault(productNumber) {
+  return service({
+    url: `/WebProject/getAlarmAndFault`,
+    method: 'GET',
+    params: {
+      productNumber
+    }
+  })
+}
+export function getFireState(productNumber) {
+  return service({
+    url: `/WebProject/getFireState`,
     method: 'GET',
     params: {
       productNumber

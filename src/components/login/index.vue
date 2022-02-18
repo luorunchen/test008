@@ -111,6 +111,7 @@ export default {
             res.data.region = "";
           }
           sessionStorage.setItem("userName", username);
+          sessionStorage.setItem("passWord", password);
           sessionStorage.setItem("role", res.data.role[0]);
           sessionStorage.setItem("new_role", res.data.new_role);
           sessionStorage.setItem("region", res.data.region);

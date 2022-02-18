@@ -1287,6 +1287,12 @@
           @click="(innerVisible_lishi = true), Historical_alarm()"
           >历史报警</el-button
         >
+        <el-button
+          type="primary"
+          @click="(innerVisible_lishi = true), getAlarmAndFaultFun()"
+          :disabled="ElecDataList.DevData[0].typeName == '正常' ? true : false"
+          >当前报警</el-button
+        >
       </el-row>
       <div class="shebeiWapper">
         <div class="shebeiInfo">
@@ -1298,14 +1304,14 @@
                 style="background: #13d61c"
                 v-if="item.typeName == '正常' && item.status == '在线'"
               >
-                <p>设备正常/{{ item.status }}</p>
+                <p style="margin-top: 60px">设备正常/{{ item.status }}</p>
               </div>
               <div
                 class="ulInfo"
                 style="background: #999"
                 v-else-if="item.typeName == '正常' && item.status == '离线'"
               >
-                <p>设备正常/{{ item.status }}</p>
+                <p style="margin-top: 60px">设备正常/{{ item.status }}</p>
               </div>
 
               <div
@@ -1313,14 +1319,17 @@
                 style="background: #eb8814"
                 v-else-if="item.typeName.indexOf('故障') > 0"
               >
-                <p>设备故障/{{ item.status }}</p>
+                <p style="margin-top: 50px">设备故障/{{ item.status }}</p>
+                <p>{{ item.level == "0" ? "" : item.level }}</p>
               </div>
               <div
                 v-if="item.typeName.indexOf('报警') >= 0"
                 style="background: #d61313"
                 class="ulInfo"
               >
-                设备报警/{{ item.status }}
+                <p style="margin-top: 60px">设备报警/{{ item.status }}</p>
+
+                <p>{{ item.level == "0" ? "" : item.level }}</p>
               </div>
               <li>
                 设备编号: <span>{{ item.productNumber }}</span>
@@ -1364,7 +1373,7 @@
               </li>
             </ul>
           </div>
-          <div class="two">
+          <!-- <div class="two">
             <p class="titleP">填写处置情况</p>
             <el-input
               v-model="managementInput"
@@ -1375,11 +1384,11 @@
             <el-button
               type="primary"
               size="mini"
-              style="margintop: 20px"
+              style="margin-top: 20px"
               @click="management"
               >提交</el-button
             >
-          </div>
+          </div> -->
         </div>
 
         <div class="shebeiEcharts">
@@ -2407,7 +2416,6 @@
                         style="width: 100%; height: 150px"
                         :src="item"
                         :preview-src-list="ElecDataList_images"
-                        :fit="fit"
                       >
                       </el-image>
                     </div>
@@ -2456,7 +2464,6 @@
                         style="width: 100%; height: 150px"
                         :src="item"
                         :preview-src-list="ElecDataList_images"
-                        :fit="fit"
                       >
                       </el-image>
                     </div>
@@ -2805,28 +2812,29 @@
     </el-dialog>
     <!-- 内部弹窗->历史报警 -->
     <el-dialog
-      title="历史报警"
+      :title="faultState ? '历史报警' : '当前报警'"
       :modal-append-to-body="false"
       :visible.sync="innerVisible_lishi"
       width="50%"
     >
-      <el-form
-        size="mini"
-        :inline="true"
-        :model="formInline"
-        class="demo-form-inline"
-      >
-        <el-form-item label="日期:">
-          <el-col :span="24">
-            <el-date-picker
-              type="date"
-              placeholder="时间"
-              v-model="sizeForm.date1"
-              value-format="yyyy-MM-dd"
-              style="width: 100%"
-            ></el-date-picker>
-          </el-col>
-          <!-- <el-col class="line" :span="2">-</el-col>
+      <div v-if="faultState">
+        <el-form
+          size="mini"
+          :inline="true"
+          :model="formInline"
+          class="demo-form-inline"
+        >
+          <el-form-item label="日期:">
+            <el-col :span="24">
+              <el-date-picker
+                type="date"
+                placeholder="时间"
+                v-model="sizeForm.date1"
+                value-format="yyyy-MM-dd"
+                style="width: 100%"
+              ></el-date-picker>
+            </el-col>
+            <!-- <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
             <el-date-picker
               type="date"
@@ -2835,33 +2843,61 @@
               style="width: 100%"
             ></el-date-picker>
           </el-col> -->
-        </el-form-item>
+          </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit, Historical_alarm()"
-            >查询</el-button
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit, Historical_alarm()"
+              >查询</el-button
+            >
+            <!-- <el-button type="primary" @click="onSubmit">导出</el-button> -->
+          </el-form-item>
+        </el-form>
+        <template>
+          <el-table
+            height="400px"
+            v-loading="Historical_alarm_list_loading"
+            :data="Historical_alarm_list"
+            style="width: 100%"
+            :default-sort="{
+              prop: 'regdate',
+              order: 'descending',
+            }"
           >
-          <!-- <el-button type="primary" @click="onSubmit">导出</el-button> -->
-        </el-form-item>
-      </el-form>
-      <template>
+            <el-table-column prop="type" label="报警名称"> </el-table-column>
+            <el-table-column prop="regdate" label="报警时间" sortable>
+            </el-table-column>
+            <el-table-column prop="leakageAlarmCurrentValue" label="报警值">
+            </el-table-column>
+          </el-table>
+        </template>
+      </div>
+      <div v-else>
         <el-table
           height="400px"
           v-loading="Historical_alarm_list_loading"
-          :data="Historical_alarm_list"
+          :data="AlarmAndFaultList"
           style="width: 100%"
           :default-sort="{
             prop: 'regdate',
             order: 'descending',
           }"
         >
-          <el-table-column prop="type" label="报警名称"> </el-table-column>
-          <el-table-column prop="regdate" label="报警时间" sortable>
+          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column prop="typeName" label="报警名称"> </el-table-column>
+          <el-table-column prop="alarmFaultDate" label="报警时间" sortable>
           </el-table-column>
-          <el-table-column prop="leakageAlarmCurrentValue" label="报警值">
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                @click="FaultHandleClick(scope.row.aFid)"
+                type="text"
+                size="small"
+                >解除</el-button
+              >
+            </template>
           </el-table-column>
         </el-table>
-      </template>
+      </div>
     </el-dialog>
 
     <!-- 消防水液体弹窗 -->
@@ -2877,8 +2913,11 @@
         "
       >
         <div class="FireWaterSystemDialogWapper">
-          <p class="title">{{ msg }}</p>
-          <p class="title">{{ time }}</p>
+          <p class="title">设备：{{ msg }}</p>
+
+          <p class="title">设备号：{{ deviceid }}</p>
+
+          <p class="title">更新时间：{{ time }}</p>
           <!-- 图表容器 -->
           <div class="shuiya_echarts"></div>
           <!-- <div class="shuiya_echarts"></div> -->
@@ -2903,80 +2942,103 @@
               ></el-col
             >
           </el-row>
-
-          <div
-            class="right_two"
-            v-for="(item, index) in liquidFilList.mess6"
-            :key="index"
-          >
-            <el-row>
-              <el-col :span="12" style="text-align: center">
-                <img
-                  v-if="item.rssi == 1"
-                  src="../../../assets/images/one.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else-if="item.rssi == 2"
-                  src="../../../assets/images/two.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else-if="item.rssi == 3"
-                  src="../../../assets/images/three.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else-if="item.rssi == 4"
-                  src="../../../assets/images/four.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else
-                  src="../../../assets/images/ling.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-              </el-col>
-              <el-col :span="12" style="text-align: center">
-                <img
-                  v-if="item.voltage == 1"
-                  src="../../../assets/images/battery1.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else-if="item.voltage == 2"
-                  src="../../../assets/images/battery2.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else-if="item.voltage == 3"
-                  src="../../../assets/images/battery3.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else-if="item.voltage == 4"
-                  src="../../../assets/images/battery4.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-                <img
-                  v-else
-                  src="../../../assets/images/battery0.png"
-                  alt=""
-                  style="width: 150px; height: 150px"
-                />
-              </el-col>
-            </el-row>
-          </div>
         </div>
+
+        <el-row style="width: 95%; margin: 0 auto">
+          <!-- <el-col :span="10">
+            <div class="managementYes">
+              <p class="titleP">填写处置情况</p>
+              <el-input
+                v-model="managementInput"
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 3 }"
+                placeholder="请输入内容"
+              ></el-input>
+              <el-button
+                type="primary"
+                size="mini"
+                style="margintop: 20px"
+                @click="management"
+                >提交</el-button
+              >
+            </div>
+            <el-button>当前报警</el-button>
+          </el-col> -->
+          <el-col :span="24">
+            <div
+              class="right_two"
+              v-for="(item, index) in liquidFilList.mess6"
+              :key="index"
+            >
+              <el-row>
+                <el-col :span="12" style="text-align: center">
+                  <img
+                    v-if="item.rssi == 1"
+                    src="../../../assets/images/one.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else-if="item.rssi == 2"
+                    src="../../../assets/images/two.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else-if="item.rssi == 3"
+                    src="../../../assets/images/three.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else-if="item.rssi == 4"
+                    src="../../../assets/images/four.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else
+                    src="../../../assets/images/ling.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                </el-col>
+                <el-col :span="12" style="text-align: center">
+                  <img
+                    v-if="item.voltage == 1"
+                    src="../../../assets/images/battery1.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else-if="item.voltage == 2"
+                    src="../../../assets/images/battery2.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else-if="item.voltage == 3"
+                    src="../../../assets/images/battery3.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else-if="item.voltage == 4"
+                    src="../../../assets/images/battery4.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                  <img
+                    v-else
+                    src="../../../assets/images/battery0.png"
+                    alt=""
+                    style="width: 150px; height: 150px"
+                  />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
       </template>
       <template v-else>
         <!-- <div class="gongYe"> -->
@@ -3019,7 +3081,44 @@
         </el-row>
         <!-- </div> -->
       </template>
-      <div class="shuju_echarts" style="height: 350px">
+
+      <div
+        class="shuju_echarts"
+        style="height: 350px"
+        v-if="AlarmAndFaultList.length >= 1"
+      >
+        <p>当前报警</p>
+        <el-table
+          height="300px"
+          v-loading="Historical_alarm_list_loading"
+          :data="AlarmAndFaultList"
+          style="width: 100%"
+          :default-sort="{
+            prop: 'regdate',
+            order: 'descending',
+          }"
+        >
+          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column prop="typeName" label="报警名称"> </el-table-column>
+          <el-table-column prop="alarmFaultDate" label="报警时间" sortable>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                @click="FaultHandleClick(scope.row.aFid)"
+                type="text"
+                size="small"
+                >解除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div
+        class="shuju_echarts"
+        style="height: 350px"
+        v-if="HeartBeatList.length >= 1"
+      >
         <p>心跳时间</p>
         <template>
           <el-table
@@ -3100,7 +3199,55 @@
               </ul>
             </div></el-col
           >
-          <el-col :span="16"> </el-col>
+          <el-col :span="16">
+            <!-- <div class="managementYes">
+              <p class="titleP">填写处置情况</p>
+              <el-input
+                v-model="managementInput"
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 3 }"
+                placeholder="请输入内容"
+              ></el-input>
+              <el-button
+                type="primary"
+                size="mini"
+                style="margin-top: 20px"
+                @click="management"
+                >提交</el-button
+              >
+            </div> -->
+            <div class="managementYes">
+              <el-table
+                height="180px"
+                :data="AlarmAndFaultList"
+                style="width: 100%"
+                :default-sort="{
+                  prop: 'regdate',
+                  order: 'descending',
+                }"
+              >
+                <el-table-column type="index" width="50"> </el-table-column>
+                <el-table-column prop="typeName" label="报警名称">
+                </el-table-column>
+                <el-table-column
+                  prop="alarmFaultDate"
+                  label="报警时间"
+                  sortable
+                >
+                </el-table-column>
+                <el-table-column label="操作">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click="FaultHandleClick(scope.row.aFid)"
+                      type="text"
+                      size="small"
+                      >解除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-col>
         </el-row>
         <div
           class="two"
@@ -3130,7 +3277,7 @@
           </div>
         </div>
 
-        <div class="two">
+        <div class="two" v-if="HeartBeatList.length >= 1">
           <p>心跳时间</p>
           <template>
             <el-table
@@ -3288,6 +3435,54 @@
     >
       <div id="ezuikitTalkData" v-if="this.popUps !== 'yes'"></div>
       <div id="ezuikitTalkData2" v-else></div>
+<!-- 
+      <div class="btn_box">
+        <el-button
+          round
+          icon="el-icon-top-left"
+          @click="directionControl(4)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-top"
+          @click="directionControl(0)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-top-right"
+          @click="directionControl(6)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-back"
+          @click="directionControl(2)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-video-play"
+          @click="stopTurn"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-right"
+          @click="directionControl(3)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-bottom-left"
+          @click="directionControl(5)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-bottom"
+          @click="directionControl(1)"
+        ></el-button>
+        <el-button
+          round
+          icon="el-icon-bottom-right"
+          @click="directionControl(7)"
+        ></el-button>
+      </div> -->
 
       <template v-if="this.getNFCInspectionByDevIdList.length > 0">
         <el-table :data="getNFCInspectionByDevIdList[0].mess">
@@ -3334,17 +3529,55 @@
                 >正常模式</el-button
               >
             </el-col> -->
-            <el-col :span="12" v-if="this.$route.name == 'InfraredSmoke'">
+            <el-col :span="24">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-button
+                    style="width: 100%; margin-bottom: 10px"
+                    type="primary"
+                    @click="infrared(2)"
+                    >消音</el-button
+                  >
+                </el-col>
+                <el-col :span="12">
+                  <el-button
+                    style="width: 100%; margin-bottom: 10px"
+                    type="primary"
+                    @click="infrared(3)"
+                    >复位</el-button
+                  >
+                </el-col>
+              </el-row>
               <el-button
+                v-if="this.$route.name == 'InfraredSmoke'"
                 type="primary"
-                style="width: 100%；"
+                style="width: 100%; margin-bottom: 20px"
                 @click="infraredVisible = true"
                 >红外模式时间设置</el-button
               >
+              <div class="SmartIndependentSmoke_right_wapper">
+                <div class="rihgt_one">
+                  <p class="titleP">设备信息</p>
+                  <ul
+                    v-for="(item, index) in ElecDataList_noIndexOf.DevData"
+                    :key="index"
+                  >
+                    <li><span>设备编号:</span> {{ item.productNumber }}</li>
+                    <li
+                      v-if="item.regdate == null || item.regdate == undefined"
+                    >
+                      <span> 时间:</span>{{ item.heartbeatTime }}
+                    </li>
+                    <li v-else><span> 时间:</span>{{ item.regdate }}</li>
+                    <li><span> 所在地址:</span>{{ item.installLocation }}</li>
+                    <li><span>所在位置:</span> {{ item.name }}</li>
+                  </ul>
+                </div>
+              </div>
             </el-col>
           </el-row>
 
-          <div class="SmartIndependentSmoke">
+          <!-- <div class="SmartIndependentSmoke">
             <div class="two">
               <p class="titleP">填写处置情况</p>
               <el-input
@@ -3361,11 +3594,11 @@
                 >提交</el-button
               >
             </div>
-          </div>
+          </div> -->
         </el-col>
         <el-col :span="18" class="SmartIndependentSmoke_right_wapper">
           <el-row :gutter="20">
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <div class="rihgt_one">
                 <p class="titleP">设备信息</p>
                 <ul
@@ -3381,8 +3614,8 @@
                   <li><span>所在位置:</span> {{ item.name }}</li>
                 </ul>
               </div>
-            </el-col>
-            <el-col :span="16">
+            </el-col> -->
+            <el-col :span="24">
               <div
                 class="right_two"
                 v-for="(item, index) in ElecDataList_noIndexOf.mess6"
@@ -3450,7 +3683,10 @@
             <p class="titleP">信号强度/温度统计图</p>
             <div class="SmartIndependentSmoke_echars_one_wapper"></div>
           </div>
-          <div class="SmartIndependentSmoke_echars_one">
+          <div
+            class="SmartIndependentSmoke_echars_one"
+            v-if="HeartBeatList.length >= 1"
+          >
             <p class="titleP">心跳时间</p>
             <!-- <div class="SmartIndependentSmoke_echars_one_wapper"></div> -->
             <template>
@@ -3474,6 +3710,35 @@
                 </el-table-column>
               </el-table>
             </template>
+          </div>
+
+          <div class="SmartIndependentSmoke_echars_one">
+            <p class="titleP">当前报警</p>
+            <el-table
+              height="300px"
+              :data="AlarmAndFaultList"
+              style="width: 100%"
+              :default-sort="{
+                prop: 'regdate',
+                order: 'descending',
+              }"
+            >
+              <el-table-column type="index" width="50"> </el-table-column>
+              <el-table-column prop="typeName" label="报警名称">
+              </el-table-column>
+              <el-table-column prop="alarmFaultDate" label="报警时间" sortable>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                    @click="FaultHandleClick(scope.row.aFid)"
+                    type="text"
+                    size="small"
+                    >解除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
           <div class="lishibaojing">
             <p class="titleP">历史报警</p>
@@ -3544,7 +3809,6 @@
                     style="width: 100%; height: 150px"
                     :src="item"
                     :preview-src-list="ElecDataList_images"
-                    :fit="fit"
                   >
                   </el-image>
                 </div>
@@ -3574,8 +3838,33 @@
       </el-time-picker>
       <span slot="footer" class="dialog-footer">
         <el-button @click="infraredVisible = false">取 消</el-button>
-        <el-button type="primary" @click="infrared">确 定</el-button>
+        <el-button type="primary" @click="infrared(1)">确 定</el-button>
       </span>
+    </el-dialog>
+
+    <el-dialog
+      title="解除"
+      :visible.sync="FaultVisible"
+      width="20%"
+      :modal="false"
+      top="12%"
+    >
+      <div class="managementYes">
+        <p class="titleP">填写处置情况</p>
+        <el-input
+          v-model="managementInput"
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 3 }"
+          placeholder="请输入内容"
+        ></el-input>
+        <el-button
+          type="primary"
+          size="mini"
+          style="margintop: 20px"
+          @click="management"
+          >提交</el-button
+        >
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -3613,13 +3902,17 @@ import {
   setDepoly,
   getHeartBea,
   getYGTemp,
+  getAlarmAndFault,
 } from "@/api/index.js";
 
 import EZUIKit from "ezuikit-js";
+import axios from "axios";
 export default {
   props: ["pagetype", "popUps"],
   data() {
     return {
+      AlarmAndFaultList: [],
+      faultState: true,
       getYGTempList: [],
       HeartBeatList: [],
       FireExtinguisherStatus: {
@@ -3643,6 +3936,7 @@ export default {
       getNFCInspectionByDevIdList: [],
       FireAlarmSystem_loading: false,
       infraredVisible: false,
+      FaultVisible: false,
       getBluebirdevent_List: [],
       caozuojilv: [],
       Historical_alarm_list: [],
@@ -3668,7 +3962,7 @@ export default {
       ElecDataList_type_List_DevInfo: {},
       baoxiandanhao: "",
       ElecDataList_images: [],
-      ElecDataList: "",
+      ElecDataList: { DevData: [{ typeName: "" }] },
       getDeviceByPidList: "",
       loading: true,
       GetMapDataList: "",
@@ -3687,6 +3981,7 @@ export default {
       // 火灾报警
       FireAlarmSystemDialog: false,
       msg: "",
+      deviceid: "",
       FireWaterSystemDialog: false,
       equipmentColor: "onLine",
       sizeForm: {
@@ -3716,6 +4011,7 @@ export default {
       tableData: [],
 
       time: "",
+      aFid: "",
     };
   },
   mounted() {
@@ -3725,6 +4021,62 @@ export default {
   },
 
   methods: {
+    directionControl(num) {
+      axios({
+        url: "https://open.ys7.com/api/lapp/device/ptz/start",
+        method: "post",
+        // params: { appKey: appKey, appSecret: appSecret }, //传入摄像头的appkey和appsecrect
+        timeout: 2000,
+      }).then((res) => {
+        this.accessToken = accessToken;
+        axios({
+          url: "https://open.ys7.com/api/lapp/device/ptz/start",
+          method: "post",
+          params: {
+            accessToken: this.accessToken, //accesstoken码，一般一周过期
+            speed: 2, //旋转速度
+            direction: num, //方向，传入数字，对应数字在api文档有
+            channelNo: 1, // 通道号
+            deviceSerial: "12132123", //序列号
+          },
+          timeout: 2000,
+        }).then((res) => {
+          // console.log(res.data)
+          if (res.data.code == "60000") {
+            this.$message(res.data.msg);
+          }
+        });
+      });
+    },
+    stopTurn() {
+      axios({
+        url: "https://open.ys7.com/api/lapp/device/ptz/stop",
+        method: "post",
+        params: {
+          accessToken: accessToken,
+          // direction:num,
+          channelNo: 1, // 通道号
+          deviceSerial: "123131235", //序列号
+        },
+        timeout: 2000,
+      }).then((res) => {
+        //  console.log(res.data)
+        if (res.data.code == "60000") {
+          this.$message(res.data.msg);
+        }
+      });
+    },
+
+    getAlarmAndFaultFun() {
+      this.faultState = false;
+      getAlarmAndFault(this.productNumber).then((res) => {
+        this.AlarmAndFaultList = res.data.data;
+      });
+    },
+    FaultHandleClick(aFid) {
+      this.FaultVisible = true;
+      this.aFid = aFid;
+    },
     devState(state) {
       switch (state) {
         case "1":
@@ -3816,15 +4168,16 @@ export default {
       }
     },
     //红外线模式
-    infrared() {
+    infrared(type) {
       this.infraredVisible = false;
-      console.log(
-        this.ElecDataList_noIndexOf.DevData[0].productNumber,
-        this.infraredTime
-      );
+      // console.log(
+      //   this.ElecDataList_noIndexOf.DevData[0].productNumber,
+      //   this.infraredTime
+      // );
       setTime(
         this.utils.userName,
         this.ElecDataList_noIndexOf.DevData[0].productNumber,
+        type,
         this.infraredTime[0],
         this.infraredTime[1]
       ).then(
@@ -3956,6 +4309,7 @@ export default {
     },
     //历史报警
     Historical_alarm() {
+      this.faultState = true;
       this.Historical_alarm_list_loading = true;
       const time = new Date();
       const year = time.getFullYear();
@@ -4162,25 +4516,32 @@ export default {
     },
     //提交处置情况
     management() {
-      let state =
-        this.ElecDataList == ""
-          ? this.ElecDataList_noIndexOf.mess6[0].aFid
-          : this.ElecDataList.DevData[0].aFid;
-      // if(this.ElecDataList==''){
+      // console.log()
 
+      // console.log(999, this.ElecDataList);
+      // let state =
+      //   this.ElecDataList == ""
+      //     ? this.ElecDataList_noIndexOf.mess6[0].aFid
+      //     : this.ElecDataList.DevData[0].aFid;
+      // // if(this.ElecDataList==''){
+      // console.log(state, "state");
+      // // }
+      // // console.log(this.ElecDataList, "62");
+      // if (state == "") {
+      //   return this.$message.warning("设备正常,无需解除");
       // }
-      // console.log(this.ElecDataList, "62");
-      if (state == "") {
-        return this.$message.warning("设备正常,无需解除");
-      }
-      if (this.managementInput == "") {
-        return this.$message.error("请填写处置信息");
-      }
+      // if (this.managementInput == "") {
+      //   return this.$message.error("请填写处置信息");
+      // }
       // console.log(this.ElecDataList.DevData[0]);
       WebeditFileimageServlet(
-        this.utils.userName + "," + state,
+        this.utils.userName + "," + this.aFid,
         this.managementInput
       ).then((res) => {
+        // console.log(res.data);
+        if (res.data == null || res.data == undefined || res.data == "") {
+          return this.$message.error("请稍后重试或联系管理员");
+        }
         if (res.data.list[0].status == true) {
           this.innerVisible = false;
           this.SmartIndependentSmokeDialog = false;
@@ -4192,6 +4553,8 @@ export default {
     SmartIndependentSmokeSee(devId, imei) {
       this.managementInput = "";
       this.SmartIndependentSmokeDialog = true;
+      this.productNumber = imei;
+      this.getAlarmAndFaultFun();
       if (this.$route.path === "/FireInternetOfThings/IntelligentFireAlarm") {
         ElecData_type(devId, 6).then((res) => {
           this.ElecDataList_noIndexOf = res.data;
@@ -4326,12 +4689,14 @@ export default {
       getHeartBea(productNumber).then((res) => {
         this.HeartBeatList = res.data.data;
       });
-
+      this.productNumber = productNumber;
+      this.getAlarmAndFaultFun();
       if (this.$route.name == "FireWaterSystem" || this.$route.name == "home") {
         ElecData_type(devId, this.pagetype).then((res) => {
           this.msg = res.data.DevData[0].typeName;
           this.time = res.data.DevData[0].alarmFaultDate;
-
+          this.deviceid = res.data.DevData[0].deviceid;
+          this.ElecDataList = res.data;
           this.liquidFilList = res.data;
           this.$nextTick(() => {
             let shui_echart = this.$echarts.init(
@@ -5012,7 +5377,9 @@ export default {
         ElectricDeviceDate(devId, now).then((res) => {
           this.one_echarts_loading = false;
 
-          if (res.data.DevData.length == 0) {
+          let result = res.data.DevData || res.data.Data;
+
+          if (result.length == 0) {
             return;
           }
           let dianLiuUa = [];
@@ -5576,11 +5943,14 @@ export default {
       } else {
         type = 7;
       }
+      this.productNumber = productNumber;
+      this.getAlarmAndFaultFun();
 
       //console.log(this.$route.path, 666666);
       ElecData_type(devID, type).then((res) => {
         // res.data.DevInfo = [...res.data.DevInfo]
         // if(res.data)
+        this.ElecDataList_noIndexOf = res.data;
         this.FireAlarmSystem_loading = false;
         // console.log(res.data == "");
         if (res.data == "" || res.data.mess12 == "[]") {
@@ -6075,7 +6445,7 @@ export default {
     .one {
       width: 300px;
       color: #4b6082;
-
+      padding-bottom: 10px;
       box-shadow: 0px 0px 10px 0px rgba(3, 27, 29, 0.11);
       span {
         color: #000;
@@ -6115,7 +6485,8 @@ export default {
       border-radius: 50%;
       text-align: center;
       margin: 0 auto;
-      line-height: 150px;
+      // line-height: 150px;
+      padding: 1px;
       color: #fff;
       font-size: 20px;
     }
@@ -6359,6 +6730,7 @@ export default {
     margin: 0 auto;
     // background: #bfa;
   }
+
   .yeya_echarts {
     width: 400px;
     height: 400px;
@@ -6367,6 +6739,19 @@ export default {
   }
   /deep/.el-button--small {
     width: 120px;
+  }
+}
+.managementYes {
+  // margin-top: 20px;
+  width: 90%;
+  padding-bottom: 20px;
+  // height: 200px;
+  box-shadow: 0px 0px 10px 0px rgba(3, 27, 29, 0.11);
+  p {
+    padding-left: 20px;
+    line-height: 40px;
+    // text-align: center;
+    border-bottom: 1px solid #f3f6fa;
   }
 }
 // .gongYe {
@@ -6508,7 +6893,7 @@ export default {
     }
     img {
       margin: 12px 70px;
-      width: 50%;
+      width: 33%;
       height: 100%;
     }
   }
