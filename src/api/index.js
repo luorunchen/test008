@@ -373,6 +373,19 @@ export function SetParameterApi(devSignature, parNine, parFourteen, parSeventeen
     }
   })
 }
+//接入设备->报警=>设备设置(阀值设置)接口
+export function SetParameterApiCopyFire(devSignature, parNine, parTen, parEleven,
+  parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen) {
+  return service({
+    url: `/SetParameterApi.action`,
+    method: 'GET',
+    params: {
+      devSignature, parNine, parTen, parEleven,
+      parTwelve, parThirteen, parFourteen, parFifteen, parSixteen, parSeventeen, parEighteen, parNineteen
+      // devSignature, parNine, parFourteen, parSeventeen, parTen, parThirteen, U_voltage, parEleven, parTwelve
+    }
+  })
+}
 //接入设备->报警=>设备设置(报警推送)接口
 export function UpdateDevicePush(devicename, app, username, sms, deviceId, phone) {
   return service({

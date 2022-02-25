@@ -3433,57 +3433,6 @@
       :modal-append-to-body="false"
       :before-close="videoHandleClose"
     >
-      <div id="ezuikitTalkData" v-if="this.popUps !== 'yes'"></div>
-      <div id="ezuikitTalkData2" v-else></div>
-<!-- 
-      <div class="btn_box">
-        <el-button
-          round
-          icon="el-icon-top-left"
-          @click="directionControl(4)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-top"
-          @click="directionControl(0)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-top-right"
-          @click="directionControl(6)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-back"
-          @click="directionControl(2)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-video-play"
-          @click="stopTurn"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-right"
-          @click="directionControl(3)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-bottom-left"
-          @click="directionControl(5)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-bottom"
-          @click="directionControl(1)"
-        ></el-button>
-        <el-button
-          round
-          icon="el-icon-bottom-right"
-          @click="directionControl(7)"
-        ></el-button>
-      </div> -->
-
       <template v-if="this.getNFCInspectionByDevIdList.length > 0">
         <el-table :data="getNFCInspectionByDevIdList[0].mess">
           <el-table-column prop="productNumber" label="设备位置">
@@ -3494,6 +3443,82 @@
           <el-table-column prop="isMess" label="设备状态"> </el-table-column>
         </el-table>
       </template>
+
+      <el-row v-else>
+        <el-col :span="18">
+          <div id="ezuikitTalkData" v-if="this.popUps !== 'yes'"></div>
+          <div id="ezuikitTalkData2" v-else></div
+        ></el-col>
+        <el-col :span="6">
+          <h4>云台控制切换其它方向时，请先按中间暂停键</h4>
+          <el-row>
+            <el-col :span="8">
+              <el-button
+                round
+                icon="el-icon-top-left"
+                @click="directionControl(4)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8"
+              ><el-button
+                round
+                icon="el-icon-top"
+                @click="directionControl(0)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8">
+              <el-button
+                round
+                icon="el-icon-top-right"
+                @click="directionControl(6)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8"
+              ><el-button
+                round
+                icon="el-icon-back"
+                @click="directionControl(2)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8">
+              <el-button
+                round
+                icon="el-icon-video-play"
+                @click="stopTurn"
+              ></el-button
+            ></el-col>
+            <el-col :span="8"
+              ><el-button
+                round
+                icon="el-icon-right"
+                @click="directionControl(3)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8">
+              <el-button
+                round
+                icon="el-icon-bottom-left"
+                @click="directionControl(5)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8"
+              ><el-button
+                round
+                icon="el-icon-bottom"
+                @click="directionControl(1)"
+              ></el-button
+            ></el-col>
+            <el-col :span="8">
+              <el-button
+                round
+                icon="el-icon-bottom-right"
+                @click="directionControl(7)"
+              ></el-button
+            ></el-col>
+            <!-- <el-col span="8"></el-col> -->
+          </el-row>
+        </el-col>
+      </el-row>
     </el-dialog>
     <!-- 独立烟感弹窗 -->
     <el-dialog
@@ -3896,7 +3921,7 @@ import {
   getHistoryFault,
   getBluebirdevent,
   getNFCInspectionByDevId,
-  SetParameterApi,
+  SetParameterApiCopyFire,
   getGasInfo,
   closeVoice,
   setDepoly,
@@ -4025,27 +4050,22 @@ export default {
       axios({
         url: "https://open.ys7.com/api/lapp/device/ptz/start",
         method: "post",
-        // params: { appKey: appKey, appSecret: appSecret }, //传入摄像头的appkey和appsecrect
+        params: {
+          accessToken: this.accessToken, //accesstoken码，一般一周过期
+          speed: 2, //旋转速度
+          direction: num, //方向，传入数字，对应数字在api文档有
+          channelNo: 1, // 通道号
+          deviceSerial: this.deviceSerial, //序列号
+        },
         timeout: 2000,
       }).then((res) => {
-        this.accessToken = accessToken;
-        axios({
-          url: "https://open.ys7.com/api/lapp/device/ptz/start",
-          method: "post",
-          params: {
-            accessToken: this.accessToken, //accesstoken码，一般一周过期
-            speed: 2, //旋转速度
-            direction: num, //方向，传入数字，对应数字在api文档有
-            channelNo: 1, // 通道号
-            deviceSerial: "12132123", //序列号
-          },
-          timeout: 2000,
-        }).then((res) => {
-          // console.log(res.data)
-          if (res.data.code == "60000") {
-            this.$message(res.data.msg);
-          }
-        });
+        // console.log(res.data)
+        if (res.data.code == "60000") {
+          this.$message(res.data.msg);
+        }
+        if (res.data.code != 200) {
+          this.$message(res.data.msg);
+        }
       });
     },
     stopTurn() {
@@ -4053,15 +4073,18 @@ export default {
         url: "https://open.ys7.com/api/lapp/device/ptz/stop",
         method: "post",
         params: {
-          accessToken: accessToken,
+          accessToken: this.accessToken,
           // direction:num,
           channelNo: 1, // 通道号
-          deviceSerial: "123131235", //序列号
+          deviceSerial: this.deviceSerial, //序列号
         },
         timeout: 2000,
       }).then((res) => {
         //  console.log(res.data)
         if (res.data.code == "60000") {
+          this.$message(res.data.msg);
+        }
+        if (res.data.code != 200) {
           this.$message(res.data.msg);
         }
       });
@@ -4379,6 +4402,9 @@ export default {
           const deviceSerial = productNumber.split("_")[0];
           const deviceSerial2 = productNumber.split("_")[1];
 
+          this.deviceSerial = deviceSerial;
+          this.accessToken = res.data.accessToken;
+
           var ezuikitTalkData = {
             accessToken: global.accessToken, // 应用accessToken
             ezopen:
@@ -4493,7 +4519,7 @@ export default {
       });
     },
     SetParameterApiFun() {
-      SetParameterApi(
+      SetParameterApiCopyFire(
         this.ElecDataList.DevData[0].productNumber,
         this.fazhishezhi.SYDL,
         this.fazhishezhi.AXWD,

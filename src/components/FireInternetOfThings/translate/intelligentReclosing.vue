@@ -2352,7 +2352,13 @@
             </template>
           </template>
           <div class="stateDate" style="text-align: center; font-weight: 800">
-            灭火器状态：{{ getFireStateList == "0" ? "未启动" : "已启动" }}
+            灭火器状态：{{
+              getFireStateList == "0"
+                ? "未启动"
+                : getFireStateList == "1"
+                ? "已启动"
+                : "未接入"
+            }}
           </div>
           <div class="stateDate">
             <el-row>
@@ -2599,6 +2605,7 @@
                     active-color="#13ce66"
                     inactive-color="#999"
                     @change="fireExtinguisherStateChange($event, 2)"
+                    :disabled="getFireStateList == '2' ? true : false"
                   >
                   </el-switch>
                 </el-col>
@@ -2614,6 +2621,7 @@
                     active-color="#13ce66"
                     inactive-color="#999"
                     @change="fireExtinguisherStateChange($event, 3)"
+                    :disabled="getFireStateList == '2' ? true : false"
                   >
                   </el-switch>
                 </el-col>
@@ -2745,7 +2753,11 @@
                     "
                   >
                     灭火器状态：{{
-                      getFireStateList == "0" ? "未启动" : "已启动"
+                      getFireStateList == "0"
+                        ? "未启动"
+                        : getFireStateList == "1"
+                        ? "已启动"
+                        : "未接入"
                     }}
                   </div>
                 </el-col>
