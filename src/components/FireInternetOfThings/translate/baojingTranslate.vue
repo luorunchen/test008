@@ -673,7 +673,7 @@ export default {
           break;
         case "/FireInternetOfThings/KeyParts":
           this.btnInfo = "重点部位";
-          type = "9,13,20";
+          type = "9,13,20,48,49";
           break;
         case "/FireInternetOfThings/SmartIndependentSmoke":
           this.btnInfo = "智慧型独立烟感";
@@ -762,7 +762,7 @@ export default {
           break;
         case "/FireInternetOfThings/KeyParts":
           this.btnInfo = "重点部位";
-          type = "9,13,20";
+          type = "9,13,20,48,49";
           break;
         case "/FireInternetOfThings/SmartIndependentSmoke":
           this.btnInfo = "智慧型独立烟感";

@@ -49,7 +49,15 @@ export default {
     return {
       dialogVisible: false,
       username: "",
-      arlme: { name: "", type: "", address: "", imei: "", pid: "25" },
+      arlme: {
+        name: "",
+        type: "",
+        address: "",
+        imei: "",
+        pid: "48",
+        videoImei: "",
+        videochanle: "",
+      },
       pagetype: "",
     };
   },
@@ -83,17 +91,26 @@ export default {
   },
   methods: {
     handleVideo() {
-      getvideoBydevno(this.arlme.imei).then((res) => {
-        if (res.data.mess == "0") {
-          return this.$message({
-            showClose: true,
-            message: "该设备的项目中没有摄像设备",
-            type: "warning",
-          });
-        } else {
-          this.$refs.publicPopUps.getvideoFun(res.data.mess[0]);
-        }
-      });
+      if (this.arlme.pid == 48) {
+        this.$refs.publicPopUps.getvideoFun(this.arlme.videoImei, 99, {
+          channle: this.arlme.videochanle,
+        });
+      } else {
+        getvideoBydevno(this.arlme.imei).then((res) => {
+          if (res.data.mess == "0") {
+            return this.$message({
+              showClose: true,
+              message: "该设备的项目中没有摄像设备",
+              type: "warning",
+            });
+          } else {
+            this.$refs.publicPopUps.getvideoFun(
+              res.data.mess[0],
+              this.arlme.pid
+            );
+          }
+        });
+      }
     },
     handle() {
       // console.log(this.arlme.pid == (23 || 22 || "25" || 26), 666);
@@ -122,7 +139,7 @@ export default {
     goEasyFun() {
       let goEasy = GoEasy.getInstance({
         host: "hangzhou.goeasy.io", //应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
-        appkey: "BC-aebaac37879b427184e50cf002f8f531", //替换为您的应用appkey
+        appkey: "BC-3937ef16a69a451088d004bb70a22c7c", //替换为您的应用appkey
       });
 
       goEasy.connect({
@@ -158,6 +175,7 @@ export default {
           _that.arlme.address = arr[3];
           _that.arlme.pid = arr[5];
           _that.arlme.did = arr[1];
+
           _that.dialogVisible = true;
 
           switch (_that.arlme.pid) {
@@ -166,6 +184,10 @@ export default {
               break;
             case "2":
               _that.pagetype = 6;
+              break;
+            case "48":
+              _that.arlme.videoImei = arr[6];
+              _that.arlme.videochanle = arr[7];
               break;
           }
         },

@@ -25,6 +25,16 @@ export function sy_map(username, type, region) {
     }
   })
 }
+//获取录像机列表
+export function getVideo() {
+  return service({
+    url: `/admin/device/getVideo.action`,
+    method: 'GET',
+    params: {
+
+    }
+  })
+}
 //首页报警数接口
 export function push_AlarmData(username, time_zone) {
   return service({
@@ -526,12 +536,12 @@ export function deletegalFireMan(pid) {
   })
 }
 //新增设备
-export function addDevice(projName, devSignature, username, installLocation, long_lat, devtype, device_name, place, superiorEquipme, loopNumber, devId, devRemark, sms) {
+export function addDevice(projName, devSignature, username, installLocation, long_lat, devtype, device_name, place, superiorEquipme, loopNumber, devId, devRemark, sms, video, channle) {
   return service({
     url: `/admin/device/check/addDevice.action`,
     method: 'GET',
     params: {
-      projName, devSignature, username, installLocation, long_lat, devtype, device_name, place, superiorEquipme, loopNumber, devId, devRemark, sms
+      projName, devSignature, username, installLocation, long_lat, devtype, device_name, place, superiorEquipme, loopNumber, devId, devRemark, sms, video, channle
     }
   })
 }
@@ -1000,6 +1010,7 @@ export function upSwitch(imei, state, content) {
     }
   })
 }
+
 export function setTime(username, productNumbers, type, startTime, endTime) {
   return service({
     url: `/WebProject/setTime.action`,

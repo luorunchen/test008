@@ -399,10 +399,22 @@
                   >
                     <el-row
                       :gutter="10"
-                      v-if="item.productNumber.indexOf('_') != -1"
+                      v-if="
+                        item.dSid == 13 ||
+                        item.dSid == 48 ||
+                        item.dSid == 9 ||
+                        item.dSid == 49
+                      "
                     >
                       <el-col :span="6">
                         <img
+                          v-if="item.dSid == 49"
+                          src="../../../assets/images/luxiangji.png"
+                          alt=""
+                          style="margin: 15px 0 0 15px"
+                        />
+                        <img
+                          v-else
                           src="../../../assets/images/视频@2x.png"
                           alt=""
                           style="margin: 15px 0 0 15px"
@@ -418,14 +430,50 @@
                               size="mini"
                               @click="
                                 (KeyPartsDialog = true),
-                                  getvideoFun(item.productNumber)
+                                  getvideoFun(
+                                    item.productNumber,
+                                    item.dSid,
+                                    item
+                                  )
                               "
                               >查看视频</el-button
                             >
                           </li>
+                          <!-- <li v-else>
+                            <el-popover
+                              placement="right"
+                              width="160"
+                              v-model="visibleVideo"
+                              :tabindex="9999"
+                            >
+                              <p>请选择录像机视频通道</p>
+                              <el-checkbox-group v-model="videoCheckList">
+                                <el-checkbox label="1">通道一</el-checkbox>
+                                <el-checkbox label="2">通道二</el-checkbox>
+                                <el-checkbox label="3">通道三</el-checkbox>
+                                <el-checkbox label="4">通道四</el-checkbox>
+                              </el-checkbox-group>
+                              <el-button
+                                type="primary"
+                                size="mini"
+                                @click="
+                                  (KeyPartsDialog = true),
+                                    getvideoFun(item.productNumber, item.dSid)
+                                "
+                                >确定</el-button
+                              >
+                              <el-button
+                                type="primary"
+                                size="mini"
+                                slot="reference"
+                                >选择通道</el-button
+                              >
+                            </el-popover>
+                          </li> -->
                         </ul>
                       </el-col>
                     </el-row>
+
                     <el-row :gutter="10" v-else>
                       <el-col :span="6">
                         <img
@@ -443,7 +491,8 @@
                               type="primary"
                               size="mini"
                               @click="
-                                (KeyPartsDialog = true), getvideoFun(item.devId)
+                                (KeyPartsDialog = true),
+                                  getvideoFun(item.devId, item.dSid)
                               "
                               >巡检记录</el-button
                             >
@@ -3427,13 +3476,14 @@
 
     <!-- 重点部位弹窗 -->
     <el-dialog
-      :title="getNFCInspectionByDevIdList.length > 0 ? '巡检记录' : '查看视频'"
+      :title="videoDsid == 20 ? '巡检记录' : '查看视频'"
       :visible.sync="KeyPartsDialog"
-      width="50%"
+      width="70%"
       :modal-append-to-body="false"
       :before-close="videoHandleClose"
     >
-      <template v-if="this.getNFCInspectionByDevIdList.length > 0">
+      <!-- {{ videoDsid }} -->
+      <template v-if="this.videoDsid == 20">
         <el-table :data="getNFCInspectionByDevIdList[0].mess">
           <el-table-column prop="productNumber" label="设备位置">
           </el-table-column>
@@ -3444,12 +3494,62 @@
         </el-table>
       </template>
 
+      <template v-else-if="this.videoDsid == 48">
+        <el-table :data="getNFCInspectionByDevIdList">
+          <el-table-column prop="typeName" label="报警类型"> </el-table-column>
+          <el-table-column prop="alarmFaultDate" label="报警时间">
+          </el-table-column>
+          <el-table-column prop="date" label="报警图片">
+            <template slot-scope="scope">
+              <el-image
+                :src="`https://psy119.cn/ctx/devPic//${scope.row.image}.jpg`"
+                alt=""
+                style='width="300px"; height="300px"'
+                :preview-src-list="scope.row.imagesArr"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="操作" width="350">
+            <template slot-scope="scope">
+              <!-- <el-image
+                :src="`https://psy119.cn/ctx/devPic//${scope.row.image}.jpg`"
+                alt=""
+                style='width="300px"; height="300px"'
+                :preview-src-list="scope.row.imagesArr"
+              /> -->
+              <el-button
+                type="primary"
+                size="mini"
+                @click="
+                  (KeyPartsDialog = true),
+                    getvideoFun(
+                      scope.row.productNumber,
+                      scope.row.dSid,
+                      scope.row
+                    )
+                "
+                >查看摄像头</el-button
+              >
+
+              <el-button
+                type="primary"
+                size="mini"
+                @click="FaultHandleClick(scope.row.aFid)"
+                >解除报警</el-button
+              >
+            </template>
+          </el-table-column>
+
+          <!-- <el-table-column prop="isMess" label="设备状态"> </el-table-column> -->
+        </el-table>
+      </template>
+
       <el-row v-else>
-        <el-col :span="18">
+        <el-col :span="20">
           <div id="ezuikitTalkData" v-if="this.popUps !== 'yes'"></div>
           <div id="ezuikitTalkData2" v-else></div
         ></el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <h4>云台控制切换其它方向时，请先按中间暂停键</h4>
           <el-row>
             <el-col :span="8">
@@ -3517,6 +3617,40 @@
             ></el-col>
             <!-- <el-col span="8"></el-col> -->
           </el-row>
+
+          <el-row v-if="this.videoDsid == 49">
+            <el-col :span="12" style="margin-top: 10px"
+              ><el-button
+                type="primary"
+                @click="getvideoFun(productNumber, videoDsid, 1)"
+                >通道一</el-button
+              ></el-col
+            >
+            <el-col :span="12" style="margin-top: 10px"
+              ><el-button
+                type="primary"
+                @click="getvideoFun(productNumber, videoDsid, 2)"
+                >通道二</el-button
+              ></el-col
+            >
+            <el-col :span="12" style="margin-top: 10px"
+              ><el-button
+                type="primary"
+                @click="getvideoFun(productNumber, videoDsid, 3)"
+                >通道三</el-button
+              ></el-col
+            >
+            <el-col :span="12" style="margin-top: 10px"
+              ><el-button
+                type="primary"
+                @click="getvideoFun(productNumber, videoDsid, 4)"
+                >通道四</el-button
+              ></el-col
+            >
+          </el-row>
+          <div v-else-if="this.videoDsid == 99" style="margin-top: 30px">
+            <el-button type="primary" size="mini">启动灭火器</el-button>
+          </div>
         </el-col>
       </el-row>
     </el-dialog>
@@ -3936,6 +4070,7 @@ export default {
   props: ["pagetype", "popUps"],
   data() {
     return {
+      videoCheckList: [],
       AlarmAndFaultList: [],
       faultState: true,
       getYGTempList: [],
@@ -3958,7 +4093,12 @@ export default {
         typeName: "",
         alarmFaultDate: "",
       },
-      getNFCInspectionByDevIdList: [],
+      getNFCInspectionByDevIdList: [
+        {
+          mess: [],
+        },
+      ],
+      visibleVideo: false,
       FireAlarmSystem_loading: false,
       infraredVisible: false,
       FaultVisible: false,
@@ -4003,6 +4143,7 @@ export default {
       SmartIndependentSmokeDialog: false,
       //重点部位
       KeyPartsDialog: false,
+      productNumber: "",
       // 火灾报警
       FireAlarmSystemDialog: false,
       msg: "",
@@ -4037,12 +4178,26 @@ export default {
 
       time: "",
       aFid: "",
+      videoDsid: "",
     };
   },
   mounted() {
     // //console.log(this.SElec_DetailElecDevice_List, 4564565);
     // undefined;
     console.log(this.popUps);
+  },
+  watch: {
+    videoCheckList(val) {
+      console.log(val);
+      if (val.length > 3) {
+        this.videoCheckList.pop();
+        return this.$message({
+          showClose: true,
+          type: "error",
+          message: "上限为三通道",
+        });
+      }
+    },
   },
 
   methods: {
@@ -4303,6 +4458,9 @@ export default {
         case "5":
           this.FireAlarmSystem(devID, imei);
           break;
+        case "48":
+          this.getvideoFun(imei, type);
+          break;
         // case "25":
         //   this.FireAlarmSystem(devID, imei);
         //   break;
@@ -4364,10 +4522,8 @@ export default {
       let item;
       if (this.popUps != "yes") {
         item = document.getElementById("ezuikitTalkData");
-        console.log("pppppp6", item);
       } else {
         item = document.getElementById("ezuikitTalkData2");
-        console.log("pppppp7", item);
       }
 
       //动态删除多出的子元素
@@ -4376,35 +4532,84 @@ export default {
       }
     },
     //萤石云视频
-    getvideoFun(productNumber) {
+    getvideoFun(productNumber, dSid, arr) {
       //这是视频展示数据
+      // console.log
+      console.log(productNumber, dSid, arr, "DISD");
+      this.productNumber = productNumber;
+      // if(dSid==)
+      this.videoDsid = dSid;
       this.KeyPartsDialog = true;
-      this.$nextTick(() => {
-        var item;
-        // console.log(this.popUps, "9jhhguj");
-        if (this.popUps !== "yes") {
-          item = document.getElementById("ezuikitTalkData");
-          console.log("pppppp6", item);
-        } else {
-          item = document.getElementById("ezuikitTalkData2");
-          console.log("pppppp7", item);
-        }
 
-        //动态删除多出的子元素
-        while (item.firstChild) {
-          item.removeChild(item.firstChild);
-        }
-      });
-      if (productNumber.toString().indexOf("_") != -1) {
+      if (dSid == 48) {
+        getAlarmAndFault(productNumber).then((res) => {
+          console.log(res, "4848484848");
+          this.getNFCInspectionByDevIdList = res.data.data;
+          this.getNFCInspectionByDevIdList.forEach((item) => {
+            console.log(item, 2222);
+            item.imagesArr = [
+              `https://psy119.cn/ctx/devPic//${item.image}.jpg`,
+            ];
+            item.productNumber = arr.video;
+            //99为自己赋值的视频id
+            item.dSid = 99;
+            item.channle = arr.channle;
+            // item.
+          });
+        });
+      } else if (dSid != 20) {
+        this.$nextTick(() => {
+          var item;
+          // console.log(this.popUps, "9jhhguj");
+          if (this.popUps !== "yes") {
+            item = document.getElementById("ezuikitTalkData");
+          } else {
+            item = document.getElementById("ezuikitTalkData2");
+          }
+
+          //动态删除多出的子元素
+          while (item.firstChild) {
+            item.removeChild(item.firstChild);
+          }
+        });
         this.getNFCInspectionByDevIdList = [];
-        console.log("ooooo");
+        // console.log("ooooo");
+
         getvideo().then((res) => {
           const deviceSerial = productNumber.split("_")[0];
           const deviceSerial2 = productNumber.split("_")[1];
 
+          // let urlArr = [];
+
+          // if (dSid == 49) {
+          //   this.visibleVideo = false;
+          //   this.videoCheckList.forEach((i) => {
+          //     urlArr.push(
+          //       "ezopen://" +
+          //         deviceSerial2 +
+          //         "@open.ys7.com/" +
+          //         deviceSerial +
+          //         "/" +
+          //         i +
+          //         ".hd.live"
+          //     );
+          //   });
+          // }
+
           this.deviceSerial = deviceSerial;
           this.accessToken = res.data.accessToken;
-
+          let num = 1;
+          if (dSid == 99) {
+            num = arr.channle;
+          }
+          if (dSid == 49) {
+            // console.log(arr, "arr");
+            if (arr instanceof Object) {
+              num = 1;
+            } else {
+              num = arr;
+            }
+          }
           var ezuikitTalkData = {
             accessToken: global.accessToken, // 应用accessToken
             ezopen:
@@ -4412,7 +4617,9 @@ export default {
               deviceSerial2 +
               "@open.ys7.com/" +
               deviceSerial +
-              "/1.hd.live", // 包含设备信息的ezopen协议
+              "/" +
+              num +
+              ".hd.live", // 包含设备信息的ezopen协议
             decoderPath: "./", // 当前页面与插件主文件ezuiit-talk相对路径
           };
           new EZUIKit.EZUIKitPlayer({

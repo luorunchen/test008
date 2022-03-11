@@ -347,7 +347,7 @@
         <el-form-item label="设备编号">
           <el-input
             v-model="mapInfo.bianhao"
-            placeholder="请填写备注"
+            placeholder="请填写设备编号"
           ></el-input>
         </el-form-item>
         <el-form-item label="设备类型">
@@ -363,14 +363,41 @@
           <!-- </el-select> -->
         </el-form-item>
       </el-form>
+      <el-form
+        label-width="100px"
+        :inline="true"
+        class="demo-form-inline"
+        v-if="this.shebeiListValue == 48"
+      >
+        <el-form-item label="录像机通道">
+          <el-input
+            v-model="mapInfo.VCRchannle"
+            placeholder="请填写录像机通道"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="录像机ID">
+          <el-select v-model="VCRValue" placeholder="请选择">
+            <el-option
+              v-for="item in VCRList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
       <el-form label-width="100px" :inline="true" class="demo-form-inline">
         <el-form-item label="设备名称">
-          <el-input v-model="mapInfo.name" placeholder="请填写备注"></el-input>
+          <el-input
+            v-model="mapInfo.name"
+            placeholder="请填写设备名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="经纬度">
           <el-input
             v-model="mapInfo.lnglat"
-            placeholder="请填写备注"
+            placeholder="请填写经纬度"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -379,7 +406,7 @@
           <el-input
             @input="clear($event, '应用场所')"
             v-model="mapInfo.changsuo"
-            placeholder="请填写备注"
+            placeholder="请填写应用场所"
           ></el-input>
         </el-form-item>
         <el-form-item label="短信推送">
@@ -418,11 +445,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addNewSheBeiVisible = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="(addNewSheBeiVisible = false), addNewSheBeiTrue()"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addNewSheBeiTrue()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -442,10 +465,13 @@ import {
   addRegisterProject,
   regionList,
   deleProject,
+  getVideo,
 } from "@/api/index.js";
 export default {
   data() {
     return {
+      VCRList: [],
+      VCRValue: "",
       regionList_list: [],
       regionList_code: [],
       addNewSheBeiVisible: false,
@@ -474,7 +500,7 @@ export default {
         code: "",
         where: "",
         address: "",
-
+        VCRchannle: "",
         zhuche: "",
         xintiao: "",
         shebei: "",
@@ -487,92 +513,7 @@ export default {
       },
       options: [],
       shebeiListValue: "",
-      shebeiList: [
-        {
-          value: "",
-          label: "",
-        },
-        {
-          value: "网关",
-          label: "0",
-        },
-        {
-          value: "烟感",
-          label: "2",
-        },
-        {
-          value: "电气",
-          label: "3",
-        },
-        {
-          value: "水压",
-          label: "4",
-        },
-        {
-          value: "消防主机",
-          label: "5",
-        },
-        {
-          value: "无线气感",
-          label: "6",
-        },
-        {
-          value: "粉尘设备",
-          label: "7",
-        },
-        {
-          value: "液位",
-          label: "8",
-        },
-        {
-          value: "录像",
-          label: "9",
-        },
-        {
-          value: "消防门磁",
-          label: "10",
-        },
-        {
-          value: "工业燃气",
-          label: "11",
-        },
-        {
-          value: "电气火灾探测器",
-          label: "12",
-        },
-        {
-          value: "声光报警器",
-          label: "15",
-        },
-        {
-          value: "手动报警",
-          label: "16",
-        },
-        {
-          value: "水浸报警",
-          label: "18",
-        },
-        {
-          value: "紧急报警",
-          label: "19",
-        },
-        {
-          value: "工业水压",
-          label: "42",
-        },
-        {
-          value: "工业液位",
-          label: "43",
-        },
-        {
-          value: "智慧用电安全卫士",
-          label: "44",
-        },
-        {
-          value: "智慧用电断路器",
-          label: "47",
-        },
-      ],
+      shebeiList: [],
       newType: "",
     };
   },
@@ -1261,6 +1202,10 @@ export default {
           this.shebeiList = res.data.data;
           // this.shebeiList.unshift({ disd: "", dSName: "所有" });
         });
+        getVideo().then((res) => {
+          // console.log(res.data.data, "woshires");
+          this.VCRList = res.data.data;
+        });
       } else {
         return this.$message({
           showClose: true,
@@ -1283,8 +1228,19 @@ export default {
       ) {
         return this.$message.error("无法获取您的项目经纬度,请重新输入");
       }
-      // console.log(this.lanlat, 999999);
 
+      if (this.shebeiListValue == 48) {
+        console.log(this.mapInfo.VCRchannle, this.VCRValue, 222211);
+        if (this.mapInfo.VCRchannle == undefined && this.VCRValue == "") {
+          return this.$message({
+            showClose: true,
+            type: "error",
+            message: "请填写通道号或选择录像设备",
+          });
+        }
+      }
+      // console.log(this.lanlat, 999999);
+      this.addNewSheBeiVisible = false;
       addDevice(
         this.addPid,
         this.mapInfo.bianhao, //设备编号
@@ -1298,7 +1254,9 @@ export default {
         loopNumber,
         devId,
         devRemark,
-        this.mapInfo.duanxin //短信推送
+        this.mapInfo.duanxin, //短信推送
+        this.VCRValue, // 录像机
+        this.mapInfo.VCRchannle // 录像机通道
       ).then(
         (res) => {
           if (res.data.list[0].status == "true") {

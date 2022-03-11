@@ -58,7 +58,7 @@ export default {
     },
     DeviceAlarm() {
       const region = sessionStorage.getItem("region");
-      DeviceAlarm(this.utils.userName, "9,13,20", region).then((res) => {
+      DeviceAlarm(this.utils.userName, "9,13,20,48,49", region).then((res) => {
         this.DeviceAlarmList = res.data;
         let num = 0;
         // console.log(res.data, 99);

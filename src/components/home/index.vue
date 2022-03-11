@@ -467,7 +467,7 @@ export default {
       const region = sessionStorage.getItem("region");
       DeviceProjectNew(
         this.utils.userName,
-        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,30,40,42,43,44,45",
+        "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,30,40,42,43,44,45,46,47,48,49,50,51,52",
         region
       ).then((res) => {
         if (res.data.length <= 0) {
