@@ -35,6 +35,16 @@ export function getVideo() {
     }
   })
 }
+//启动灭火器摄像头
+export function setFireSwitch(productNumber, style) {
+  return service({
+    url: `/WebProject/setFireSwitch.action`,
+    method: 'GET',
+    params: {
+      productNumber, style
+    }
+  })
+}
 //首页报警数接口
 export function push_AlarmData(username, time_zone) {
   return service({
@@ -1020,12 +1030,12 @@ export function setTime(username, productNumbers, type, startTime, endTime) {
     }
   })
 }
-export function getHongWaiYG(username) {
+export function getHongWaiYG(username, pageSize, pageNum) {
   return service({
     url: `/WebProject/getHongWaiYG.action`,
     method: 'GET',
     params: {
-      username
+      username, pageSize, pageNum
     }
   })
 }

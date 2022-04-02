@@ -1946,31 +1946,31 @@
                         </li>
                         <li>
                           报警值:
-                          <span v-if="item.type.indexOf('N温度') != -1"
+                          <span v-if="item.type.indexOf('N') != -1"
                             >{{
                               item.temperatureAlarmNvalue == ""
                                 ? item.noAlarmNTemperatureValue
                                 : item.temperatureAlarmNvalue
                             }}℃
                           </span>
-                          <span v-if="item.type.indexOf('A温度') != -1"
+                          <span v-if="item.type.indexOf('A') != -1"
                             >{{
                               item.temperatureAlarmAvalue == ""
-                                ? item.noAlarmNTemperatureValue
+                                ? item.noAlarmATemperatureValue
                                 : item.temperatureAlarmAvalue
                             }}℃
                           </span>
-                          <span v-if="item.type.indexOf('B温度') != -1"
+                          <span v-if="item.type.indexOf('B') != -1"
                             >{{
                               item.temperatureAlarmBvalue == ""
-                                ? item.noAlarmNTemperatureValue
+                                ? item.noAlarmBTemperatureValue
                                 : item.temperatureAlarmBvalue
                             }}℃
                           </span>
-                          <span v-if="item.type.indexOf('C温度') != -1"
+                          <span v-if="item.type.indexOf('C') != -1"
                             >{{
                               item.temperatureAlarmCvalue == ""
-                                ? item.noAlarmNTemperatureValue
+                                ? item.noAlarmCTemperatureValue
                                 : item.temperatureAlarmCvalue
                             }}℃
                           </span>
@@ -3649,7 +3649,12 @@
             >
           </el-row>
           <div v-else-if="this.videoDsid == 99" style="margin-top: 30px">
-            <el-button type="primary" size="mini">启动灭火器</el-button>
+            <el-button
+              type="primary"
+              size="mini"
+              @click="openFireExtinguisher(productNumber)"
+              >{{ openFireExtinguisherMsg ? "启动" : "关闭" }}灭火器</el-button
+            >
           </div>
         </el-col>
       </el-row>
@@ -4030,6 +4035,7 @@
 
 <script>
 import {
+  setFireSwitch,
   getHistoryPress_value,
   setTime,
   GetMapData,
@@ -4070,6 +4076,7 @@ export default {
   props: ["pagetype", "popUps"],
   data() {
     return {
+      openFireExtinguisherMsg: true,
       videoCheckList: [],
       AlarmAndFaultList: [],
       faultState: true,
@@ -4537,6 +4544,10 @@ export default {
       // console.log
       console.log(productNumber, dSid, arr, "DISD");
       this.productNumber = productNumber;
+      if (dSid != 99) {
+        this.FireExtinguisherProductNumber = productNumber;
+      }
+
       // if(dSid==)
       this.videoDsid = dSid;
       this.KeyPartsDialog = true;
@@ -4546,7 +4557,6 @@ export default {
           console.log(res, "4848484848");
           this.getNFCInspectionByDevIdList = res.data.data;
           this.getNFCInspectionByDevIdList.forEach((item) => {
-            console.log(item, 2222);
             item.imagesArr = [
               `https://psy119.cn/ctx/devPic//${item.image}.jpg`,
             ];
@@ -4556,6 +4566,10 @@ export default {
             item.channle = arr.channle;
             // item.
           });
+          // console.log(
+          //   this.getNFCInspectionByDevIdList,
+          //   "getNFCInspectionByDevIdList"
+          // );
         });
       } else if (dSid != 20) {
         this.$nextTick(() => {
@@ -4656,6 +4670,39 @@ export default {
           // console.log(this.getNFCInspectionByDevIdList);
         });
       }
+    },
+    // 启动摄像头灭火器
+    openFireExtinguisher(productNumber) {
+      console.log(productNumber, "启动灭火器");
+
+      setFireSwitch(
+        this.FireExtinguisherProductNumber,
+        this.openFireExtinguisherMsg ? 1 : 0
+      ).then(
+        (res) => {
+          if (res.data.data == "ok") {
+            this.$message({
+              showClose: true,
+              type: "success",
+              message: "请求成功",
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              type: "error",
+              message: "请稍后重试或联系管理员",
+            });
+          }
+          this.openFireExtinguisherMsg = !this.openFireExtinguisherMsg;
+        },
+        (rej) => {
+          this.$message({
+            showClose: true,
+            type: "error",
+            message: "请稍后重试或联系管理员",
+          });
+        }
+      );
     },
     //设备历史
     deviceHistory(type) {

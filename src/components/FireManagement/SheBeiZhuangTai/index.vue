@@ -141,7 +141,7 @@ export default {
     getDsidFun() {
       getDsid(this.utils.userName).then((res) => {
         this.options = res.data.data;
-        this.options.unshift({ disd: "", dSName: "所有" });
+        this.options.unshift({ dsid: "", dSName: "所有" });
       });
     },
     onSubmit() {

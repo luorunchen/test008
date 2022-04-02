@@ -37,12 +37,7 @@
       :pagetype="pagetype"
     />
 
-    <el-dialog
-      title="时间选择"
-      :visible.sync="dialogVisible"
-      width="25%"
-      :modal="false"
-    >
+    <el-dialog title="时间选择" :visible.sync="dialogVisible" :modal="false">
       <el-time-picker
         is-range
         v-model="infraredTime"
@@ -60,6 +55,7 @@
           @change="handleCheckAllChange"
           >全选</el-checkbox
         >
+
         <div style="margin: 15px 0"></div>
         <el-checkbox-group
           v-model="checkedCities"
@@ -73,6 +69,18 @@
           >
         </el-checkbox-group>
       </div>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="1"
+        :page-sizes="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="getHongWaiYGCount"
+        small
+      >
+      </el-pagination>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -105,6 +113,9 @@ export default {
       checkedCities: [],
       infraredTime: "",
       isIndeterminate: true,
+      pageSize: 100,
+      pageNum: 1,
+      getHongWaiYGCount: 0,
     };
   },
   mounted() {
@@ -112,6 +123,24 @@ export default {
     this.getHongWaiYGFun();
   },
   methods: {
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.getHongWaiYGFun();
+      this.checkedCities = [];
+      this.checkAll = false;
+      this.isIndeterminate = true;
+      // this.checkedCities = false;
+      // this.$forceUpdate();
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.pageNum = val;
+      this.getHongWaiYGFun();
+      this.checkedCities = [];
+      this.checkAll = false;
+      this.isIndeterminate = true;
+    },
     setTimeTrue() {
       if (this.checkedCities.length == 0) {
         return this.$message({
@@ -154,6 +183,7 @@ export default {
       this.dialogVisible = false;
     },
     handleCheckAllChange(val) {
+      console.log(val, 22);
       this.checkedCities = val ? this.getHongWaiYGList : [];
 
       this.isIndeterminate = false;
@@ -166,10 +196,13 @@ export default {
         checkedCount > 0 && checkedCount < this.getHongWaiYGList.length;
     },
     getHongWaiYGFun() {
-      getHongWaiYG(this.utils.userName).then((res) => {
-        // console.log(res, 88);
-        this.getHongWaiYGList = res.data.data;
-      });
+      getHongWaiYG(this.utils.userName, this.pageSize, this.pageNum).then(
+        (res) => {
+          // console.log(res, 88);
+          this.getHongWaiYGList = res.data.data;
+          this.getHongWaiYGCount = res.data.count;
+        }
+      );
     },
     callPolice(pid) {
       SElec_DetailElecDevice(pid).then((res) => {
